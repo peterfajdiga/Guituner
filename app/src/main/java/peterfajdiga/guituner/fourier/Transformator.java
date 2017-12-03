@@ -2,9 +2,14 @@ package peterfajdiga.guituner.fourier;
 
 public class Transformator extends Thread implements ShortBufferReceiver {
 
+    private final DoubleReceiver receiver;
     private boolean threadEnabled = false;
     private volatile boolean working = false;
     private short[] buffer;
+
+    public Transformator(final DoubleReceiver receiver) {
+        this.receiver = receiver;
+    }
 
     public void startTransforming() {
         threadEnabled = true;
@@ -42,6 +47,6 @@ public class Transformator extends Thread implements ShortBufferReceiver {
 
     // called by this thread
     private void transform() {
-        System.err.println("first short: " + buffer[0]);
+        receiver.putDouble(buffer[0]);
     }
 }
