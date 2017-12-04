@@ -6,13 +6,12 @@ import android.media.MediaRecorder;
 
 import java.util.Arrays;
 
-public class Recorder extends Thread {
+public class Recorder extends StoppableThread {
 
     private static final int SAMPLE_RATE = 22050;
     private final ShortBufferReceiver receiver;
     private int bufferSize;  // in bytes
     private final short[] buffer;
-    private boolean recordingEnabled = false;
 
     public Recorder(final ShortBufferReceiver receiver) {
         this.receiver = receiver;
@@ -28,20 +27,6 @@ public class Recorder extends Thread {
         }
 
         buffer = new short[bufferSize / 2];
-    }
-
-    public void startRecording() {
-        if (recordingEnabled || isAlive()) {
-            throw new RuntimeException("Already recording");
-        }
-        recordingEnabled = true;
-        start();
-    }
-    public void stopRecording() {
-        if (!recordingEnabled || !isAlive()) {
-            throw new RuntimeException("Not recording");
-        }
-        recordingEnabled = false;
     }
 
     @Override
@@ -60,7 +45,7 @@ public class Recorder extends Thread {
         }
 
         record.startRecording();
-        while (recordingEnabled) {
+        while (threadEnabled) {
             final int sampleCount = record.read(buffer, 0, buffer.length);
             if (sampleCount > buffer.length) {
                 throw new RuntimeException("Read more samples than buffer.length");

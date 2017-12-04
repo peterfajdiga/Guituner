@@ -19,9 +19,9 @@ public class TunerActivity extends AppCompatActivity implements DoubleReceiver {
         setContentView(R.layout.activity_tuner);
 
         final Transformator fourier = new Transformator(this);
-        fourier.startTransforming();
+        fourier.startThread();
         final Recorder recorder = new Recorder(fourier);
-        recorder.startRecording();
+        recorder.startThread();
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
     }

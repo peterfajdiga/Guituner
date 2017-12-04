@@ -1,23 +1,13 @@
 package peterfajdiga.guituner.fourier;
 
-public class Transformator extends Thread implements ShortBufferReceiver {
+public class Transformator extends StoppableThread implements ShortBufferReceiver {
 
     private final DoubleReceiver receiver;
-    private boolean threadEnabled = false;
     private volatile boolean working = false;
     private short[] buffer;
 
     public Transformator(final DoubleReceiver receiver) {
         this.receiver = receiver;
-    }
-
-    public void startTransforming() {
-        threadEnabled = true;
-        start();
-    }
-
-    public void stopTransforming() {
-        threadEnabled = false;
     }
 
     // called by another thread
