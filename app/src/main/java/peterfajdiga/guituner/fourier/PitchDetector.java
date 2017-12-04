@@ -1,12 +1,12 @@
 package peterfajdiga.guituner.fourier;
 
-public class Transformator extends StoppableThread implements ShortBufferReceiver {
+public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
 
-    private final DoubleReceiver receiver;
+    private final Owner receiver;
     private volatile boolean working = false;
     private short[] buffer;
 
-    public Transformator(final DoubleReceiver receiver) {
+    public PitchDetector(final Owner receiver) {
         this.receiver = receiver;
     }
 
@@ -31,12 +31,18 @@ public class Transformator extends StoppableThread implements ShortBufferReceive
                 working = false;
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException("Transformator thread stopped");
+            throw new RuntimeException("PitchDetector thread stopped");
         }
     }
 
     // called by this thread
     private void transform() {
         receiver.putDouble(buffer[0]);
+    }
+
+
+
+    public interface Owner {
+        void putDouble(double value);
     }
 }

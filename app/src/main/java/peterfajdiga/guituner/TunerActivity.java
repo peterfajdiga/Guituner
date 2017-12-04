@@ -3,13 +3,11 @@ package peterfajdiga.guituner;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-import peterfajdiga.guituner.fourier.DoubleReceiver;
+import peterfajdiga.guituner.fourier.PitchDetector;
 import peterfajdiga.guituner.fourier.Recorder;
-import peterfajdiga.guituner.fourier.Transformator;
 
-public class TunerActivity extends AppCompatActivity implements DoubleReceiver {
+public class TunerActivity extends AppCompatActivity implements PitchDetector.Owner {
 
     private FrequencySetterRunnable frequencySetterRunnable;
 
@@ -18,9 +16,9 @@ public class TunerActivity extends AppCompatActivity implements DoubleReceiver {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuner);
 
-        final Transformator fourier = new Transformator(this);
-        fourier.startThread();
-        final Recorder recorder = new Recorder(fourier);
+        final PitchDetector pitchDetector = new PitchDetector(this);
+        pitchDetector.startThread();
+        final Recorder recorder = new Recorder(pitchDetector);
         recorder.startThread();
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));

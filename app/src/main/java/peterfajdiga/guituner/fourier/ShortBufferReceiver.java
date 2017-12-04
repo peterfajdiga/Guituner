@@ -1,5 +1,5 @@
 package peterfajdiga.guituner.fourier;
 
-public interface ShortBufferReceiver {
+interface ShortBufferReceiver {
     void putBuffer(short[] buffer);
 }
