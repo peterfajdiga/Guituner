@@ -50,7 +50,6 @@ public class Fourier {
     }
 
     static Complex[] fft(final short[] input) {
-        final long startTime = System.currentTimeMillis();
         final int coefficientCount = input.length;
         int n = Integer.highestOneBit(coefficientCount);
         if (n != coefficientCount)
@@ -61,8 +60,6 @@ public class Fourier {
             input_complex[i] = new Complex(input[i], 0);
         for (; i < n; i++)
             input_complex[i] = new Complex(0, 0);
-        final Complex[] result = fft(input_complex);
-        System.err.println(System.currentTimeMillis() - startTime);
-        return result;
+        return fft(input_complex);
     }
 }

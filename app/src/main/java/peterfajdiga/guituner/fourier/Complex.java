@@ -1,15 +1,15 @@
 package peterfajdiga.guituner.fourier;
 
-class Complex {
+public class Complex {
     double re;
     double im;
 
-    Complex(double real, double imag) {
+    public Complex(double real, double imag) {
         re = real;
         im = imag;
     }
 
-    Complex(final Complex original) {
+    public Complex(final Complex original) {
         this.re = original.re;
         this.im = original.im;
     }
