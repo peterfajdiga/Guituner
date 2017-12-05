@@ -2,11 +2,11 @@ package peterfajdiga.guituner.fourier;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
 
-    private final Owner receiver;
+    private final Receiver receiver;
     private volatile boolean working = false;
     private short[] buffer;
 
-    public PitchDetector(final Owner receiver) {
+    public PitchDetector(final Receiver receiver) {
         this.receiver = receiver;
     }
 
@@ -37,12 +37,25 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     // called by this thread
     private void transform() {
-        receiver.putDouble(buffer[0]);
+        final Complex[] freqSpace = Fourier.fft(buffer);
+        final int halfN = buffer.length / 2;
+
+        int max_i = -1;
+        double max_val = Double.MIN_VALUE;
+        for (int i = 0; i < halfN; i++) {
+            final double val = freqSpace[i].abs();
+            if (val > max_val) {
+                max_val = val;
+                max_i = i;
+            }
+        }
+
+        receiver.updatePitch(max_i);
     }
 
 
 
-    public interface Owner {
-        void putDouble(double value);
+    public interface Receiver {
+        void updatePitch(double frequency);
     }
 }

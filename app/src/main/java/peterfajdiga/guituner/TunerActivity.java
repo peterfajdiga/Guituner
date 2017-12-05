@@ -7,7 +7,7 @@ import android.view.View;
 import peterfajdiga.guituner.fourier.PitchDetector;
 import peterfajdiga.guituner.fourier.Recorder;
 
-public class TunerActivity extends AppCompatActivity implements PitchDetector.Owner {
+public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver {
 
     private FrequencySetterRunnable frequencySetterRunnable;
 
@@ -25,7 +25,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Ow
     }
 
     @Override
-    public void putDouble(final double value) {
+    public void updatePitch(final double value) {
         final View contentView = findViewById(android.R.id.content);
         contentView.post(frequencySetterRunnable.setFrequency(value));
     }
