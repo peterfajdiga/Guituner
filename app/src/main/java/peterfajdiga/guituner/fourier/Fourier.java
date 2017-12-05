@@ -3,26 +3,37 @@ package peterfajdiga.guituner.fourier;
 public class Fourier {
     private Fourier() {}
 
-    static Complex[] fft(final Complex[] input, final int step, final int start) {
-        final int n = input.length / step;
-        if (n == 1)
-            return new Complex[]{input[start]};
-        final int halfLength = n / 2;
-
-        final Complex[] tableEven = fft(input, step*2, start);
-        final Complex[] tableOdd  = fft(input, step*2, start+step);
-
-        final Complex w = Complex.n_root(n);
-        Complex wk = new Complex(1, 0);
-        final Complex[] y = new Complex[n];
-        for (int k=0; k < halfLength; k++) {
-            Complex tmp     = wk.times(tableOdd[k]);
-            y[k]            = tableEven[k].plus(tmp);
-            y[k+halfLength] = tableEven[k].minus(tmp);
-            wk = wk.times(w);
+    private static Complex[] bitReverseCopy(final Complex[] original) {
+        final int n = original.length;
+        final int shift = Integer.numberOfLeadingZeros(n-1);
+        final Complex[] copy = new Complex[n];
+        for (int k = 0; k < n; k++) {
+            final int k_rev = Integer.reverse(k) >>> shift;
+            copy[k_rev] = original[k];
         }
+        return copy;
+    }
 
-        return y;
+    static Complex[] fft(final Complex[] input) {
+        Complex[] A = bitReverseCopy(input);
+        final int n = input.length;
+        final int logn = Integer.numberOfTrailingZeros(n);
+        for (int s = 0; s < logn; s++) {
+            final int m = 2 << s;  // m = 2^(s+1)
+            final Complex wm = Complex.n_root_neg(m);
+            for (int k = 0; k < n; k += m) {
+                Complex w = new Complex(1, 0);
+                final int m_half = m/2;
+                for (int j = 0; j < m_half; j++) {
+                    final Complex t = w.times(A[k + j + m_half]);
+                    final Complex u = new Complex(A[k+j]);
+                    A[k+j] = u.plus(t);
+                    A[k + j + m_half] = u.minus(t);
+                    w = w.times(wm);
+                }
+            }
+        }
+        return A;
     }
 
     static Complex[] fft(final double[] input) {
@@ -36,7 +47,7 @@ public class Fourier {
             input_complex[i] = new Complex(input[i], 0);
         for (; i < n; i++)
             input_complex[i] = new Complex(0, 0);
-        return fft(input_complex, 1, 0);
+        return fft(input_complex);
     }
 
     static Complex[] fft(final short[] input) {
@@ -51,7 +62,7 @@ public class Fourier {
             input_complex[i] = new Complex(input[i], 0);
         for (; i < n; i++)
             input_complex[i] = new Complex(0, 0);
-        final Complex[] result = fft(input_complex, 1, 0);
+        final Complex[] result = fft(input_complex);
         System.err.println(System.currentTimeMillis() - startTime);
         return result;
     }
