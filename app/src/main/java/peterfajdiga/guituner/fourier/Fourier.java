@@ -26,10 +26,9 @@ public class Fourier {
                 final int m_half = m/2;
                 for (int j = 0; j < m_half; j++) {
                     final Complex t = w.times(A[k + j + m_half]);
-                    final Complex u = new Complex(A[k+j]);
-                    A[k+j] = u.plus(t);
-                    A[k + j + m_half] = u.minus(t);
-                    w = w.times(wm);
+                    A[k + j + m_half] = A[k+j].minus(t);
+                    A[k+j].plusEquals(t);
+                    w.timesEquals(wm);
                 }
             }
         }

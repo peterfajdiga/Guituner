@@ -32,17 +32,31 @@ class Complex {
         final double imag = this.im + b.im;
         return new Complex(real, imag);
     }
+    public void plusEquals(final Complex b) {
+        re += b.re;
+        im += b.im;
+    }
 
     public Complex minus(final Complex b) {
         final double real = this.re - b.re;
         final double imag = this.im - b.im;
         return new Complex(real, imag);
     }
+    public void minusEquals(final Complex b) {
+        re -= b.re;
+        im -= b.im;
+    }
 
     public Complex times(final Complex b) {
         final double real = this.re * b.re - this.im * b.im;
         final double imag = this.re * b.im + this.im * b.re;
         return new Complex(real, imag);
+    }
+    public void timesEquals(final Complex b) {
+        final double real = this.re * b.re - this.im * b.im;
+        final double imag = this.re * b.im + this.im * b.re;
+        re = real;
+        im = imag;
     }
 
     public static Complex n_root(final int n) {
