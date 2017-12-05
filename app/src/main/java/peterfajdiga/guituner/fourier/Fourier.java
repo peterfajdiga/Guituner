@@ -3,25 +3,18 @@ package peterfajdiga.guituner.fourier;
 public class Fourier {
     private Fourier() {}
 
-    static Complex[] fft(final Complex[] input) {
-        if (input.length == 1)
-            return input;
+    static Complex[] fft(final Complex[] input, final int step, final int start) {
+        final int n = input.length / step;
+        if (n == 1)
+            return new Complex[]{input[start]};
+        final int halfLength = n / 2;
 
-        final int halfLength = input.length / 2;
+        final Complex[] tableEven = fft(input, step*2, start);
+        final Complex[] tableOdd  = fft(input, step*2, start+step);
 
-        final Complex[] tableEvenIn = new Complex[halfLength];
-        for (int i=0; i < tableEvenIn.length; i++)
-            tableEvenIn[i] = input[i * 2];
-        final Complex[] tableOddIn = new Complex[halfLength];
-        for (int i=0; i < halfLength; i++)
-            tableOddIn[i] = input[i * 2 + 1];
-
-        final Complex[] tableEven = fft(tableEvenIn);
-        final Complex[] tableOdd  = fft(tableOddIn);
-
-        final Complex w = Complex.n_root(input.length);
+        final Complex w = Complex.n_root(n);
         Complex wk = new Complex(1, 0);
-        final Complex[] y = new Complex[input.length];
+        final Complex[] y = new Complex[n];
         for (int k=0; k < halfLength; k++) {
             Complex tmp     = wk.times(tableOdd[k]);
             y[k]            = tableEven[k].plus(tmp);
@@ -43,10 +36,11 @@ public class Fourier {
             input_complex[i] = new Complex(input[i], 0);
         for (; i < n; i++)
             input_complex[i] = new Complex(0, 0);
-        return fft(input_complex);
+        return fft(input_complex, 1, 0);
     }
 
     static Complex[] fft(final short[] input) {
+        final long startTime = System.currentTimeMillis();
         final int coefficientCount = input.length;
         int n = Integer.highestOneBit(coefficientCount);
         if (n != coefficientCount)
@@ -57,6 +51,8 @@ public class Fourier {
             input_complex[i] = new Complex(input[i], 0);
         for (; i < n; i++)
             input_complex[i] = new Complex(0, 0);
-        return fft(input_complex);
+        final Complex[] result = fft(input_complex, 1, 0);
+        System.err.println(System.currentTimeMillis() - startTime);
+        return result;
     }
 }
