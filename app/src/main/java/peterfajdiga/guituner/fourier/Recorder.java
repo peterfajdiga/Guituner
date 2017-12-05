@@ -15,6 +15,7 @@ public class Recorder extends StoppableThread {
 
     public Recorder(final ShortBufferReceiver receiver) {
         this.receiver = receiver;
+        receiver.setSampleRate(SAMPLE_RATE);
 
         bufferSize = AudioRecord.getMinBufferSize(
                 SAMPLE_RATE,

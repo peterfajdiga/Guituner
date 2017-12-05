@@ -5,6 +5,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private final Receiver receiver;
     private volatile boolean working = false;
     private short[] buffer;
+    private int sampleRate;
 
     public PitchDetector(final Receiver receiver) {
         this.receiver = receiver;
@@ -19,6 +20,12 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
         this.buffer = buffer;
         notify();
+    }
+
+    // called by another thread
+    @Override
+    public void setSampleRate(final int sampleRate) {
+        this.sampleRate = sampleRate;
     }
 
     @Override
@@ -50,7 +57,8 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             }
         }
 
-        receiver.updatePitch(max_i);
+        final double k = (double)sampleRate / (buffer.length);
+        receiver.updatePitch(max_i * k);
     }
 
 
