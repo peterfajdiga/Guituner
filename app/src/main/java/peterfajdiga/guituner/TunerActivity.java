@@ -11,15 +11,13 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
     private FrequencySetterRunnable frequencySetterRunnable;
 
+    PitchDetector pitchDetector;
+    Recorder recorder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuner);
-
-        final PitchDetector pitchDetector = new PitchDetector(this);
-        pitchDetector.startThread();
-        final Recorder recorder = new Recorder(pitchDetector);
-        recorder.startThread();
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
     }
@@ -28,5 +26,21 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     public void updatePitch(final double value) {
         final View contentView = findViewById(android.R.id.content);
         contentView.post(frequencySetterRunnable.setFrequency(value));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        pitchDetector.stopThread();
+        recorder.stopThread();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pitchDetector = new PitchDetector(this);
+        pitchDetector.startThread();
+        recorder = new Recorder(pitchDetector);
+        recorder.startThread();
     }
 }
