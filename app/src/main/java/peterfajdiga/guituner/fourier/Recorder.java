@@ -6,6 +6,8 @@ import android.media.MediaRecorder;
 
 import java.util.Arrays;
 
+import peterfajdiga.guituner.general.General;
+
 public class Recorder extends StoppableThread {
 
     private static final int SAMPLE_RATE = 6400;
@@ -26,6 +28,7 @@ public class Recorder extends StoppableThread {
             throw new RuntimeException("bufferSize: " + bufferSize);  // TODO: remove
 //            bufferSize = SAMPLE_RATE * 2;
         }
+        bufferSize = General.ceilPow2(bufferSize);
 
         buffer = new short[bufferSize / 2];
     }

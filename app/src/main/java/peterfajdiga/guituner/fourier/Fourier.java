@@ -1,5 +1,7 @@
 package peterfajdiga.guituner.fourier;
 
+import peterfajdiga.guituner.general.General;
+
 public class Fourier {
     private Fourier() {}
 
@@ -51,9 +53,7 @@ public class Fourier {
 
     static Complex[] fft(final short[] input) {
         final int coefficientCount = input.length;
-        int n = Integer.highestOneBit(coefficientCount);
-        if (n != coefficientCount)
-            n *= 2;
+        final int n = General.ceilPow2(coefficientCount);
         Complex[] input_complex = new Complex[n];
         int i = 0;
         for (; i < coefficientCount; i++)
