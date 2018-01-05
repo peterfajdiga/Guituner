@@ -23,9 +23,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     }
 
     @Override
-    public void updatePitch(final double value) {
+    public void updatePitch(final double frequency_min, final double frequency_max) {
         final View contentView = findViewById(android.R.id.content);
-        contentView.post(frequencySetterRunnable.setFrequency(value));
+        contentView.post(frequencySetterRunnable.setFrequency_min(frequency_min, frequency_max));
     }
 
     @Override

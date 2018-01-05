@@ -57,13 +57,15 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             }
         }
 
-        final double k = (double)sampleRate / (buffer.length);
-        receiver.updatePitch(max_i * k);
+        final double binWidth = (double)sampleRate / freqSpace.length;
+        final double halfBinWidth = binWidth / 2;
+        final double midFreq = max_i * binWidth;
+        receiver.updatePitch(midFreq - halfBinWidth, midFreq + halfBinWidth);
     }
 
 
 
     public interface Receiver {
-        void updatePitch(double frequency);
+        void updatePitch(double frequency_min, double frequency_max);
     }
 }

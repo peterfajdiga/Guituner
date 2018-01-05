@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Recorder extends StoppableThread {
 
-    private static final int SAMPLE_RATE = 22050;
+    private static final int SAMPLE_RATE = 6400;
     private final ShortBufferReceiver receiver;
     private int bufferSize;  // in bytes
     private final short[] buffer;
@@ -36,7 +36,7 @@ public class Recorder extends StoppableThread {
 
         final AudioRecord record = new AudioRecord(
                 MediaRecorder.AudioSource.DEFAULT,
-                44100,
+                SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize
