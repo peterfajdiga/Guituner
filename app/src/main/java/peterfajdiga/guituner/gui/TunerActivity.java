@@ -1,11 +1,12 @@
-package peterfajdiga.guituner;
+package peterfajdiga.guituner.gui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import peterfajdiga.guituner.fourier.PitchDetector;
-import peterfajdiga.guituner.fourier.Recorder;
+import peterfajdiga.guituner.R;
+import peterfajdiga.guituner.pitch.PitchDetector;
+import peterfajdiga.guituner.pitch.Recorder;
 
 public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver {
 

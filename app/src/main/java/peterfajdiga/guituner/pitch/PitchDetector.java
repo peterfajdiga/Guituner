@@ -1,4 +1,7 @@
-package peterfajdiga.guituner.fourier;
+package peterfajdiga.guituner.pitch;
+
+import peterfajdiga.guituner.fourier.Complex;
+import peterfajdiga.guituner.fourier.Fourier;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
 

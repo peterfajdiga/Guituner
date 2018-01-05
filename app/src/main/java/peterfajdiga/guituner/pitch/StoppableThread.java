@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.fourier;
+package peterfajdiga.guituner.pitch;
 
 import android.support.annotation.CallSuper;
 

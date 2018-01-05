@@ -16,7 +16,7 @@ public class Fourier {
         return copy;
     }
 
-    static Complex[] fft(final Complex[] input) {
+    public static Complex[] fft(final Complex[] input) {
         Complex[] A = bitReverseCopy(input);
         final int n = input.length;
         final int logn = Integer.numberOfTrailingZeros(n);
@@ -37,7 +37,7 @@ public class Fourier {
         return A;
     }
 
-    static Complex[] fft(final double[] input) {
+    public static Complex[] fft(final double[] input) {
         final int coefficientCount = input.length;
         int n = Integer.highestOneBit(coefficientCount);
         if (n != coefficientCount)
@@ -51,7 +51,7 @@ public class Fourier {
         return fft(input_complex);
     }
 
-    static Complex[] fft(final short[] input) {
+    public static Complex[] fft(final short[] input) {
         final int coefficientCount = input.length;
         final int n = General.ceilPow2(coefficientCount);
         Complex[] input_complex = new Complex[n];

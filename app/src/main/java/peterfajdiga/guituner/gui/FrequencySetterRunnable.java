@@ -1,7 +1,9 @@
-package peterfajdiga.guituner;
+package peterfajdiga.guituner.gui;
 
 import android.view.View;
 import android.widget.TextView;
+
+import peterfajdiga.guituner.R;
 
 public class FrequencySetterRunnable implements Runnable {
 
