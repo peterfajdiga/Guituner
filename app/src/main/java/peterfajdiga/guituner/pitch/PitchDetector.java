@@ -1,9 +1,16 @@
 package peterfajdiga.guituner.pitch;
 
+import android.support.annotation.NonNull;
+
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+
 import peterfajdiga.guituner.fourier.Complex;
 import peterfajdiga.guituner.fourier.Fourier;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
+
+    private static final int N_MAX_BINS = 5;
 
     private final Receiver receiver;
     private volatile boolean working = false;
@@ -45,28 +52,61 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
     }
 
+    private static double interpolateBin(final Complex[] freqSpace,
+                                         final int index,
+                                         final double midFrequency) {
+        // Quadratic Method
+        final double y1 = freqSpace[index-1].abs();
+        final double y2 = freqSpace[index  ].abs();
+        final double y3 = freqSpace[index+1].abs();
+        final double d = (y3 - y1) / (2 * (2 * y2 - y1 - y3));
+        return midFrequency + d;
+    }
+
     // called by this thread
     private void transform() {
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
 
-        int max_i = -1;
-        double max_val = Double.MIN_VALUE;
+        final PriorityQueue<Bin> maxBinsQueue = new PriorityQueue<Bin>(N_MAX_BINS);
+        for (int i = 0; i < N_MAX_BINS; i++) {
+            maxBinsQueue.add(new Bin(Double.MIN_VALUE, -1));
+        }
         for (int i = 0; i < halfN; i++) {
             final double val = freqSpace[i].abs();
-            if (val > max_val) {
-                max_val = val;
-                max_i = i;
+            if (val > maxBinsQueue.peek().value) {
+                maxBinsQueue.poll();
+                maxBinsQueue.add(new Bin(val, i));
             }
+        }
+
+        final int[] maxBins = new int[N_MAX_BINS];
+        for (int i = 0; i < N_MAX_BINS; i++) {
+            maxBins[i] = maxBinsQueue.poll().index;
         }
 
         final double binWidth = (double)sampleRate / freqSpace.length;
         final double halfBinWidth = binWidth / 2;
-        final double midFreq = max_i * binWidth;
+        final double midFreq = maxBins[N_MAX_BINS-1] * binWidth;
         receiver.updatePitch(midFreq - halfBinWidth, midFreq + halfBinWidth);
     }
 
 
+
+    private static class Bin implements Comparable<Bin> {
+        double value;
+        int index;
+
+        Bin(final double value, final int index) {
+            this.value = value;
+            this.index = index;
+        }
+
+        @Override
+        public int compareTo(@NonNull Bin bin) {
+            return Double.compare(this.value, bin.value);
+        }
+    }
 
     public interface Receiver {
         void updatePitch(double frequency_min, double frequency_max);
