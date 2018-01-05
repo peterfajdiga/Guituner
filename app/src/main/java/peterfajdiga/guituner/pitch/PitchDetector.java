@@ -52,9 +52,13 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
     }
 
+    // called by this thread
     private static double interpolateBin(final Complex[] freqSpace,
                                          final int index,
                                          final double midFrequency) {
+        if (index <= 0 || index >= freqSpace.length-1) {
+            return midFrequency;
+        }
         // Quadratic Method
         final double y1 = freqSpace[index-1].abs();
         final double y2 = freqSpace[index  ].abs();
@@ -86,9 +90,9 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
 
         final double binWidth = (double)sampleRate / freqSpace.length;
-        final double halfBinWidth = binWidth / 2;
-        final double midFreq = maxBins[N_MAX_BINS-1] * binWidth;
-        receiver.updatePitch(midFreq - halfBinWidth, midFreq + halfBinWidth);
+        final int maxBin = maxBins[N_MAX_BINS-1];
+        final double midFreq = maxBin * binWidth;
+        receiver.updatePitch(interpolateBin(freqSpace, maxBin, midFreq));
     }
 
 
@@ -109,6 +113,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     public interface Receiver {
-        void updatePitch(double frequency_min, double frequency_max);
+        void updatePitch(double frequency);
     }
 }
