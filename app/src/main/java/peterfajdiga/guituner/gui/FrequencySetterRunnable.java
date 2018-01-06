@@ -14,13 +14,17 @@ public class FrequencySetterRunnable implements Runnable {
         this.contentView = contentView;
     }
 
-    public FrequencySetterRunnable setFrequency_min(final double frequency) {
+    public FrequencySetterRunnable setFrequency(final double frequency) {
         this.frequency = frequency;
         return this;
     }
 
     @Override
     public void run() {
+        final PitchView pitchView = contentView.findViewById(R.id.pitchview);
+        pitchView.setFrequency(frequency);
+
+        // debug
         final TextView hello = contentView.findViewById(R.id.hello);
         hello.setText(String.format("%.2f Hz", frequency));
     }

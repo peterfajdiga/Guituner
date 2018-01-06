@@ -30,6 +30,8 @@ public class PitchView extends View {
 
     private float dp;
 
+    private double detectedFrequency = 0.0;
+
     public PitchView(Context context) {
         super(context);
         init(context);
@@ -48,6 +50,12 @@ public class PitchView extends View {
     public PitchView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
+    }
+
+
+    public void setFrequency(final double frequency) {
+        this.detectedFrequency = frequency;
+        invalidate();
     }
 
 
@@ -83,25 +91,26 @@ public class PitchView extends View {
 
 
         // draw detected frequency
-        final double detectedFrequency = 34.65 + 1.0;
-        final String freqText = String.format("%.1f Hz", detectedFrequency);
-        final float freqX = width * FREQ_OFFSET_X_RATIO;
-        final float freqY = getFrequencyY(detectedFrequency, height);
+        if (detectedFrequency > 0.0) {
+            final String freqText = String.format("%.1f Hz", detectedFrequency);
+            final float freqX = width * FREQ_OFFSET_X_RATIO;
+            final float freqY = getFrequencyY(detectedFrequency, height);
 
-        paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
+            paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
 
-        canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
+            canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
 
-        canvas.drawLine(
-                0.0f, freqY,
-                getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
-                paint_freq
-        );
-        canvas.drawLine(
-                getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
-                width, freqY,
-                paint_freq
-        );
+            canvas.drawLine(
+                    0.0f, freqY,
+                    getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
+                    paint_freq
+            );
+            canvas.drawLine(
+                    getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
+                    width, freqY,
+                    paint_freq
+            );
+        }
 
 
         // draw tones
