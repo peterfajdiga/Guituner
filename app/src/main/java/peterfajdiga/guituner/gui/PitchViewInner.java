@@ -13,6 +13,7 @@ import peterfajdiga.guituner.general.Tone;
 
 class PitchViewInner extends View {
 
+    private static final boolean HIGH_F_ON_TOP = true;
     private static final float TONE_OFFSET_X_RATIO = 0.5f;
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;
 
@@ -157,7 +158,10 @@ class PitchViewInner extends View {
         final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
         final double logFreq = Math.log(frequency);
 
-        final double freq01 = (logFreq - minLogFreq) / (maxLogFreq - minLogFreq);
+        double freq01 = (logFreq - minLogFreq) / (maxLogFreq - minLogFreq);
+        if (HIGH_F_ON_TOP) {
+            freq01 = 1 - freq01;
+        }
         return minY + (float)freq01 * (maxY - minY);
     }
 
@@ -168,7 +172,10 @@ class PitchViewInner extends View {
         final double minLogFreq = Math.log(tones[0].frequency);
         final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
 
-        final double freq01 = (y - minY) / (maxY - minY);
+        double freq01 = (y - minY) / (maxY - minY);
+        if (HIGH_F_ON_TOP) {
+            freq01 = 1 - freq01;
+        }
         final double logFreq = (freq01 * (maxLogFreq - minLogFreq)) + minLogFreq;
         return Math.exp(logFreq);
     }
