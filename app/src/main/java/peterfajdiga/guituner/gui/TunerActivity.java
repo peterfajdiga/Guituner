@@ -32,16 +32,16 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     @Override
     public void onPause() {
         super.onPause();
-        pitchDetector.stopThread();
-        recorder.stopThread();
+        /*pitchDetector.stopThread();
+        recorder.stopThread();*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        pitchDetector = new PitchDetector(this);
+        /*pitchDetector = new PitchDetector(this);
         pitchDetector.startThread();
         recorder = new Recorder(pitchDetector);
-        recorder.startThread();
+        recorder.startThread();*/
     }
 }
