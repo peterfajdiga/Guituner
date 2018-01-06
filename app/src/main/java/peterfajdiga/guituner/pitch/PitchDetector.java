@@ -17,6 +17,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final int HARMONICS_DROP_RADIUS = 16;
     private static final int GCD_MIN_COUNT = 2;
     private static final int GCD_MIN_DELTA = 20;
+    private static final double GCD_FAILSAFE_PREFERENCE = 4.0;
     private static final int FOCUSED_FREQUENCY_RADIUS = 20;
 
     private final Receiver receiver;
@@ -52,11 +53,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             while (threadEnabled) {
                 wait();
                 working = true;
-                if (focusedFrequency == 0.0) {
-                    findPitch();
-                } else {
-                    findPitch(focusedFrequency);
-                }
+                findPitch();
                 working = false;
             }
         } catch (InterruptedException e) {
@@ -123,7 +120,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             return failsafe;
         }
         for (Double value : values) {
-            if (value < gcd) {
+            if (value < gcd - GCD_FAILSAFE_PREFERENCE) {
                 return value;
             }
         }
@@ -131,7 +128,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     // called by this thread
-    // unfocused findPitch, search whole frequency space
     private void findPitch() {
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
@@ -144,44 +140,28 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
         final double floor = sum / freqSpace.length;
 
-        int maxBin = General.max(values);
+        final int startIndex, endIndex;
+        if (focusedFrequency == 0.0) {
+            startIndex = 0;
+            endIndex = values.length;
+        } else {
+            final double binWidth = (double) sampleRate / freqSpace.length;
+            final int focusedIndex = (int) Math.round(focusedFrequency / binWidth);
+            startIndex = General.getStart(focusedIndex, FOCUSED_FREQUENCY_RADIUS);
+            endIndex = General.getEnd(focusedIndex, FOCUSED_FREQUENCY_RADIUS, values.length);
+        }
+        int maxBin = General.max(values, startIndex, endIndex);
         final List<Double> harmonics = new ArrayList<Double>();
         while (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(freqSpace, maxBin));
             General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
-            maxBin = General.max(values);
+            maxBin = General.max(values, startIndex, endIndex);
         }
 
         if (harmonics.isEmpty()) {
             return;
         }
         receiver.updatePitch(homebrewGcd(harmonics));
-    }
-
-    // focused findPitch, search around given frequency
-    private void findPitch(final double focusedFrequency) {
-        final Complex[] freqSpace = Fourier.fft(buffer);
-        final int halfN = buffer.length / 2;
-
-        final double binWidth = (double)sampleRate / freqSpace.length;
-        final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
-
-        // find maxBin
-        final int start = General.getStart(focusedIndex, FOCUSED_FREQUENCY_RADIUS);
-        final int end = General.getEnd(focusedIndex, FOCUSED_FREQUENCY_RADIUS, halfN);
-        int maxBin = Integer.MIN_VALUE;
-        double maxValue = Double.MIN_VALUE;
-        for (int i = start; i < end; i++) {
-            final double value = freqSpace[i].abs();
-            if (value > maxValue) {
-                maxValue = value;
-                maxBin = i;
-            }
-        }
-        if (maxBin < 0) {
-            return;
-        }
-        receiver.updatePitch(getFrequency(freqSpace, maxBin));
     }
 
     @Override
