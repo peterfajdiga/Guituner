@@ -13,7 +13,9 @@ import peterfajdiga.guituner.general.General;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
 
-    private static final int N_MAX_BINS = 10;
+    private static final int MAX_HARMONICS = 24;
+    private static final int HARMONICS_DROP_RADIUS = 16;
+    private static final double HARMONICS_THRESHOLD = 0.05;
     private static final int GCD_MIN_COUNT = 2;
     private static final int GCD_MIN_DELTA = 20;
 
@@ -125,17 +127,21 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double floor = sum / halfN;
 
         int maxBin = General.max(values);
-        final double threshold = (values[maxBin] - floor) * 0.2;  // TODO: define constant
+        final double threshold = (values[maxBin] - floor) * HARMONICS_THRESHOLD;
 
         final List<Double> harmonics = new ArrayList<Double>();
-        while (values[maxBin] - floor > threshold) {
+        while (values[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(values, maxBin));
-            General.drop(values, maxBin, 4);  // TODO: define constant
+            General.drop(values, maxBin, HARMONICS_DROP_RADIUS);
             maxBin = General.max(values);
         }
 
         receiver.updatePitch(homebrewGcd(harmonics));
-        System.err.println("Time elapsed: " + (System.currentTimeMillis() - startTime) + " for harmonics: " + harmonics.size());
+        System.err.println("Time elapsed: " + (System.currentTimeMillis() - startTime) + " for harmonics:");
+        for (double harmonic : harmonics) {
+            System.err.printf("%f Hz\n", harmonic);
+        }
+        System.err.println();
     }
 
 
