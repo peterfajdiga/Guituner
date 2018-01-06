@@ -10,7 +10,7 @@ import peterfajdiga.guituner.general.General;
 
 public class Recorder extends StoppableThread {
 
-    private static final int SAMPLE_RATE = 6400;
+    private static final int SAMPLE_RATE = 4000;
     private final ShortBufferReceiver receiver;
     private int bufferSize;  // in bytes
     private final short[] buffer;
@@ -19,7 +19,7 @@ public class Recorder extends StoppableThread {
         this.receiver = receiver;
         receiver.setSampleRate(SAMPLE_RATE);
 
-        bufferSize = AudioRecord.getMinBufferSize(
+        /*bufferSize = AudioRecord.getMinBufferSize(
                 SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT
@@ -28,7 +28,8 @@ public class Recorder extends StoppableThread {
             throw new RuntimeException("bufferSize: " + bufferSize);  // TODO: remove
 //            bufferSize = SAMPLE_RATE * 2;
         }
-        bufferSize = General.ceilPow2(bufferSize);
+        bufferSize = General.ceilPow2(bufferSize);*/
+        bufferSize = 2048;
 
         buffer = new short[bufferSize / 2];
     }
