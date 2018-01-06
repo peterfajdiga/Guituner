@@ -7,9 +7,13 @@ import android.widget.ScrollView;
 
 public class PitchView extends ScrollView {
 
+    private static final int SNAP_DELTA_Y = 10;
+
     private OnFocusChangedListener onFocusChangedListener;
     private PitchViewInner display;
     private boolean allowToneSelection = true;
+    private boolean fingerOnScreen = false;
+    private int lastDeltaY;
 
     public PitchView(Context context) {
         super(context);
@@ -44,19 +48,14 @@ public class PitchView extends ScrollView {
         }
         display.detectedFrequency = frequency;
         display.invalidate();
-        if (display.selectedTone == null) {
+        if (display.selectedTone == null && !fingerOnScreen) {
             focusOnFrequency(frequency);
         }
     }
 
     private void focusOnFrequency(final double frequency) {
         final int screenHeightHalf = getHeight() / 2;
-        int y = (int)display.getFrequencyY(frequency) - screenHeightHalf;
-        if (y < screenHeightHalf) {
-            y = screenHeightHalf;
-        } else if (y > display.height - screenHeightHalf) {
-            y = display.height - screenHeightHalf;
-        }
+        final int y = (int)display.getFrequencyY(frequency) - screenHeightHalf;
         allowToneSelection = false;
         smoothScrollTo(0, y);
     }
@@ -64,8 +63,22 @@ public class PitchView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
-        allowToneSelection = true;
-        return super.onTouchEvent(event);
+        final boolean retval = super.onTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                fingerOnScreen = true;
+                allowToneSelection = true;
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                fingerOnScreen = false;
+                if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
+                    focusOnFrequency(display.selectedTone.frequency);
+                }
+                break;
+            }
+        }
+        return retval;
     }
 
     @Override
@@ -75,6 +88,10 @@ public class PitchView extends ScrollView {
                                     final int oldt) {
         if (allowToneSelection) {
             selectCenterTone();
+            lastDeltaY = Math.abs(t - oldt);
+            if (lastDeltaY < SNAP_DELTA_Y && !fingerOnScreen) {
+                focusOnFrequency(display.selectedTone.frequency);
+            }
         }
     }
 
