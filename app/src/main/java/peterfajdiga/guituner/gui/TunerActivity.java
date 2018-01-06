@@ -8,9 +8,10 @@ import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.pitch.PitchDetector;
 import peterfajdiga.guituner.pitch.Recorder;
 
-public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver {
+public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver, PitchView.OnFocusChangedListener {
 
     private FrequencySetterRunnable frequencySetterRunnable;
+    private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
 
     PitchDetector pitchDetector;
     Recorder recorder;
@@ -21,6 +22,10 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         setContentView(R.layout.activity_tuner);
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
+
+        final View soundButton = findViewById(R.id.soundbtn);
+        soundButton.setSoundEffectsEnabled(false);
+        soundButton.setOnClickListener(soundOnClickListener);
     }
 
     @Override
@@ -46,6 +51,12 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         recorder.startThread();
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setOnFocusChangedListener(pitchDetector);
+        pitchView.setOnFocusChangedListener(this);
+    }
+
+    @Override
+    public void onFocusChanged(double focusedFrequency) {
+        soundOnClickListener.setFrequency(focusedFrequency);
+        pitchDetector.onFocusChanged(focusedFrequency);
     }
 }
