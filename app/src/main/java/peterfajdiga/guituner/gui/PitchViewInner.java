@@ -14,13 +14,13 @@ import peterfajdiga.guituner.general.Tone;
 class PitchViewInner extends View {
 
     private static final int HEIGHT_MULT = 20;
-    private static final float TONE_OFFSET_X_RATIO = 0.35f;
-    private static final float FREQ_OFFSET_X_RATIO = 0.8f;
+    private static final float TONE_OFFSET_X_RATIO = 0.5f;
+    private static final float FREQ_OFFSET_X_RATIO = 0.94f;
 
     // these need to be multiplied by dp
     private static final float EDGE_TONE_OFFSET_Y = 46.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
-    private static final float TONE_LINE_LENGTH = 46.0f;
+    private static final float TONE_LINE_LENGTH = 96.0f;
     private static final float SELECTION_WIDTH = 48.0f;
 
     private static final Paint paint_tone = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -47,7 +47,7 @@ class PitchViewInner extends View {
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
 
         paint_tone.setTextSize(24 * dp);
-        paint_tone.setTextAlign(Paint.Align.LEFT);
+        paint_tone.setTextAlign(Paint.Align.CENTER);
         paint_tone.setColor(r.getColor(android.R.color.primary_text_light));
         paint_tone.setStrokeWidth(dp);
 
