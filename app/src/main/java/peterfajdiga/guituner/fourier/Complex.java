@@ -1,8 +1,8 @@
 package peterfajdiga.guituner.fourier;
 
 public class Complex {
-    double re;
-    double im;
+    public double re;
+    public double im;
 
     public Complex(double real, double imag) {
         re = real;

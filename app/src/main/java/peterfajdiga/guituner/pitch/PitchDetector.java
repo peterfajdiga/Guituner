@@ -65,18 +65,26 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     // called by this thread
-    private double getFrequency(final double[] freqSpace, final int index) {
-        final double binWidth = sampleRate / (freqSpace.length * 2.0);
+    private double getFrequency(final Complex[] X, final int index) {
+        final double binWidth = (double)sampleRate / X.length;
         final double midFrequency = index * binWidth;
-        if (index <= 0 || index >= freqSpace.length-1) {
+        if (index <= 0 || index >= X.length-1) {
             return midFrequency;
         }
-        // Quadratic Method for bin interpolation
-        final double y1 = freqSpace[index-1];
-        final double y2 = freqSpace[index  ];
-        final double y3 = freqSpace[index+1];
-        final double d = (y3 - y1) / (2.0 * (2.0 * y2 - y1 - y3));
-        return midFrequency + d;
+        // Quinn's Second Estimator Method for bin interpolation
+        final double ap = (X[index+1].re * X[index].re + X[index+1].im * X[index].im)  /  (X[index].re * X[index].re + X[index].im * X[index].im);
+        final double dp = -ap / (1 - ap);
+        final double am = (X[index-1].re * X[index].re + X[index-1].im * X[index].im)  /  (X[index].re * X[index].re + X[index].im * X[index].im);
+        final double dm = am / (1 - am);
+        final double d = (dp + dm) / 2 + tau(dp * dp) - tau(dm * dm);
+        // linear interpolation
+        final double nextFrequency = (index+1) * binWidth;
+        return midFrequency + d * (nextFrequency - midFrequency);
+    }
+    private static final double TAU_CONST_A = Math.sqrt(6.0)/24.0;
+    private static final double TAU_CONST_B = Math.sqrt(2.0/3.0);
+    private double tau(final double x) {
+        return 0.25 * Math.log(3.0*x*x + 6.0*x + 1) - TAU_CONST_A * Math.log((x + 1 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
     private static double homebrewGcd(final List<Double> values) {
@@ -123,40 +131,31 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     // called by this thread
-    // in-place FFT
-    private double[] transform() {
+    // unfocused findPitch, search whole frequency space
+    private void findPitch() {
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
 
+        double sum = 0.0;
         final double[] values = new double[halfN];
         for (int i = 0; i < halfN; i++) {
             values[i] = freqSpace[i].abs();
-        }
-        return values;
-    }
-
-    // called by this thread
-    // unfocused findPitch, search whole frequency space
-    private void findPitch() {
-        final double[] freqSpace = transform();
-        double sum = 0.0;
-        for (double value : freqSpace) {
-            sum += value;
+            sum += values[i];
         }
         final double floor = sum / freqSpace.length;
 
-        int maxBin = General.max(freqSpace);
+        int maxBin = General.max(values);
         if (maxBin < 0) {
             // invalid buffer
             return;
         }
-        final double threshold = (freqSpace[maxBin] - floor) * HARMONICS_THRESHOLD;
+        final double threshold = (values[maxBin] - floor) * HARMONICS_THRESHOLD;
 
         final List<Double> harmonics = new ArrayList<Double>();
-        while (maxBin >= 0 && freqSpace[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
+        while (maxBin >= 0 && values[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(freqSpace, maxBin));
-            General.dropAround(freqSpace, maxBin, HARMONICS_DROP_RADIUS);
-            maxBin = General.max(freqSpace);
+            General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
+            maxBin = General.max(values);
         }
 
         receiver.updatePitch(homebrewGcd(harmonics));
@@ -164,12 +163,24 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     // focused findPitch, search around given frequency
     private void findPitch(final double focusedFrequency) {
-        final double[] freqSpace = transform();
+        final Complex[] freqSpace = Fourier.fft(buffer);
+        final int halfN = buffer.length / 2;
 
-        final double binWidth = sampleRate / (freqSpace.length * 2.0);
+        final double binWidth = (double)sampleRate / freqSpace.length;
         final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
 
-        final int maxBin = General.maxAround(freqSpace, focusedIndex, FOCUSED_FREQUENCY_RADIUS);
+        // find maxBin
+        final int start = General.getStart(focusedIndex, FOCUSED_FREQUENCY_RADIUS);
+        final int end = General.getEnd(focusedIndex, FOCUSED_FREQUENCY_RADIUS, halfN);
+        int maxBin = Integer.MIN_VALUE;
+        double maxValue = Double.MIN_VALUE;
+        for (int i = start; i < end; i++) {
+            final double value = freqSpace[i].abs();
+            if (value > maxValue) {
+                maxValue = value;
+                maxBin = i;
+            }
+        }
         if (maxBin < 0) {
             return;
         }
