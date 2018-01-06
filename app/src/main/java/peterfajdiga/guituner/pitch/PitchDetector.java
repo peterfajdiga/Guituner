@@ -109,6 +109,11 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         if (maxCount < GCD_MIN_COUNT) {
             return failsafe;
         }
+        for (Double value : values) {
+            if (value < gcd) {
+                return value;
+            }
+        }
         return gcd;
     }
 
