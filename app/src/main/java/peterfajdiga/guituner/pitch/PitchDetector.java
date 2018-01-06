@@ -2,15 +2,20 @@ package peterfajdiga.guituner.pitch;
 
 import android.support.annotation.NonNull;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import peterfajdiga.guituner.fourier.Complex;
 import peterfajdiga.guituner.fourier.Fourier;
+import peterfajdiga.guituner.general.General;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver {
 
-    private static final int N_MAX_BINS = 5;
+    private static final int N_MAX_BINS = 10;
+    private static final int GCD_MIN_COUNT = 2;
+    private static final int GCD_MIN_DELTA = 20;
 
     private final Receiver receiver;
     private volatile boolean working = false;
@@ -53,49 +58,118 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     // called by this thread
-    private static double interpolateBin(final Complex[] freqSpace,
-                                         final int index,
-                                         final double midFrequency) {
+    private double getFrequency(final double[] freqSpace, final int index) {
+        final double binWidth = (double)sampleRate / (freqSpace.length * 2);
+        final double midFrequency = index * binWidth;
         if (index <= 0 || index >= freqSpace.length-1) {
             return midFrequency;
         }
-        // Quadratic Method
-        final double y1 = freqSpace[index-1].abs();
-        final double y2 = freqSpace[index  ].abs();
-        final double y3 = freqSpace[index+1].abs();
-        final double d = (y3 - y1) / (2 * (2 * y2 - y1 - y3));
+        // Quadratic Method for bin interpolation
+        final double y1 = freqSpace[index-1];
+        final double y2 = freqSpace[index  ];
+        final double y3 = freqSpace[index+1];
+        final double d = (y3 - y1) / (2.0 * (2.0 * y2 - y1 - y3));
         return midFrequency + d;
+    }
+
+    private static double homebrewGcd(final List<Double> values) {
+        final double failsafe = values.get(0);
+
+        final List<GcdCandidate> candidates = new ArrayList<GcdCandidate>();
+        for (double value0 : values) {
+            for (double value1 : values) {
+                final double delta = Math.abs(value1 - value0);
+                if (delta < GCD_MIN_DELTA) {
+                    continue;
+                }
+                boolean addedToExistingCandidate = false;
+                for (GcdCandidate candidate : candidates) {
+                    if (candidate.add(delta)) {
+                        addedToExistingCandidate = true;
+                        break;
+                    }
+                }
+                if (!addedToExistingCandidate) {
+                    candidates.add(new GcdCandidate(delta));
+                }
+            }
+        }
+
+        // return candidate with highest count
+        int maxCount = Integer.MIN_VALUE;
+        double gcd = Double.NaN;
+        for (GcdCandidate candidate : candidates) {
+            if (candidate.count > maxCount) {
+                maxCount = candidate.count;
+                gcd = candidate.avg();
+            }
+        }
+        if (maxCount < GCD_MIN_COUNT) {
+            return failsafe;
+        }
+        return gcd;
     }
 
     // called by this thread
     private void transform() {
+        final long startTime = System.currentTimeMillis();
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
 
-        final PriorityQueue<Bin> maxBinsQueue = new PriorityQueue<Bin>(N_MAX_BINS);
-        for (int i = 0; i < N_MAX_BINS; i++) {
-            maxBinsQueue.add(new Bin(Double.MIN_VALUE, -1));
-        }
+        double sum = 0.0;
+        final double[] values = new double[halfN];
         for (int i = 0; i < halfN; i++) {
-            final double val = freqSpace[i].abs();
-            if (val > maxBinsQueue.peek().value) {
-                maxBinsQueue.poll();
-                maxBinsQueue.add(new Bin(val, i));
-            }
+            values[i] = freqSpace[i].abs();
+            sum += values[i];
+        }
+        final double floor = sum / halfN;
+
+        int maxBin = General.max(values);
+        final double threshold = (values[maxBin] - floor) * 0.2;  // TODO: define constant
+
+        final List<Double> harmonics = new ArrayList<Double>();
+        while (values[maxBin] - floor > threshold) {
+            harmonics.add(getFrequency(values, maxBin));
+            General.drop(values, maxBin, 4);  // TODO: define constant
+            maxBin = General.max(values);
         }
 
-        final int[] maxBins = new int[N_MAX_BINS];
-        for (int i = 0; i < N_MAX_BINS; i++) {
-            maxBins[i] = maxBinsQueue.poll().index;
-        }
-
-        final double binWidth = (double)sampleRate / freqSpace.length;
-        final int maxBin = maxBins[N_MAX_BINS-1];
-        final double midFreq = maxBin * binWidth;
-        receiver.updatePitch(interpolateBin(freqSpace, maxBin, midFreq));
+        receiver.updatePitch(homebrewGcd(harmonics));
+        System.err.println("Time elapsed: " + (System.currentTimeMillis() - startTime) + " for harmonics: " + harmonics.size());
     }
 
 
+
+    private static class GcdCandidate {
+
+        private static final double MAX_ERROR = 2.0;
+        private static final int MULTS = 5;
+
+        double sum;
+        int count;
+
+        GcdCandidate(final double value) {
+            sum = value;
+            count = 1;
+        }
+
+        double avg() {
+            return sum / count;
+        }
+
+        // return true if added
+        boolean add(final double value) {
+            for (int mult = 1; mult <= MULTS; mult++) {
+                final double adjustedValue = value / mult;
+                if (Math.abs(avg() - adjustedValue) <= MAX_ERROR) {
+                    sum += adjustedValue;
+                    count++;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     private static class Bin implements Comparable<Bin> {
         double value;
