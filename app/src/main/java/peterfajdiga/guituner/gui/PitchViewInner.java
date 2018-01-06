@@ -13,12 +13,11 @@ import peterfajdiga.guituner.general.Tone;
 
 class PitchViewInner extends View {
 
-    private static final int HEIGHT_MULT = 20;
     private static final float TONE_OFFSET_X_RATIO = 0.5f;
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;
 
     // these need to be multiplied by dp
-    private static final float EDGE_TONE_OFFSET_Y = 46.0f;
+    private static final float TONE_FULL_WIDTH = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
     private static final float TONE_LINE_LENGTH = 96.0f;
     private static final float SELECTION_WIDTH = 48.0f;
@@ -32,6 +31,7 @@ class PitchViewInner extends View {
     private float dp;
     private int width;
     int height;
+    private float edgeToneOffsetY;
 
     double detectedFrequency = 0.0;
     Tone selectedTone = null;
@@ -62,18 +62,14 @@ class PitchViewInner extends View {
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
-        // Compute the height required to render the view
-        // Assume Width will always be MATCH_PARENT.
         width = MeasureSpec.getSize(widthMeasureSpec);
-        height = width * HEIGHT_MULT;
+        height = (int)(TONE_FULL_WIDTH * dp * tones.length) + heightMeasureSpec;
+        edgeToneOffsetY = heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        width  = canvas.getWidth();   // probably unnecessary
-        height = canvas.getHeight();  // probably unnecessary
-
 
         // draw tones
         final float toneX = width * TONE_OFFSET_X_RATIO;
@@ -102,7 +98,6 @@ class PitchViewInner extends View {
                     paint_tone
             );
         }
-
 
         // draw detected frequency
         if (detectedFrequency > 0.0) {
@@ -155,8 +150,8 @@ class PitchViewInner extends View {
     }
 
     float getFrequencyY(final double frequency) {
-        final float minY = EDGE_TONE_OFFSET_Y * dp;
-        final float maxY = height - EDGE_TONE_OFFSET_Y * dp;
+        final float minY = edgeToneOffsetY;
+        final float maxY = height - edgeToneOffsetY;
 
         final double minLogFreq = Math.log(tones[0].frequency);
         final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
@@ -167,8 +162,8 @@ class PitchViewInner extends View {
     }
 
     private double getFrequencyFromY(final float y) {
-        final float minY = EDGE_TONE_OFFSET_Y * dp;
-        final float maxY = height - EDGE_TONE_OFFSET_Y * dp;
+        final float minY = edgeToneOffsetY;
+        final float maxY = height - edgeToneOffsetY;
 
         final double minLogFreq = Math.log(tones[0].frequency);
         final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
