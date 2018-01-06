@@ -2,11 +2,13 @@ package peterfajdiga.guituner.gui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 public class PitchView extends ScrollView {
 
     private PitchViewInner display;
+    private boolean allowToneSelection = true;
 
     public PitchView(Context context) {
         super(context);
@@ -41,7 +43,9 @@ public class PitchView extends ScrollView {
         }
         display.detectedFrequency = frequency;
         display.invalidate();
-        focusOnFrequency(frequency);
+        if (display.selectedTone == null) {
+            focusOnFrequency(frequency);
+        }
     }
 
     private void focusOnFrequency(final double frequency) {
@@ -52,6 +56,29 @@ public class PitchView extends ScrollView {
         } else if (y > display.height - screenHeightHalf) {
             y = display.height - screenHeightHalf;
         }
+        allowToneSelection = false;
         smoothScrollTo(0, y);
+    }
+
+
+    @Override
+    public boolean onTouchEvent(final MotionEvent event) {
+        allowToneSelection = true;
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onScrollChanged (final int l,
+                                    final int t,
+                                    final int oldl,
+                                    final int oldt) {
+        if (allowToneSelection) {
+            selectCenterTone();
+        }
+    }
+
+    private void selectCenterTone() {
+        final int y = getScrollY() + getHeight() / 2;
+        display.selectToneByY(y);
     }
 }

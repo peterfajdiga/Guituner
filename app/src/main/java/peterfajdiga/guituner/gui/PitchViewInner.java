@@ -6,13 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
-import android.widget.ScrollView;
 
 import peterfajdiga.guituner.general.Tone;
 
@@ -39,50 +34,12 @@ class PitchViewInner extends View {
     int height;
 
     double detectedFrequency = 0.0;
-    private Tone selectedTone = null;
+    Tone selectedTone = null;
 
     public PitchViewInner(Context context) {
         super(context);
         init(context);
     }
-
-
-    private ScrollView getParentScrollView() {
-        final ViewParent parent = getParent();
-        if (parent instanceof ScrollView) {
-            return (ScrollView) parent;
-        } else {
-            throw new RuntimeException("PitchView not in a ScrollView");
-        }
-    }
-
-
-
-    // control
-    /*@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        final ScrollView parent = getParentScrollView();
-        final int y = parent.getScrollY() + parent.getHeight() / 2;
-        final double frequency = getFrequencyFromY(y);
-
-        double minDiff = Double.MAX_VALUE;
-        for (Tone tone : tones) {
-            final double diff = Math.abs(tone.frequency - frequency);
-            if (diff < minDiff) {
-                minDiff = diff;
-                selectedTone = tone;
-            }
-        }
-        invalidate();
-        return true;
-    }*/
-
-    /*@Override
-    public boolean performClick() {
-        System.err.println("asdf");
-        return true;
-    }*/
-
 
 
     private void init(final Context context) {
@@ -101,6 +58,7 @@ class PitchViewInner extends View {
 
         paint_selection.setColor(Color.LTGRAY);
     }
+
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
@@ -218,6 +176,20 @@ class PitchViewInner extends View {
         final double freq01 = (y - minY) / (maxY - minY);
         final double logFreq = (freq01 * (maxLogFreq - minLogFreq)) + minLogFreq;
         return Math.exp(logFreq);
+    }
+
+    void selectToneByY(final float y) {
+        final double frequency = getFrequencyFromY(y);
+        // find nearest Tone
+        double minDiff = Double.MAX_VALUE;
+        for (Tone tone : tones) {
+            final double diff = Math.abs(tone.frequency - frequency);
+            if (diff < minDiff) {
+                minDiff = diff;
+                selectedTone = tone;
+            }
+        }
+        invalidate();
     }
 
 
