@@ -15,9 +15,16 @@ public class General {
 
     // find index of max element
     public static int max(final double[] values) {
+        return max(values, 0, values.length);
+    }
+
+    // find index of max element
+    // start is inclusive
+    // end is exclusive
+    public static int max(final double[] values, final int start, final int end) {
         int maxIndex = Integer.MIN_VALUE;
         double maxValue = Double.MIN_VALUE;
-        for (int i = 0; i < values.length; i++) {
+        for (int i = start; i < end; i++) {
             final double value = values[i];
             if (value > maxValue) {
                 maxValue = value;
@@ -27,12 +34,48 @@ public class General {
         return maxIndex;
     }
 
+    // find index of max element
+    public static int maxAround(final double[] values, final int index, final int radius) {
+        return max(
+                values,
+                getStart(index, radius),
+                getEnd(index, radius, values.length)
+        );
+    }
+
     // set values to 0
-    public static void drop(final double[] values, final int index, final int radius) {
-        for (int i = index-radius; i < index+radius; i++) {
-            if (i >= 0 && i < values.length) {
-                values[i] = 0.0;
-            }
+    // start is inclusive
+    // end is exclusive
+    public static void drop(final double[] values, final int start, final int end) {
+        for (int i = start; i <= end; i++) {
+            values[i] = 0.0;
         }
+    }
+
+    // set values to 0
+    public static void dropAround(final double[] values, final int index, final int radius) {
+        drop(
+                values,
+                getStart(index, radius),
+                getEnd(index, radius, values.length)
+        );
+    }
+
+    // to be used as inclusive start
+    public static int getStart(final int index, final int radius) {
+        int start = index - radius;
+        if (start < 0) {
+            start = 0;
+        }
+        return start;
+    }
+
+    // to be used as exclusive end
+    public static int getEnd(final int index, final int radius, final int length) {
+        int end = index + radius + 1;
+        if (end > length) {
+            end = length;
+        }
+        return end;
     }
 }

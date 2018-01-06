@@ -7,6 +7,7 @@ import android.widget.ScrollView;
 
 public class PitchView extends ScrollView {
 
+    private OnFocusChangedListener onFocusChangedListener;
     private PitchViewInner display;
     private boolean allowToneSelection = true;
 
@@ -80,5 +81,19 @@ public class PitchView extends ScrollView {
     private void selectCenterTone() {
         final int y = getScrollY() + getHeight() / 2;
         display.selectToneByY(y);
+        if (onFocusChangedListener != null) {
+            onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
+        }
+    }
+
+
+
+    public interface OnFocusChangedListener {
+        // when focusedFrequency == 0.0, there is no focus
+        void onFocusChanged(double focusedFrequency);
+    }
+
+    public void setOnFocusChangedListener(final OnFocusChangedListener listener) {
+        this.onFocusChangedListener = listener;
     }
 }
