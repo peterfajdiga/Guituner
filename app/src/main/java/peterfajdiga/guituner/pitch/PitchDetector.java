@@ -133,7 +133,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double threshold = (values[maxBin] - floor) * HARMONICS_THRESHOLD;
 
         final List<Double> harmonics = new ArrayList<Double>();
-        while (values[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
+        while (maxBin >= 0 && values[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(values, maxBin));
             General.drop(values, maxBin, HARMONICS_DROP_RADIUS);
             maxBin = General.max(values);
