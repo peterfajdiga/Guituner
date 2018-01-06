@@ -12,7 +12,7 @@ import peterfajdiga.guituner.gui.PitchView;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver, PitchView.OnFocusChangedListener {
 
-    private static final double NOISE_THRESHOLD = 2.0;
+    private static final double NOISE_THRESHOLD = 20.0;
     private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
