@@ -12,9 +12,9 @@ import peterfajdiga.guituner.gui.PitchView;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver, PitchView.OnFocusChangedListener {
 
+    private static final double NOISE_THRESHOLD = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
-    private static final double HARMONICS_THRESHOLD = 0.05;
     private static final int GCD_MIN_COUNT = 2;
     private static final int GCD_MIN_DELTA = 20;
     private static final int FOCUSED_FREQUENCY_RADIUS = 20;
@@ -145,19 +145,16 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double floor = sum / freqSpace.length;
 
         int maxBin = General.max(values);
-        if (maxBin < 0) {
-            // invalid buffer
-            return;
-        }
-        final double threshold = (values[maxBin] - floor) * HARMONICS_THRESHOLD;
-
         final List<Double> harmonics = new ArrayList<Double>();
-        while (maxBin >= 0 && values[maxBin] - floor > threshold && harmonics.size() < MAX_HARMONICS) {
+        while (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(freqSpace, maxBin));
             General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
             maxBin = General.max(values);
         }
 
+        if (harmonics.isEmpty()) {
+            return;
+        }
         receiver.updatePitch(homebrewGcd(harmonics));
     }
 
