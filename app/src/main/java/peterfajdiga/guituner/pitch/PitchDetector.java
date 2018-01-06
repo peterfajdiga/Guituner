@@ -114,7 +114,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     // called by this thread
     private void transform() {
-        final long startTime = System.currentTimeMillis();
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
 
@@ -137,11 +136,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
 
         receiver.updatePitch(homebrewGcd(harmonics));
-        System.err.println("Time elapsed: " + (System.currentTimeMillis() - startTime) + " for harmonics:");
-        for (double harmonic : harmonics) {
-            System.err.printf("%f Hz\n", harmonic);
-        }
-        System.err.println();
     }
 
 
