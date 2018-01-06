@@ -29,7 +29,7 @@ public class Recorder extends StoppableThread {
 //            bufferSize = SAMPLE_RATE * 2;
         }
         bufferSize = General.ceilPow2(bufferSize);*/
-        bufferSize = 2048;
+        bufferSize = 4096;
 
         buffer = new short[bufferSize / 2];
     }

@@ -12,13 +12,14 @@ import peterfajdiga.guituner.gui.PitchView;
 
 public class PitchDetector extends StoppableThread implements ShortBufferReceiver, PitchView.OnFocusChangedListener {
 
-    private static final double NOISE_THRESHOLD = 20.0;
+    private static final double NOISE_THRESHOLD = 2.0;
+    private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
     private static final int GCD_MIN_COUNT = 2;
     private static final int GCD_MIN_DELTA = 20;
     private static final double GCD_FAILSAFE_PREFERENCE = 4.0;
-    private static final int FOCUSED_BIN_RADIUS = 20;
+    private static final int FOCUSED_BIN_RADIUS = 10;
 
     private final Receiver receiver;
     private volatile boolean working = false;
@@ -141,21 +142,25 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double floor = sum / freqSpace.length;
 
         final int startIndex, endIndex;
+        double noiseThreshold;
         if (focusedFrequency == 0.0) {
             startIndex = 0;
             endIndex = values.length;
+            noiseThreshold = NOISE_THRESHOLD;
         } else {
             final double binWidth = (double) sampleRate / freqSpace.length;
             final int focusedIndex = (int) Math.round(focusedFrequency / binWidth);
             startIndex = General.getStart(focusedIndex, FOCUSED_BIN_RADIUS);
             endIndex = General.getEnd(focusedIndex, FOCUSED_BIN_RADIUS, values.length);
+            noiseThreshold = NOISE_THRESHOLD_FOCUSED;
         }
         int maxBin = General.max(values, startIndex, endIndex);
         final List<Double> harmonics = new ArrayList<Double>();
-        while (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD && harmonics.size() < MAX_HARMONICS) {
+        while (maxBin >= 0 && values[maxBin] / floor > noiseThreshold && harmonics.size() < MAX_HARMONICS) {
             harmonics.add(getFrequency(freqSpace, maxBin));
             General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
             maxBin = General.max(values, startIndex, endIndex);
+            noiseThreshold = NOISE_THRESHOLD;
         }
 
         if (harmonics.isEmpty()) {
