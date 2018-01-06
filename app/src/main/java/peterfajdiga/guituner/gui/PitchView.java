@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewParent;
+import android.widget.ScrollView;
 
 import peterfajdiga.guituner.general.Tone;
 
@@ -29,6 +31,7 @@ public class PitchView extends View {
     private final android.graphics.Rect textBounds = new Rect();
 
     private float dp;
+    private int width, height;
 
     private double detectedFrequency = 0.0;
 
@@ -54,8 +57,29 @@ public class PitchView extends View {
 
 
     public void setFrequency(final double frequency) {
+        if (frequency <= 0.0) {
+            return;
+        }
         this.detectedFrequency = frequency;
         invalidate();
+        focusOnFrequency(frequency);
+    }
+
+    private void focusOnFrequency(final double frequency) {
+        final ViewParent parent = getParent();
+        if (parent instanceof ScrollView) {
+            final ScrollView scrollView = (ScrollView)parent;
+            final int screenHeightHalf = scrollView.getHeight() / 2;
+            int y = (int)getFrequencyY(frequency) - screenHeightHalf;
+            if (y < screenHeightHalf) {
+                y = screenHeightHalf;
+            } else if (y > height - screenHeightHalf) {
+                y = height - screenHeightHalf;
+            }
+            scrollView.smoothScrollTo(0, y);
+        } else {
+            throw new RuntimeException("PitchView not in a ScrollView");
+        }
     }
 
 
@@ -79,22 +103,22 @@ public class PitchView extends View {
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         // Compute the height required to render the view
         // Assume Width will always be MATCH_PARENT.
-        final int width = MeasureSpec.getSize(widthMeasureSpec);
-        final int height = width * HEIGHT_MULT;
+        width = MeasureSpec.getSize(widthMeasureSpec);
+        height = width * HEIGHT_MULT;
         setMeasuredDimension(width, height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final int width  = canvas.getWidth();
-        final int height = canvas.getHeight();
+        width  = canvas.getWidth();   // probably unnecessary
+        height = canvas.getHeight();  // probably unnecessary
 
 
         // draw detected frequency
         if (detectedFrequency > 0.0) {
             final String freqText = String.format("%.1f Hz", detectedFrequency);
             final float freqX = width * FREQ_OFFSET_X_RATIO;
-            final float freqY = getFrequencyY(detectedFrequency, height);
+            final float freqY = getFrequencyY(detectedFrequency);
 
             paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
 
@@ -116,7 +140,7 @@ public class PitchView extends View {
         // draw tones
         final float toneX = width * TONE_OFFSET_X_RATIO;
         for (Tone tone : tones) {
-            final float toneY = getFrequencyY(tone.frequency, height);
+            final float toneY = getFrequencyY(tone.frequency);
 
             paint_tone.getTextBounds(tone.name, 0, tone.name.length(), textBounds);
 
@@ -164,7 +188,7 @@ public class PitchView extends View {
         }
     }
 
-    private float getFrequencyY(final double frequency, final int height) {
+    private float getFrequencyY(final double frequency) {
         final float minY = EDGE_TONE_OFFSET_Y * dp;
         final float maxY = height - EDGE_TONE_OFFSET_Y * dp;
 
