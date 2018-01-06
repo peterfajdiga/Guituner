@@ -18,7 +18,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final int GCD_MIN_COUNT = 2;
     private static final int GCD_MIN_DELTA = 20;
     private static final double GCD_FAILSAFE_PREFERENCE = 4.0;
-    private static final int FOCUSED_FREQUENCY_RADIUS = 20;
+    private static final int FOCUSED_BIN_RADIUS = 20;
 
     private final Receiver receiver;
     private volatile boolean working = false;
@@ -147,8 +147,8 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         } else {
             final double binWidth = (double) sampleRate / freqSpace.length;
             final int focusedIndex = (int) Math.round(focusedFrequency / binWidth);
-            startIndex = General.getStart(focusedIndex, FOCUSED_FREQUENCY_RADIUS);
-            endIndex = General.getEnd(focusedIndex, FOCUSED_FREQUENCY_RADIUS, values.length);
+            startIndex = General.getStart(focusedIndex, FOCUSED_BIN_RADIUS);
+            endIndex = General.getEnd(focusedIndex, FOCUSED_BIN_RADIUS, values.length);
         }
         int maxBin = General.max(values, startIndex, endIndex);
         final List<Double> harmonics = new ArrayList<Double>();
