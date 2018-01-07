@@ -8,12 +8,14 @@ import android.widget.ScrollView;
 public class PitchView extends ScrollView {
 
     private static final int SNAP_DELTA_Y = 10;
+    private static final float TONE_PRESS_MOVE_TOLERANCE = 10;
 
     private OnFocusChangedListener onFocusChangedListener;
     private PitchViewInner display;
     private boolean allowToneSelection = true;
     private boolean fingerOnScreen = false;
     private int lastDeltaY;
+    private float lastTouchX, lastTouchY;
 
     public PitchView(Context context) {
         super(context);
@@ -77,11 +79,17 @@ public class PitchView extends ScrollView {
                 fingerOnScreen = true;
                 allowToneSelection = true;
                 lastDeltaY = 0;
+                lastTouchX = event.getX();
+                lastTouchY = event.getY();
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 fingerOnScreen = false;
-                if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
+                if (Math.abs(event.getX() - lastTouchX) + Math.abs(event.getY() - lastTouchY) < TONE_PRESS_MOVE_TOLERANCE) {
+                    display.selectToneByY(event.getY() + getScrollY());
+                    focusOnFrequency(display.selectedTone.frequency);
+                    dispatchFocusChaned();
+                } else if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
                     focusOnFrequency(display.selectedTone.frequency);
                 }
                 break;
@@ -107,6 +115,10 @@ public class PitchView extends ScrollView {
     private void selectCenterTone() {
         final int y = getScrollY() + getHeight() / 2;
         display.selectToneByY(y);
+        dispatchFocusChaned();
+    }
+
+    private void dispatchFocusChaned() {
         if (onFocusChangedListener != null) {
             onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
         }
