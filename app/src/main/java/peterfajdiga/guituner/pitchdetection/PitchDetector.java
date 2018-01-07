@@ -217,6 +217,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                 if (Math.abs(avg() - adjustedValue) <= MAX_ERROR) {
                     sum += adjustedValue;
                     count++;
+                    sum /= mult;
                     return true;
                 }
             }
