@@ -15,7 +15,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
-    private static final int FUNDAMENTAL_MIN_COUNT = 2;
     private static final double FUNDAMENTAL_WEIGHT_GCD = 0.5;
     private static final double FUNDAMENTAL_WEIGHT_MINFREQ = 0.5;
     private static final int FOCUSED_BIN_RADIUS = 10;
@@ -85,9 +84,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     private static double findFundamental(final List<Double> values) {
-        System.err.println("**********************");
         final double failsafe = values.get(0);
-        System.err.println("failsafe: " + failsafe);
 
         final List<FundamentalCandidate> candidates = new ArrayList<FundamentalCandidate>();
         for (double value0 : values) {
@@ -118,7 +115,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                 gcd = candidate.avg();
             }
         }
-        System.err.println("gcd: " + gcd);
 
         double minFreq = Double.MAX_VALUE;
         for (Double value : values) {
@@ -126,19 +122,13 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                 minFreq = value;
             }
         }
-        System.err.println("minFreq: " + minFreq);
 
         if (Math.abs(minFreq - gcd) < FundamentalCandidate.MAX_ERROR) {
-            System.err.println("returning mix: " + (FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd));
             return FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd;
         }
-
         if (minFreq < gcd) {
-            System.err.println("returning minFreq: " + minFreq);
             return minFreq;
         }
-
-        System.err.println("returning gcd: " + gcd);
         return gcd;
     }
 
