@@ -13,6 +13,10 @@ public class General {
         return n;
     }
 
+    public static double db(final double value) {
+        return 20.0 * Math.log10(value);
+    }
+
     // find index of max element
     public static int max(final double[] values) {
         return max(values, 0, values.length);
