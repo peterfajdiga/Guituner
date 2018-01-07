@@ -53,6 +53,14 @@ public class PitchView extends ScrollView {
         }
     }
 
+    public void unselectTone() {
+        display.selectedTone = null;
+        display.invalidate();
+        if (onFocusChangedListener != null) {
+            onFocusChangedListener.onFocusChanged(0.0);
+        }
+    }
+
     private void focusOnFrequency(final double frequency) {
         final int screenHeightHalf = getHeight() / 2;
         final int y = (int)display.getFrequencyY(frequency) - screenHeightHalf;

@@ -26,6 +26,15 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         final View soundButton = findViewById(R.id.soundbtn);
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnClickListener(soundOnClickListener);
+
+        final View unpinButton = findViewById(R.id.unpinbtn);
+        unpinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final PitchView pitchView = findViewById(R.id.pitchview);
+                pitchView.unselectTone();
+            }
+        });
     }
 
     @Override
@@ -56,6 +65,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
     @Override
     public void onFocusChanged(double focusedFrequency) {
+        final View selectionBackground = findViewById(R.id.selectionbg);
+        selectionBackground.setVisibility(focusedFrequency == 0.0 ? View.INVISIBLE : View.VISIBLE);
+
         soundOnClickListener.setFrequency(focusedFrequency);
         pitchDetector.onFocusChanged(focusedFrequency);
     }

@@ -17,14 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
-        android:background="@color/selectionBackground">
+        android:background="@color/selectionBackground"
+        android:visibility="invisible">
 
         <Button android:id="@+id/unpinbtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"
             android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_music_note_black_24dp" />
+            android:drawableLeft="@drawable/ic_close_black_24dp" />
 
         <Button android:id="@+id/soundbtn"
             android:layout_width="48dp"

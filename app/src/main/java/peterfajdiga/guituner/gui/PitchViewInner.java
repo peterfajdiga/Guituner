@@ -72,34 +72,6 @@ class PitchViewInner extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        // draw tones
-        final float toneX = width * TONE_OFFSET_X_RATIO;
-        for (Tone tone : tones) {
-            final float toneY = getFrequencyY(tone.frequency);
-
-            if (tone == selectedTone) {
-                final float selectionHalfWidth = SELECTION_WIDTH * dp / 2.0f;
-                canvas.drawRect(0, toneY - selectionHalfWidth, width, toneY + selectionHalfWidth, paint_selection);
-            }
-
-            paint_tone.getTextBounds(tone.name, 0, tone.name.length(), textBounds);
-
-            canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint_tone);
-
-            final float toneLineLeftStartX = getTextLeft(toneX, paint_tone) - LINE_TEXT_SPACING * dp;
-            final float toneLineRightStartX = getTextRight(toneX, paint_tone) + LINE_TEXT_SPACING * dp;
-            canvas.drawLine(
-                    toneLineLeftStartX - TONE_LINE_LENGTH, toneY,
-                    toneLineLeftStartX, toneY,
-                    paint_tone
-            );
-            canvas.drawLine(
-                    toneLineRightStartX, toneY,
-                    toneLineRightStartX + TONE_LINE_LENGTH, toneY,
-                    paint_tone
-            );
-        }
-
         // draw detected frequency
         if (detectedFrequency > 0.0) {
             final String freqText = String.format("%.1f Hz", detectedFrequency);
@@ -119,6 +91,29 @@ class PitchViewInner extends View {
                     getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
                     width, freqY,
                     paint_freq
+            );
+        }
+
+        // draw tones
+        final float toneX = width * TONE_OFFSET_X_RATIO;
+        for (Tone tone : tones) {
+            final float toneY = getFrequencyY(tone.frequency);
+
+            paint_tone.getTextBounds(tone.name, 0, tone.name.length(), textBounds);
+
+            canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint_tone);
+
+            final float toneLineLeftStartX = getTextLeft(toneX, paint_tone) - LINE_TEXT_SPACING * dp;
+            final float toneLineRightStartX = getTextRight(toneX, paint_tone) + LINE_TEXT_SPACING * dp;
+            canvas.drawLine(
+                    toneLineLeftStartX - TONE_LINE_LENGTH, toneY,
+                    toneLineLeftStartX, toneY,
+                    paint_tone
+            );
+            canvas.drawLine(
+                    toneLineRightStartX, toneY,
+                    toneLineRightStartX + TONE_LINE_LENGTH, toneY,
+                    paint_tone
             );
         }
     }
