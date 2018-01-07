@@ -120,17 +120,21 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             }
         }
         System.err.println("gcd: " + gcd);
-        if (maxCount < GCD_MIN_COUNT) {
-            System.err.println("return: " + failsafe);
-            return failsafe;
-        }
+
+        double minFreq = Double.MAX_VALUE;
         for (Double value : values) {
-            if (value > MIN_FREQUENCY && value < gcd - GCD_FAILSAFE_PREFERENCE) {
-                System.err.println("return: " + value);
-                return value;
+            if (value > MIN_FREQUENCY && value < minFreq) {
+                minFreq = value;
             }
         }
-        System.err.println("return: " + gcd);
+        System.err.println("minFreq: " + minFreq);
+
+        if (minFreq < gcd) {
+            System.err.println("returning minFreq: " + minFreq);
+            return minFreq;
+        }
+
+        System.err.println("returning gcd: " + gcd);
         return gcd;
     }
 
