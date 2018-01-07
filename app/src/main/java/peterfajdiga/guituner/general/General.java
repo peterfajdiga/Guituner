@@ -51,7 +51,7 @@ public class General {
     // start is inclusive
     // end is exclusive
     public static void drop(final double[] values, final int start, final int end) {
-        for (int i = start; i <= end; i++) {
+        for (int i = start; i < end; i++) {
             values[i] = 0.0;
         }
     }
