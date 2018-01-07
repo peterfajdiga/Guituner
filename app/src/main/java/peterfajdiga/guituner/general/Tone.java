@@ -2,8 +2,8 @@ package peterfajdiga.guituner.general;
 
 public class Tone {
 
-    public double frequency;
-    public String name;
+    public final double frequency;
+    public final String name;
 
     // don't allow creation of a new Tone
     private Tone(final double frequency, final String name) {

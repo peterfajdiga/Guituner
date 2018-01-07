@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Recorder extends StoppableThread {
 
-    private static final int SAMPLE_RATE = 4000;
+    public static final int SAMPLE_RATE = 4000;
     private final ShortBufferReceiver receiver;
     private int bufferSize;  // in bytes
     private final short[] buffer;

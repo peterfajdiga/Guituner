@@ -23,6 +23,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
+        final PitchView pitchView = findViewById(R.id.pitchview);
+        pitchView.setHighestFrequency(Recorder.SAMPLE_RATE / 2.0);
+
         final View soundButton = findViewById(R.id.soundbtn);
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnClickListener(soundOnClickListener);
@@ -31,8 +34,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         unpinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final PitchView pitchView = findViewById(R.id.pitchview);
-                pitchView.unselectTone();
+                pitchView.removeFocus();
             }
         });
     }

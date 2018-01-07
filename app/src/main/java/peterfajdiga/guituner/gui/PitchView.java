@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
+import java.util.Arrays;
+
 import peterfajdiga.guituner.general.Tone;
 
 public class PitchView extends ScrollView {
@@ -64,11 +66,18 @@ public class PitchView extends ScrollView {
         }
     }
 
-    public void unselectTone() {
-        display.selectedTone = null;
-        display.invalidate();
-        if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(0.0);
+    public void setHighestFrequency(final double frequency) {
+        display.highestFrequency = frequency;
+
+        int n_detectableTones = 0;
+        for (Tone tone : PitchViewInner.toneList) {
+            if (tone.frequency > frequency) break;
+            n_detectableTones++;
+        }
+        display.tones = Arrays.copyOf(PitchViewInner.toneList, n_detectableTones);
+
+        if (display.selectedTone != null && display.selectedTone.frequency > frequency) {
+            removeFocus();
         }
     }
 
@@ -97,7 +106,7 @@ public class PitchView extends ScrollView {
                 if (Math.abs(event.getX() - lastTouchX) + Math.abs(event.getY() - lastTouchY) < TONE_PRESS_MOVE_TOLERANCE) {
                     display.selectToneByY(event.getY() + getScrollY());
                     focusOnFrequency(display.selectedTone.frequency);
-                    dispatchFocusChaned();
+                    dispatchFocusChanged();
                 } else if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
                     focusOnFrequency(display.selectedTone.frequency);
                 }
@@ -124,10 +133,18 @@ public class PitchView extends ScrollView {
     private void selectCenterTone() {
         final int y = getScrollY() + getHeight() / 2;
         display.selectToneByY(y);
-        dispatchFocusChaned();
+        dispatchFocusChanged();
     }
 
-    private void dispatchFocusChaned() {
+    // don't call dispatchFocusChanged afterwards
+    public void removeFocus() {
+        display.selectedTone = null;
+        if (onFocusChangedListener != null) {
+            onFocusChangedListener.onFocusChanged(0.0);
+        }
+        display.invalidate();
+    }
+    private void dispatchFocusChanged() {
         if (onFocusChangedListener != null) {
             onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
         }
@@ -169,6 +186,8 @@ public class PitchView extends ScrollView {
         private final android.graphics.Rect textBounds = new Rect();
 
         private double detectedFrequency = 0.0;
+        private double highestFrequency = 2000.0;
+        private Tone[] tones = toneList;
         private Tone selectedTone = null;
 
         public PitchViewInner(Context context) {
@@ -366,7 +385,7 @@ public class PitchView extends ScrollView {
 
 
 
-        private static final Tone[] tones = {
+        private static final Tone[] toneList = {
                 Tone.A0,
                 Tone.A0s,
                 Tone.B0,
