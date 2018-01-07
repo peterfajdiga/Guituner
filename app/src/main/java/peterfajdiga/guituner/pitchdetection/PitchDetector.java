@@ -208,6 +208,14 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                     return true;
                 }
             }
+            for (int mult = 1; mult <= MULTS; mult++) {
+                final double adjustedValue = value * mult;
+                if (Math.abs(avg() - adjustedValue) <= MAX_ERROR) {
+                    sum += adjustedValue;
+                    count++;
+                    return true;
+                }
+            }
             return false;
         }
     }
