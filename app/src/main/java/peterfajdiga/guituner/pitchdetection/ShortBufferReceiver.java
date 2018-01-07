@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.pitch;
+package peterfajdiga.guituner.pitchdetection;
 
 interface ShortBufferReceiver {
     void putBuffer(short[] buffer);

@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.pitch;
+package peterfajdiga.guituner.pitchdetection;
 
 import android.support.annotation.CallSuper;
 

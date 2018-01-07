@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.pitch;
+package peterfajdiga.guituner.sound;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;

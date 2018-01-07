@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.pitch.PitchDetector;
-import peterfajdiga.guituner.pitch.Recorder;
+import peterfajdiga.guituner.pitchdetection.PitchDetector;
+import peterfajdiga.guituner.pitchdetection.Recorder;
 
 public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver, PitchView.OnFocusChangedListener {
 

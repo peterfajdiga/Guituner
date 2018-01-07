@@ -1,12 +1,10 @@
-package peterfajdiga.guituner.pitch;
+package peterfajdiga.guituner.pitchdetection;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
 import java.util.Arrays;
-
-import peterfajdiga.guituner.general.General;
 
 public class Recorder extends StoppableThread {
 
