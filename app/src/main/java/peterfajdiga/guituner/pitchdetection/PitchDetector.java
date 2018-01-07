@@ -134,6 +134,11 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     // called by this thread
     private void findPitch() {
+        if (buffer.length == 0) {
+            // invalid buffer
+            return;
+        }
+
         final Complex[] freqSpace = Fourier.fft(buffer);
         final int halfN = buffer.length / 2;
 
