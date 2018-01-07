@@ -204,9 +204,10 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
         // return true if added
         boolean add(final double value) {
+            final double avg = avg();
             for (int mult = 1; mult <= MULTS; mult++) {
                 final double adjustedValue = value / mult;
-                if (Math.abs(avg() - adjustedValue) <= MAX_ERROR) {
+                if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
                     sum += adjustedValue;
                     count++;
                     return true;
@@ -214,7 +215,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             }
             for (int mult = 1; mult <= MULTS; mult++) {
                 final double adjustedValue = value * mult;
-                if (Math.abs(avg() - adjustedValue) <= MAX_ERROR) {
+                if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
                     sum += adjustedValue;
                     count++;
                     sum /= mult;

@@ -54,15 +54,14 @@ public class BeepThread extends Thread {
         audioTrack.release();
     }
 
-    private static final int DBA_N1 = 12200 * 12200;
+    private static final double DBA_N1 = 12200.0 * 12200.0;
     private static final double DBA_N2 = 20.6 * 20.6;
     private static final double DBA_N3 = 107.7 * 107.7;
     private static final double DBA_N4 = 737.9 * 737.9;
     private double dbaGain(final double frequency) {
         final double freqSq = frequency * frequency;
         return DBA_N1 * freqSq * freqSq /
-                ((freqSq+DBA_N2) * (freqSq+DBA_N1) * Math.sqrt(freqSq+DBA_N3) * Math.sqrt(freqSq+DBA_N4)) /
-                0.79434639580229505;
+                ((freqSq+DBA_N2) * (freqSq+DBA_N1) * Math.sqrt(freqSq+DBA_N3) * Math.sqrt(freqSq+DBA_N4) * 0.79434639580229505);
     }
     private double dba(final double frequency) {
         return General.db(dbaGain(frequency));
