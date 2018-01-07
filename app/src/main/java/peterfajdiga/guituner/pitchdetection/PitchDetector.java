@@ -1,7 +1,5 @@
 package peterfajdiga.guituner.pitchdetection;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +15,9 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
-    private static final int GCD_MIN_COUNT = 2;
-    private static final double GCD_FAILSAFE_PREFERENCE = 4.0;
+    private static final int FUNDAMENTAL_MIN_COUNT = 2;
+    private static final double FUNDAMENTAL_WEIGHT_GCD = 0.5;
+    private static final double FUNDAMENTAL_WEIGHT_MINFREQ = 0.5;
     private static final int FOCUSED_BIN_RADIUS = 10;
 
     private final Receiver receiver;
@@ -85,12 +84,12 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1) - TAU_CONST_A * Math.log((x + 1 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
-    private static double homebrewGcd(final List<Double> values) {
+    private static double findFundamental(final List<Double> values) {
         System.err.println("**********************");
         final double failsafe = values.get(0);
         System.err.println("failsafe: " + failsafe);
 
-        final List<GcdCandidate> candidates = new ArrayList<GcdCandidate>();
+        final List<FundamentalCandidate> candidates = new ArrayList<FundamentalCandidate>();
         for (double value0 : values) {
             for (double value1 : values) {
                 final double delta = Math.abs(value1 - value0);
@@ -98,14 +97,14 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                     continue;
                 }
                 boolean addedToExistingCandidate = false;
-                for (GcdCandidate candidate : candidates) {
+                for (FundamentalCandidate candidate : candidates) {
                     if (candidate.add(delta)) {
                         addedToExistingCandidate = true;
                         break;
                     }
                 }
                 if (!addedToExistingCandidate) {
-                    candidates.add(new GcdCandidate(delta));
+                    candidates.add(new FundamentalCandidate(delta));
                 }
             }
         }
@@ -113,7 +112,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         // return candidate with highest count
         int maxCount = Integer.MIN_VALUE;
         double gcd = Double.MAX_VALUE;
-        for (GcdCandidate candidate : candidates) {
+        for (FundamentalCandidate candidate : candidates) {
             if (candidate.count > maxCount) {
                 maxCount = candidate.count;
                 gcd = candidate.avg();
@@ -128,6 +127,11 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             }
         }
         System.err.println("minFreq: " + minFreq);
+
+        if (Math.abs(minFreq - gcd) < FundamentalCandidate.MAX_ERROR) {
+            System.err.println("returning mix: " + (FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd));
+            return FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd;
+        }
 
         if (minFreq < gcd) {
             System.err.println("returning minFreq: " + minFreq);
@@ -176,7 +180,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         if (harmonics.isEmpty()) {
             return;
         }
-        receiver.updatePitch(homebrewGcd(harmonics));
+        receiver.updatePitch(findFundamental(harmonics));
     }
 
     @Override
@@ -185,7 +189,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
 
-    private static class GcdCandidate {
+    private static class FundamentalCandidate {
 
         private static final double MAX_ERROR = 2.0;
         private static final int MULTS = 5;
@@ -193,7 +197,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         double sum;
         int count;
 
-        GcdCandidate(final double value) {
+        FundamentalCandidate(final double value) {
             sum = value;
             count = 1;
         }
