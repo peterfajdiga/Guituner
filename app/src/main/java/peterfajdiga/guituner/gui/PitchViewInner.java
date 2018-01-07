@@ -32,7 +32,7 @@ class PitchViewInner extends View {
     private float dp;
     private int width;
     int height;
-    private float edgeToneOffsetY;
+    private float edgeToneOffsetY, toneLineStartLeftX, toneLineStartRightX;
 
     double detectedFrequency = 0.0;
     Tone selectedTone = null;
@@ -72,6 +72,11 @@ class PitchViewInner extends View {
         height = (int)(TONE_FULL_WIDTH * dp * tones.length) + heightMeasureSpec;
         edgeToneOffsetY = heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
+
+        paint_tone.getTextBounds(Tone.A4s.name, 0, Tone.A4s.name.length(), textBounds);
+        final float x = width * TONE_OFFSET_X_RATIO;
+        toneLineStartLeftX = getTextLeft(x, paint_tone) - LINE_TEXT_SPACING * dp;
+        toneLineStartRightX = getTextRight(x, paint_tone) + LINE_TEXT_SPACING * dp;
     }
 
     @Override
@@ -109,16 +114,14 @@ class PitchViewInner extends View {
 
             canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint);
 
-            final float toneLineLeftStartX = getTextLeft(toneX, paint) - LINE_TEXT_SPACING * dp;
-            final float toneLineRightStartX = getTextRight(toneX, paint) + LINE_TEXT_SPACING * dp;
             canvas.drawLine(
-                    toneLineLeftStartX - TONE_LINE_LENGTH, toneY,
-                    toneLineLeftStartX, toneY,
+                    toneLineStartLeftX - TONE_LINE_LENGTH, toneY,
+                    toneLineStartLeftX, toneY,
                     paint
             );
             canvas.drawLine(
-                    toneLineRightStartX, toneY,
-                    toneLineRightStartX + TONE_LINE_LENGTH, toneY,
+                    toneLineStartRightX, toneY,
+                    toneLineStartRightX + TONE_LINE_LENGTH, toneY,
                     paint
             );
         }
