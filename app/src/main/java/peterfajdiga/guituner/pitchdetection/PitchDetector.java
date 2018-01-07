@@ -84,8 +84,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     private static double findFundamental(final List<Double> values) {
-        final double failsafe = values.get(0);
-
         final List<FundamentalCandidate> candidates = new ArrayList<FundamentalCandidate>();
         for (double value0 : values) {
             for (double value1 : values) {
