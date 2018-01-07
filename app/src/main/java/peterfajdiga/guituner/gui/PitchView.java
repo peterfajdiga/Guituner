@@ -76,6 +76,7 @@ public class PitchView extends ScrollView {
             case MotionEvent.ACTION_DOWN: {
                 fingerOnScreen = true;
                 allowToneSelection = true;
+                lastDeltaY = 0;
                 break;
             }
             case MotionEvent.ACTION_UP: {
