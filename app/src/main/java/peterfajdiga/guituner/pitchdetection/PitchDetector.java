@@ -212,21 +212,6 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
     }
 
-    private static class Bin implements Comparable<Bin> {
-        double value;
-        int index;
-
-        Bin(final double value, final int index) {
-            this.value = value;
-            this.index = index;
-        }
-
-        @Override
-        public int compareTo(@NonNull Bin bin) {
-            return Double.compare(this.value, bin.value);
-        }
-    }
-
     public interface Receiver {
         void updatePitch(double frequency);
     }
