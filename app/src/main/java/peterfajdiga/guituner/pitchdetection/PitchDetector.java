@@ -69,9 +69,10 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             return midFrequency;
         }
         // Quinn's Second Estimator Method for bin interpolation
-        final double ap = (X[index+1].re * X[index].re + X[index+1].im * X[index].im)  /  (X[index].re * X[index].re + X[index].im * X[index].im);
+        final double iAbsSq = X[index].re * X[index].re + X[index].im * X[index].im;
+        final double ap = (X[index+1].re * X[index].re + X[index+1].im * X[index].im) / iAbsSq;
+        final double am = (X[index-1].re * X[index].re + X[index-1].im * X[index].im) / iAbsSq;
         final double dp = -ap / (1 - ap);
-        final double am = (X[index-1].re * X[index].re + X[index-1].im * X[index].im)  /  (X[index].re * X[index].re + X[index].im * X[index].im);
         final double dm = am / (1 - am);
         final double d = (dp + dm) / 2 + tau(dp * dp) - tau(dm * dm);
         return (index + d) * binWidth;
@@ -79,7 +80,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final double TAU_CONST_A = Math.sqrt(6.0)/24.0;
     private static final double TAU_CONST_B = Math.sqrt(2.0/3.0);
     private double tau(final double x) {
-        return 0.25 * Math.log(3.0*x*x + 6.0*x + 1) - TAU_CONST_A * Math.log((x + 1 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
+        return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
     private static double findFundamental(final List<Double> values) {
