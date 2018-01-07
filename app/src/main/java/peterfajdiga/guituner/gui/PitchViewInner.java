@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.View;
@@ -25,14 +26,14 @@ class PitchViewInner extends View {
     private static final Paint paint_tone = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_tone_inactive = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private static final Paint paint_selection = new Paint();
+    private static final Paint paint_freq_light = new Paint();
 
     private final android.graphics.Rect textBounds = new Rect();
 
     private float dp;
     private int width;
     int height;
-    private float edgeToneOffsetY, toneLineStartLeftX, toneLineStartRightX;
+    private float edgeToneOffsetY, toneLineStartLeftX, toneLineStartRightX, toneLineEndLeftX, toneLineEndRightX;
 
     double detectedFrequency = 0.0;
     Tone selectedTone = null;
@@ -62,7 +63,8 @@ class PitchViewInner extends View {
         paint_freq.setColor(r.getColor(android.R.color.tertiary_text_light));
         paint_freq.setStrokeWidth(dp);
 
-        paint_selection.setColor(Color.LTGRAY);
+        paint_freq_light.setColor(r.getColor(android.R.color.tertiary_text_light));
+        paint_freq_light.setStrokeWidth(1);
     }
 
 
@@ -77,6 +79,8 @@ class PitchViewInner extends View {
         final float x = width * TONE_OFFSET_X_RATIO;
         toneLineStartLeftX = getTextLeft(x, paint_tone) - LINE_TEXT_SPACING * dp;
         toneLineStartRightX = getTextRight(x, paint_tone) + LINE_TEXT_SPACING * dp;
+        toneLineEndLeftX = toneLineStartLeftX - TONE_LINE_LENGTH;
+        toneLineEndRightX = toneLineStartRightX + TONE_LINE_LENGTH;
     }
 
     @Override
@@ -94,6 +98,16 @@ class PitchViewInner extends View {
 
             canvas.drawLine(
                     0.0f, freqY,
+                    toneLineEndLeftX, freqY,
+                    paint_freq
+            );
+            canvas.drawLine(
+                    toneLineEndLeftX, freqY,
+                    toneLineEndRightX, freqY,
+                    paint_freq_light
+            );
+            canvas.drawLine(
+                    toneLineEndRightX, freqY,
                     getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
                     paint_freq
             );
@@ -102,6 +116,9 @@ class PitchViewInner extends View {
                     width, freqY,
                     paint_freq
             );
+
+            canvas.drawPath(getTriangle(toneLineEndLeftX , freqY, true ), paint_freq);
+            canvas.drawPath(getTriangle(toneLineEndRightX, freqY, false), paint_freq);
         }
 
         // draw tones
@@ -125,6 +142,22 @@ class PitchViewInner extends View {
                     paint
             );
         }
+    }
+
+    private Path getTriangle(float x, float y, final boolean pointRight) {
+        final float size = 4.0f * dp;  // TODO: define constant
+        final Path path = new Path();
+        path.setFillType(Path.FillType.EVEN_ODD);
+        path.moveTo(x, y);
+        if (pointRight) {
+            x -= size;
+        } else {
+            x += size;
+        }
+        path.lineTo(x, y - size);
+        path.lineTo(x, y + size);
+        path.close();
+        return path;
     }
 
     // getTextBounds must be called before this
