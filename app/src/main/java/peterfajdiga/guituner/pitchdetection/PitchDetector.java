@@ -112,7 +112,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
         // return candidate with highest count
         int maxCount = Integer.MIN_VALUE;
-        double gcd = Double.NaN;
+        double gcd = Double.MAX_VALUE;
         for (GcdCandidate candidate : candidates) {
             if (candidate.count > maxCount) {
                 maxCount = candidate.count;
