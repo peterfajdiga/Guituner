@@ -14,10 +14,10 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     private static final double NOISE_THRESHOLD = 20.0;
     private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
+    private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS = 16;
     private static final int GCD_MIN_COUNT = 2;
-    private static final int GCD_MIN_DELTA = 20;
     private static final double GCD_FAILSAFE_PREFERENCE = 4.0;
     private static final int FOCUSED_BIN_RADIUS = 10;
 
@@ -86,13 +86,15 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     private static double homebrewGcd(final List<Double> values) {
+        System.err.println("**********************");
         final double failsafe = values.get(0);
+        System.err.println("failsafe: " + failsafe);
 
         final List<GcdCandidate> candidates = new ArrayList<GcdCandidate>();
         for (double value0 : values) {
             for (double value1 : values) {
                 final double delta = Math.abs(value1 - value0);
-                if (delta < GCD_MIN_DELTA) {
+                if (delta < MIN_FREQUENCY) {
                     continue;
                 }
                 boolean addedToExistingCandidate = false;
@@ -117,14 +119,18 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
                 gcd = candidate.avg();
             }
         }
+        System.err.println("gcd: " + gcd);
         if (maxCount < GCD_MIN_COUNT) {
+            System.err.println("return: " + failsafe);
             return failsafe;
         }
         for (Double value : values) {
-            if (value < gcd - GCD_FAILSAFE_PREFERENCE) {
+            if (value > MIN_FREQUENCY && value < gcd - GCD_FAILSAFE_PREFERENCE) {
+                System.err.println("return: " + value);
                 return value;
             }
         }
+        System.err.println("return: " + gcd);
         return gcd;
     }
 
