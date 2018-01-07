@@ -62,9 +62,10 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     // called by this thread
     private double getFrequency(final Complex[] X, final int index) {
+        final int n_positiveFrequencies = X.length / 2;
         final double binWidth = (double)sampleRate / X.length;
         final double midFrequency = index * binWidth;
-        if (index <= 0 || index >= X.length-1) {
+        if (index <= 0 || index >= n_positiveFrequencies-1) {
             return midFrequency;
         }
         // Quinn's Second Estimator Method for bin interpolation
@@ -73,9 +74,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double am = (X[index-1].re * X[index].re + X[index-1].im * X[index].im)  /  (X[index].re * X[index].re + X[index].im * X[index].im);
         final double dm = am / (1 - am);
         final double d = (dp + dm) / 2 + tau(dp * dp) - tau(dm * dm);
-        // linear interpolation
-        final double nextFrequency = (index+1) * binWidth;
-        return midFrequency + d * (nextFrequency - midFrequency);
+        return (index + d) * binWidth;
     }
     private static final double TAU_CONST_A = Math.sqrt(6.0)/24.0;
     private static final double TAU_CONST_B = Math.sqrt(2.0/3.0);
