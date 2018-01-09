@@ -4,11 +4,6 @@ public class General {
 
     private General() {}  // make class static
 
-    // returns fractional part
-    public static double frac(final double value) {
-        return value - (long)value;
-    }
-
     // finds the nearest power of two above given value
     public static int ceilPow2(final int value) {
         int n = Integer.highestOneBit(value);
@@ -16,6 +11,10 @@ public class General {
             n *= 2;
         }
         return n;
+    }
+
+    public static boolean nearlyEqual(final double a, final double b, final double err) {
+        return Math.abs(a - b) < err;
     }
 
     public static double db(final double value) {

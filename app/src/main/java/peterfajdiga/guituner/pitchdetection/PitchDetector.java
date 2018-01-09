@@ -83,7 +83,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
-    private static double findFundamental(final List<Double> values) {
+    private double findFundamental(final List<Double> values) {
         final List<FundamentalCandidate> candidates = new ArrayList<FundamentalCandidate>();
         for (double value0 : values) {
             for (double value1 : values) {
@@ -123,6 +123,18 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
         if (Math.abs(minFreq - gcd) < FundamentalCandidate.MAX_ERROR) {
             return FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd;
+        }
+
+        if (focusedFrequency > 0.0) {
+            final double focusedFrequencyRadius = FOCUSED_BIN_RADIUS * ((double)sampleRate / buffer.length);
+            final boolean gcdLegal     = General.nearlyEqual(gcd    , focusedFrequency, focusedFrequencyRadius);
+            final boolean minFreqLegal = General.nearlyEqual(minFreq, focusedFrequency, focusedFrequencyRadius);
+            if (gcdLegal && !minFreqLegal) {
+                return gcd;
+            }
+            if (minFreqLegal && !gcdLegal) {
+                return minFreq;
+            }
         }
         if (minFreq < gcd) {
             return minFreq;
