@@ -4,7 +4,11 @@ public class General {
 
     private General() {}  // make class static
 
-    // finds the nearest power of two above given value
+    /**
+     * finds the nearest power of two above given value
+     * @param value input value
+     * @return      nearest power of two above input value
+     */
     public static int ceilPow2(final int value) {
         int n = Integer.highestOneBit(value);
         if (n != value) {
@@ -13,22 +17,17 @@ public class General {
         return n;
     }
 
-    public static boolean nearlyEqual(final double a, final double b, final double err) {
-        return Math.abs(a - b) < err;
+    public static boolean nearlyEqual(final double a, final double b, final double eps) {
+        return Math.abs(a - b) < eps;
     }
 
-    public static double db(final double value) {
-        return 20.0 * Math.log10(value);
-    }
-
-    // find index of max element
-    public static int max(final double[] values) {
-        return max(values, 0, values.length);
-    }
-
-    // find index of max element
-    // start is inclusive
-    // end is exclusive
+    /**
+     * find index of greatest element in given array between indices start and end
+     * @param values array in which to search
+     * @param start  start index (inclusive)
+     * @param end    end index (exclusive)
+     * @return       index of max element
+     */
     public static int max(final double[] values, final int start, final int end) {
         int maxIndex = Integer.MIN_VALUE;
         double maxValue = Double.MIN_VALUE;
@@ -42,25 +41,24 @@ public class General {
         return maxIndex;
     }
 
-    // find index of max element
-    public static int maxAround(final double[] values, final int index, final int radius) {
-        return max(
-                values,
-                getStart(index, radius),
-                getEnd(index, radius, values.length)
-        );
-    }
-
-    // set values to 0
-    // start is inclusive
-    // end is exclusive
+    /**
+     * set values from start to end in given array to 0
+     * @param values array to modify
+     * @param start  start index (inclusive)
+     * @param end    end index (exclusive
+     */
     public static void drop(final double[] values, final int start, final int end) {
         for (int i = start; i < end; i++) {
             values[i] = 0.0;
         }
     }
 
-    // set values to 0
+    /**
+     * set values around index in given array to 0
+     * @param values array to modify
+     * @param index  center index
+     * @param radius distance from center index
+     */
     public static void dropAround(final double[] values, final int index, final int radius) {
         drop(
                 values,
@@ -69,7 +67,11 @@ public class General {
         );
     }
 
-    // to be used as inclusive start
+    /**
+     * @param index  center index
+     * @param radius distance from center index
+     * @return       inclusive start index (>= 0)
+     */
     public static int getStart(final int index, final int radius) {
         int start = index - radius;
         if (start < 0) {
@@ -78,7 +80,12 @@ public class General {
         return start;
     }
 
-    // to be used as exclusive end
+    /**
+     * @param index  center index
+     * @param radius distance from center index
+     * @param length limit
+     * @return       exclusive end index (<= length)
+     */
     public static int getEnd(final int index, final int radius, final int length) {
         int end = index + radius + 1;
         if (end > length) {
