@@ -9,15 +9,16 @@ import peterfajdiga.guituner.general.General;
 public class BeepThread extends Thread {
 
     private static final int SAMPLE_RATE = 44100;
-    private static final double BASE_AMPLITUDE = Short.MAX_VALUE / 10.0f;
+    private static final double BASE_AMPLITUDE = Short.MAX_VALUE * 0.2;
+    private static final double MAX_AMPLITUDE  = Short.MAX_VALUE * 0.9;
 
     private final double frequency;
     private final int n_samples;
 
-    private AudioTrack audioTrack;
-
-    // frequency in Hz
-    // duration in s
+    /**
+     * @param frequency in Hz
+     * @param duration in s
+     */
     public BeepThread(final double frequency, final double duration) {
         this.frequency = frequency;
         this.n_samples = (int)(SAMPLE_RATE * duration);
@@ -29,13 +30,13 @@ public class BeepThread extends Thread {
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_8BIT);
 
-        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE,
+        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize, AudioTrack.MODE_STREAM);
 
         double amplitude = BASE_AMPLITUDE / dbaGain(frequency);
-        if (amplitude > Short.MAX_VALUE) {
-            amplitude = Short.MAX_VALUE;
+        if (amplitude > MAX_AMPLITUDE) {
+            amplitude = MAX_AMPLITUDE;
         }
 
         // Sine wave
@@ -46,12 +47,16 @@ public class BeepThread extends Thread {
             buffer[i] = (short)(Math.sin(2.0*Math.PI * i * frequency / SAMPLE_RATE) * sustain * amplitude);
         }
 
-        audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
-        audioTrack.play();
-        audioTrack.write(buffer, 0, n_samples);
+        if (audioTrack.getState() == AudioTrack.STATE_INITIALIZED) {
+            audioTrack.setVolume(AudioTrack.getMaxVolume());
+            audioTrack.play();
+            audioTrack.write(buffer, 0, n_samples);
 
-        audioTrack.stop();
-        audioTrack.release();
+            audioTrack.stop();
+            audioTrack.release();
+        } else {
+            System.err.println("AudioTrack not initialized");
+        }
     }
 
     private static final double DBA_N1 = 12200.0 * 12200.0;
