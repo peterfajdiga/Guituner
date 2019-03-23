@@ -1,8 +1,12 @@
 package peterfajdiga.guituner.gui;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
@@ -18,6 +22,11 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!checkMicPermission()) {
+            Toast.makeText(this, R.string.no_mic_permission, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuner);
 
@@ -72,5 +81,13 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
         soundOnClickListener.setFrequency(focusedFrequency);
         pitchDetector.onFocusChanged(focusedFrequency);
+    }
+
+    private boolean checkMicPermission() {
+        switch (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
+            case PackageManager.PERMISSION_GRANTED: return true;
+            case PackageManager.PERMISSION_DENIED: return false;
+            default: throw new RuntimeException("Microphone permission check failed");
+        }
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Guituner</string>
+    <string name="no_mic_permission">Guituner needs the microphone permission to work</string>
 </resources>
