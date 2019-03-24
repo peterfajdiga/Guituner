@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
+import peterfajdiga.guituner.general.ToneFrequencies;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.Recorder;
 
@@ -33,6 +34,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         pitchView.setHighestFrequency(Recorder.SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
+        setupShortcutButtons();
 
         initialized = true;
     }
@@ -47,10 +49,29 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         final View unpinButton = findViewById(R.id.unpinbtn);
         unpinButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 pitchView.removeFocus();
             }
         });
+    }
+
+    private void setupShortcutButton(final View button, final double frequency) {
+        final PitchView pitchView = findViewById(R.id.pitchview);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                pitchView.setFrequency(frequency);
+            }
+        });
+    }
+
+    private void setupShortcutButtons() {
+        setupShortcutButton(findViewById(R.id.e2btn), ToneFrequencies.E2);
+        setupShortcutButton(findViewById(R.id.a2btn), ToneFrequencies.A2);
+        setupShortcutButton(findViewById(R.id.d3btn), ToneFrequencies.D3);
+        setupShortcutButton(findViewById(R.id.g3btn), ToneFrequencies.G3);
+        setupShortcutButton(findViewById(R.id.b3btn), ToneFrequencies.B3);
+        setupShortcutButton(findViewById(R.id.e4btn), ToneFrequencies.E4);
     }
 
     private void finishWithoutMicPermission() {

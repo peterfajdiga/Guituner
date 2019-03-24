@@ -12,8 +12,8 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/selectionbg"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
@@ -33,6 +33,58 @@
             android:padding="12dp"
             android:background="?attr/selectableItemBackground"
             android:drawableLeft="@drawable/ic_music_note_black_24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shortcutcontainer"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:background="@color/selectionBackground">
+
+        <Button android:id="@+id/e2btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="E2"
+            android:background="?attr/selectableItemBackground" />
+
+        <Button android:id="@+id/a2btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="A2"
+            android:background="?attr/selectableItemBackground" />
+
+        <Button android:id="@+id/d3btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="D3"
+            android:background="?attr/selectableItemBackground" />
+
+        <Button android:id="@+id/g3btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="G3"
+            android:background="?attr/selectableItemBackground" />
+
+        <Button android:id="@+id/b3btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="B3"
+            android:background="?attr/selectableItemBackground" />
+
+        <Button android:id="@+id/e4btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:text="E4"
+            android:background="?attr/selectableItemBackground" />
 
     </LinearLayout>
 
