@@ -2,6 +2,7 @@ package peterfajdiga.guituner.gui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,18 +17,13 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
     private FrequencySetterRunnable frequencySetterRunnable;
     private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
+    private static final int MIC_PERMISSION_REQUEST = 1001;
 
+    private boolean initialized = false;
     PitchDetector pitchDetector;
     Recorder recorder;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        if (!checkMicPermission()) {
-            Toast.makeText(this, R.string.no_mic_permission, Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        super.onCreate(savedInstanceState);
+    private void initialize() {
         setContentView(R.layout.activity_tuner);
 
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
@@ -46,6 +42,40 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
                 pitchView.removeFocus();
             }
         });
+
+        initialized = true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, final String[] permissions, final int[] grantResults) {
+        if (requestCode != MIC_PERMISSION_REQUEST) {
+            // unknown request code
+            return;
+        }
+
+        for (int i = 0; i < permissions.length; i++) {
+            if (permissions[i].equals(Manifest.permission.RECORD_AUDIO)) {
+                final int micGrantResult = grantResults[i];
+                switch (micGrantResult) {
+                    case PackageManager.PERMISSION_GRANTED: initialize(); break;
+                    case PackageManager.PERMISSION_DENIED: finish(); break;
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        System.err.println("on create");
+        super.onCreate(savedInstanceState);
+        if (checkMicPermission()) {
+            initialize();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MIC_PERMISSION_REQUEST);
+            /*Toast.makeText(this, R.string.no_mic_permission, Toast.LENGTH_SHORT).show();
+            finish();*/
+        }
     }
 
     @Override
@@ -57,6 +87,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     @Override
     public void onPause() {
         super.onPause();
+        if (!initialized) {
+            return;
+        }
         pitchDetector.stopThread();
         recorder.stopThread();
     }
@@ -64,6 +97,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     @Override
     public void onResume() {
         super.onResume();
+        if (!initialized) {
+            return;
+        }
 
         pitchDetector = new PitchDetector(this);
         pitchDetector.startThread();
@@ -76,6 +112,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
 
     @Override
     public void onFocusChanged(double focusedFrequency) {
+        if (!initialized) {  // probably unnecessary
+            return;
+        }
         final View selectionBackground = findViewById(R.id.selectionbg);
         selectionBackground.setVisibility(focusedFrequency == 0.0 ? View.INVISIBLE : View.VISIBLE);
 
