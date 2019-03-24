@@ -32,6 +32,14 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         final PitchView pitchView = findViewById(R.id.pitchview);
         pitchView.setHighestFrequency(Recorder.SAMPLE_RATE / 2.0);
 
+        setupSelectionButtons();
+
+        initialized = true;
+    }
+
+    private void setupSelectionButtons() {
+        final PitchView pitchView = findViewById(R.id.pitchview);
+
         final View soundButton = findViewById(R.id.soundbtn);
         soundButton.setSoundEffectsEnabled(false);
         soundButton.setOnClickListener(soundOnClickListener);
@@ -43,8 +51,6 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
                 pitchView.removeFocus();
             }
         });
-
-        initialized = true;
     }
 
     private void finishWithoutMicPermission() {
