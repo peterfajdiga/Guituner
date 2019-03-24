@@ -2,6 +2,7 @@ package peterfajdiga.guituner.gui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +47,13 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         initialized = true;
     }
 
+    private void finishWithoutMicPermission() {
+        Toast.makeText(this, R.string.no_mic_permission, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     @Override
-    public void onRequestPermissionsResult(final int requestCode, final String[] permissions, final int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         if (requestCode != MIC_PERMISSION_REQUEST) {
             // unknown request code
             return;
@@ -58,7 +64,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
                 final int micGrantResult = grantResults[i];
                 switch (micGrantResult) {
                     case PackageManager.PERMISSION_GRANTED: initialize(); break;
-                    case PackageManager.PERMISSION_DENIED: finish(); break;
+                    case PackageManager.PERMISSION_DENIED: finishWithoutMicPermission(); break;
                 }
                 return;
             }
@@ -73,8 +79,6 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
             initialize();
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, MIC_PERMISSION_REQUEST);
-            /*Toast.makeText(this, R.string.no_mic_permission, Toast.LENGTH_SHORT).show();
-            finish();*/
         }
     }
 
