@@ -15,21 +15,21 @@
         android:id="@+id/selectionbg"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/selection_bar_height"
         android:layout_gravity="center_vertical"
         android:background="@color/selectionBackground"
         android:visibility="invisible">
 
         <Button android:id="@+id/unpinbtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/button_pitchview_width"
+            android:layout_height="@dimen/selection_bar_height"
             android:padding="12dp"
             android:background="?attr/selectableItemBackground"
             android:drawableLeft="@drawable/ic_close_black_24dp" />
 
         <Button android:id="@+id/soundbtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/button_pitchview_width"
+            android:layout_height="@dimen/selection_bar_height"
             android:padding="12dp"
             android:background="?attr/selectableItemBackground"
             android:drawableLeft="@drawable/ic_music_note_black_24dp" />
