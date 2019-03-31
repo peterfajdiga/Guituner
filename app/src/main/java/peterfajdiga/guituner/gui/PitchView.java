@@ -229,7 +229,7 @@ public class PitchView extends ScrollView {
         protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
             width = MeasureSpec.getSize(widthMeasureSpec);
             height = (int)(TONE_FULL_WIDTH * dp * tones.length) + heightMeasureSpec;
-            edgeToneOffsetY = heightMeasureSpec / 2;
+            edgeToneOffsetY = (float)heightMeasureSpec / 2;
             setMeasuredDimension(width, height);
 
             paint_tone.getTextBounds(Tone.A4s.name, 0, Tone.A4s.name.length(), textBounds);
