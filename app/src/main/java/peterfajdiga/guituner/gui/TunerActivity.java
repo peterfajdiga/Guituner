@@ -8,10 +8,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.general.ToneFrequencies;
+import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.Recorder;
 
@@ -34,7 +37,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         pitchView.setHighestFrequency(Recorder.SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
-        setupShortcutButtons();
+        setupToneShortcutButtons(pitchView);
 
         initialized = true;
     }
@@ -55,23 +58,37 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         });
     }
 
-    private void setupShortcutButton(final View button, final double frequency) {
-        final PitchView pitchView = findViewById(R.id.pitchview);
+    private static final Tone[] shortcutTones = new Tone[]{
+            Tone.E2,
+            Tone.A2,
+            Tone.D3,
+            Tone.G3,
+            Tone.B3,
+            Tone.E4
+    };
+
+    private void setupToneShortcutButton(final Button button, final Tone tone, final PitchView targetPitchView) {
+        button.setText(tone.name);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                pitchView.setFrequency(frequency);
+                targetPitchView.setFrequency(tone.frequency);
             }
         });
     }
 
-    private void setupShortcutButtons() {
-        setupShortcutButton(findViewById(R.id.e2btn), ToneFrequencies.E2);
-        setupShortcutButton(findViewById(R.id.a2btn), ToneFrequencies.A2);
-        setupShortcutButton(findViewById(R.id.d3btn), ToneFrequencies.D3);
-        setupShortcutButton(findViewById(R.id.g3btn), ToneFrequencies.G3);
-        setupShortcutButton(findViewById(R.id.b3btn), ToneFrequencies.B3);
-        setupShortcutButton(findViewById(R.id.e4btn), ToneFrequencies.E4);
+    private void setupToneShortcutButtons(final PitchView targetPitchView) {
+        final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
+        shortcutContainer.removeAllViews();
+        for (final Tone shortcutTone : shortcutTones) {
+            final Button button = (Button)(getLayoutInflater().inflate(R.layout.button_pitchview, null));
+            button.setLayoutParams(new LinearLayout.LayoutParams(
+                    (int)getResources().getDimension(R.dimen.button_pitchview_width),
+                    (int)getResources().getDimension(R.dimen.selection_bar_height)
+            ));
+            setupToneShortcutButton(button, shortcutTone, targetPitchView);
+            shortcutContainer.addView(button);
+        }
     }
 
     private void finishWithoutMicPermission() {
