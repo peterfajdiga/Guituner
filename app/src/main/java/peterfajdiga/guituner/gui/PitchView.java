@@ -67,8 +67,6 @@ public class PitchView extends ScrollView {
     }
 
     public void setHighestFrequency(final double frequency) {
-        display.highestFrequency = frequency;
-
         int n_detectableTones = 0;
         for (Tone tone : PitchViewInner.toneList) {
             if (tone.frequency > frequency) break;
@@ -191,7 +189,6 @@ public class PitchView extends ScrollView {
         private final android.graphics.Rect textBounds = new Rect();
 
         private double detectedFrequency = 0.0;
-        private double highestFrequency = 2000.0;
         private Tone[] tones = toneList;
         private Tone selectedTone = null;
 
