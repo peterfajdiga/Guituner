@@ -144,6 +144,11 @@ public class PitchView extends ScrollView {
         }
         display.invalidate();
     }
+    public void setFocus(final Tone tone) {
+        display.selectedTone = tone;
+        focusOnFrequency(tone.frequency);
+        dispatchFocusChanged();
+    }
     private void dispatchFocusChanged() {
         if (onFocusChangedListener != null) {
             onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
