@@ -134,12 +134,9 @@ public class PitchView extends ScrollView {
         dispatchFocusChanged();
     }
 
-    // don't call dispatchFocusChanged afterwards
     public void removeFocus() {
         display.selectedTone = null;
-        if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(0.0);
-        }
+        dispatchFocusChanged();
         display.invalidate();
     }
     public void setFocus(final Tone tone) {
@@ -149,7 +146,7 @@ public class PitchView extends ScrollView {
     }
     private void dispatchFocusChanged() {
         if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
+            onFocusChangedListener.onFocusChanged(display.selectedTone == null ? 0.0 : display.selectedTone.frequency);
         }
     }
 
