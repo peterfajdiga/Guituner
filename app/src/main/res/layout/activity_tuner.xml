@@ -14,7 +14,7 @@
         android:id="@+id/selectionbg"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/selection_bar_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@color/selectionBackground"
         android:visibility="invisible">
@@ -37,7 +37,7 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/selection_bar_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:fillViewport="true"
         android:background="@color/background">
@@ -45,7 +45,7 @@
         <LinearLayout
             android:id="@+id/shortcutcontainer"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/selection_bar_height"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="horizontal"/>
 
