@@ -104,7 +104,9 @@ public class PitchView extends ScrollView {
                 if (Math.abs(event.getX() - lastTouchX) + Math.abs(event.getY() - lastTouchY) < TONE_PRESS_MOVE_TOLERANCE) {
                     display.selectToneByY(event.getY() + getScrollY());
                     focusOnFrequency(display.selectedTone.frequency);
-                    dispatchFocusChanged();
+                    if (onFocusChangedListener != null) {
+                        onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
+                    }
                 } else if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
                     focusOnFrequency(display.selectedTone.frequency);
                 }
@@ -131,30 +133,31 @@ public class PitchView extends ScrollView {
     private void selectCenterTone() {
         final int y = getScrollY() + getHeight() / 2;
         display.selectToneByY(y);
-        dispatchFocusChanged();
+        if (onFocusChangedListener != null) {
+            onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
+        }
     }
 
     public void removeFocus() {
         display.selectedTone = null;
-        dispatchFocusChanged();
+        if (onFocusChangedListener != null) {
+            onFocusChangedListener.onFocusRemoved();
+        }
         display.invalidate();
     }
     public void setFocus(final Tone tone) {
         display.selectedTone = tone;
         focusOnFrequency(tone.frequency);
-        dispatchFocusChanged();
-    }
-    private void dispatchFocusChanged() {
         if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(display.selectedTone == null ? 0.0 : display.selectedTone.frequency);
+            onFocusChangedListener.onFocusChanged(tone.frequency);
         }
     }
 
 
 
     public interface OnFocusChangedListener {
-        // when focusedFrequency == 0.0, there is no focus
         void onFocusChanged(double focusedFrequency);
+        void onFocusRemoved();
     }
 
     public void setOnFocusChangedListener(final OnFocusChangedListener listener) {

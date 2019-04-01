@@ -159,15 +159,22 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
     }
 
     @Override
-    public void onFocusChanged(double focusedFrequency) {
-        if (!initialized) {  // probably unnecessary
+    public void onFocusChanged(final double focusedFrequency) {
+        if (!initialized) {
             return;
         }
-        final View selectionBackground = findViewById(R.id.selectionbg);
-        selectionBackground.setVisibility(focusedFrequency == 0.0 ? View.INVISIBLE : View.VISIBLE);
-
+        findViewById(R.id.selectionbg).setVisibility(View.VISIBLE);
         soundOnClickListener.setFrequency(focusedFrequency);
         pitchDetector.onFocusChanged(focusedFrequency);
+    }
+
+    @Override
+    public void onFocusRemoved() {
+        if (!initialized) {
+            return;
+        }
+        findViewById(R.id.selectionbg).setVisibility(View.INVISIBLE);
+        pitchDetector.onFocusChanged(0.0);
     }
 
     private boolean checkMicPermission() {

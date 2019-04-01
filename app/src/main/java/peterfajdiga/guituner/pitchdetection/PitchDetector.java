@@ -84,7 +84,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     private double findFundamental(final List<Double> values) {
-        final List<FundamentalCandidate> candidates = new ArrayList<FundamentalCandidate>();
+        final List<FundamentalCandidate> candidates = new ArrayList<>();
         for (double value0 : values) {
             for (double value1 : values) {
                 final double delta = Math.abs(value1 - value0);
@@ -161,7 +161,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double floor = sum / freqSpace.length;
 
         final int startIndex;
-        final List<Double> harmonics = new ArrayList<Double>();
+        final List<Double> harmonics = new ArrayList<>();
         if (focusedFrequency > 0.0) {
             final double binWidth = (double)sampleRate / freqSpace.length;
             final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
@@ -194,6 +194,11 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     @Override
     public void onFocusChanged(final double focusedFrequency) {
         this.focusedFrequency = focusedFrequency;
+    }
+
+    @Override
+    public void onFocusRemoved() {
+        this.focusedFrequency = 0.0;
     }
 
 
