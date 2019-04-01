@@ -15,17 +15,17 @@ import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
-import peterfajdiga.guituner.pitchdetection.PitchDetector;
-import peterfajdiga.guituner.pitchdetection.Recorder;
+import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
+import peterfajdiga.guituner.recording.Recorder;
 
-public class TunerActivity extends AppCompatActivity implements PitchDetector.Receiver, PitchView.OnFocusChangedListener {
+public class TunerActivity extends AppCompatActivity implements PitchDetectorThread.Receiver, PitchView.OnFocusChangedListener {
 
     private FrequencySetterRunnable frequencySetterRunnable;
     private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
 
     private boolean initialized = false;
-    PitchDetector pitchDetector;
+    PitchDetectorThread pitchDetectorThread;
     Recorder recorder;
 
     private void initialize() {
@@ -138,7 +138,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         if (!initialized) {
             return;
         }
-        pitchDetector.stopThread();
+        pitchDetectorThread.stopThread();
         recorder.stopThread();
     }
 
@@ -149,9 +149,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
             return;
         }
 
-        pitchDetector = new PitchDetector(this);
-        pitchDetector.startThread();
-        recorder = new Recorder(pitchDetector);
+        pitchDetectorThread = new PitchDetectorThread(this);
+        pitchDetectorThread.startThread();
+        recorder = new Recorder(pitchDetectorThread);
         recorder.startThread();
 
         final PitchView pitchView = findViewById(R.id.pitchview);
@@ -165,7 +165,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
         }
         findViewById(R.id.selectionbg).setVisibility(View.VISIBLE);
         soundOnClickListener.setFrequency(focusedFrequency);
-        pitchDetector.onFocusChanged(focusedFrequency);
+        pitchDetectorThread.onFocusChanged(focusedFrequency);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetector.Re
             return;
         }
         findViewById(R.id.selectionbg).setVisibility(View.INVISIBLE);
-        pitchDetector.onFocusChanged(0.0);
+        pitchDetectorThread.onFocusChanged(0.0);
     }
 
     private boolean checkMicPermission() {

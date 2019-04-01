@@ -1,8 +1,8 @@
-package peterfajdiga.guituner.pitchdetection;
+package peterfajdiga.guituner.recording;
 
 import android.support.annotation.CallSuper;
 
-abstract class StoppableThread extends Thread {
+public abstract class StoppableThread extends Thread {
     protected boolean threadEnabled = false;
 
     @CallSuper

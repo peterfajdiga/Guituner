@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.pitchdetection;
+package peterfajdiga.guituner.recording;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;

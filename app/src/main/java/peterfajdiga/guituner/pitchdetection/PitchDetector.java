@@ -6,10 +6,8 @@ import java.util.List;
 import peterfajdiga.guituner.fourier.Complex;
 import peterfajdiga.guituner.fourier.Fourier;
 import peterfajdiga.guituner.general.General;
-import peterfajdiga.guituner.gui.PitchView;
 
-public class PitchDetector extends StoppableThread implements ShortBufferReceiver, PitchView.OnFocusChangedListener {
-
+class PitchDetector {
     private static final double NOISE_THRESHOLD = 20.0;
     private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
     private static final double MIN_FREQUENCY = 20.0;
@@ -19,54 +17,58 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private static final double FUNDAMENTAL_WEIGHT_MINFREQ = 0.5;
     private static final int FOCUSED_BIN_RADIUS = 10;
 
-    private final Receiver receiver;
-    private volatile boolean working = false;
-    private short[] buffer;
-    private int sampleRate;
-    private boolean focusedMode = false;
-    private double focusedFrequency;
+    int sampleRate;
+    boolean focusedMode = false;
+    double focusedFrequency;
 
-    public PitchDetector(final Receiver receiver) {
-        this.receiver = receiver;
-    }
-
-    // called by another thread
-    @Override
-    public synchronized void putBuffer(final short[] buffer) {
-        if (working) {
-            // still busy with previous buffer, skip this one
-            return;
+    public double findPitch(final short[] buffer) throws PitchDetectorThread.NoPitchFoundException {
+        if (buffer.length == 0) {
+            // invalid buffer
+            throw new PitchDetectorThread.NoPitchFoundException();
         }
-        this.buffer = buffer;
-        notify();
-    }
 
-    // called by another thread
-    @Override
-    public void setSampleRate(final int sampleRate) {
-        this.sampleRate = sampleRate;
-    }
+        final Complex[] freqSpace = Fourier.fft(buffer);
+        final int halfN = buffer.length / 2;
 
-    @Override
-    public synchronized void run() {
-        try {
-            while (threadEnabled) {
-                wait();
-                working = true;
-                try {
-                    final double pitch = findPitch(buffer);
-                    receiver.updatePitch(pitch);
-                } catch (final NoPitchFoundException e) {
-                    // no problem, we'll find a pitch next time
-                }
-                working = false;
+        double sum = 0.0;
+        final double[] values = new double[halfN];
+        for (int i = 0; i < halfN; i++) {
+            values[i] = freqSpace[i].abs();
+            sum += values[i];
+        }
+        final double floor = sum / freqSpace.length;
+
+        final int startIndex;
+        final List<Double> harmonics = new ArrayList<>();
+        if (focusedMode) {
+            final double binWidth = (double)sampleRate / freqSpace.length;
+            final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
+            final int maxBin = General.max(values, focusedIndex, FOCUSED_BIN_RADIUS);
+            if (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD_FOCUSED) {
+                harmonics.add(getFrequency(freqSpace, maxBin));
+                General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
             }
-        } catch (final InterruptedException e) {
-            throw new RuntimeException("PitchDetector thread stopped");
+            startIndex = General.getStart(focusedIndex, FOCUSED_BIN_RADIUS);
+        } else {
+            startIndex = 0;
         }
+
+        final int endIndex = values.length;
+        while (harmonics.size() < MAX_HARMONICS) {
+            final int maxBin = General.max(values, startIndex, endIndex);
+            if (maxBin < 0 || values[maxBin] / floor < NOISE_THRESHOLD) {
+                break;  // no more harmonics
+            }
+            harmonics.add(getFrequency(freqSpace, maxBin));
+            General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
+        }
+
+        if (harmonics.isEmpty()) {
+            throw new PitchDetectorThread.NoPitchFoundException();
+        }
+        return findFundamental(buffer, harmonics);
     }
 
-    // called by this thread
     private double getFrequency(final Complex[] X, final int index) {
         final int n_positiveFrequencies = X.length / 2;
         final double binWidth = (double)sampleRate / X.length;
@@ -83,13 +85,14 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         final double d = (dp + dm) / 2 + tau(dp * dp) - tau(dm * dm);
         return (index + d) * binWidth;
     }
+
     private static final double TAU_CONST_A = Math.sqrt(6.0)/24.0;
     private static final double TAU_CONST_B = Math.sqrt(2.0/3.0);
     private double tau(final double x) {
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
-    private double findFundamental(final List<Double> values) {
+    private double findFundamental(final short[] buffer, final List<Double> values) {
         final List<FundamentalCandidate> candidates = new ArrayList<>();
         for (double value0 : values) {
             for (double value1 : values) {
@@ -146,113 +149,5 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             return minFreq;
         }
         return gcd;
-    }
-
-    // called by this thread
-    private double findPitch(final short[] buffer) throws NoPitchFoundException {
-        if (buffer.length == 0) {
-            // invalid buffer
-            throw new NoPitchFoundException();
-        }
-
-        final Complex[] freqSpace = Fourier.fft(buffer);
-        final int halfN = buffer.length / 2;
-
-        double sum = 0.0;
-        final double[] values = new double[halfN];
-        for (int i = 0; i < halfN; i++) {
-            values[i] = freqSpace[i].abs();
-            sum += values[i];
-        }
-        final double floor = sum / freqSpace.length;
-
-        final int startIndex;
-        final List<Double> harmonics = new ArrayList<>();
-        if (focusedMode) {
-            final double binWidth = (double)sampleRate / freqSpace.length;
-            final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
-            final int maxBin = General.max(values, focusedIndex, FOCUSED_BIN_RADIUS);
-            if (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD_FOCUSED) {
-                harmonics.add(getFrequency(freqSpace, maxBin));
-                General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
-            }
-            startIndex = General.getStart(focusedIndex, FOCUSED_BIN_RADIUS);
-        } else {
-            startIndex = 0;
-        }
-
-        final int endIndex = values.length;
-        while (harmonics.size() < MAX_HARMONICS) {
-            final int maxBin = General.max(values, startIndex, endIndex);
-            if (maxBin < 0 || values[maxBin] / floor < NOISE_THRESHOLD) {
-                break;  // no more harmonics
-            }
-            harmonics.add(getFrequency(freqSpace, maxBin));
-            General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
-        }
-
-        if (harmonics.isEmpty()) {
-            throw new NoPitchFoundException();
-        }
-        return findFundamental(harmonics);
-    }
-
-    @Override
-    public void onFocusChanged(final double focusedFrequency) {
-        this.focusedMode = true;
-        this.focusedFrequency = focusedFrequency;
-    }
-
-    @Override
-    public void onFocusRemoved() {
-        this.focusedMode = false;
-    }
-
-
-    public static class NoPitchFoundException extends Exception {}
-
-    private static class FundamentalCandidate {
-
-        private static final double MAX_ERROR = 2.0;
-        private static final int MULTS = 5;
-
-        double sum;
-        int count;
-
-        FundamentalCandidate(final double value) {
-            sum = value;
-            count = 1;
-        }
-
-        double avg() {
-            return sum / count;
-        }
-
-        // return true if added
-        boolean add(final double value) {
-            final double avg = avg();
-            for (int mult = 1; mult <= MULTS; mult++) {
-                final double adjustedValue = value / mult;
-                if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
-                    sum += adjustedValue;
-                    count++;
-                    return true;
-                }
-            }
-            for (int mult = 1; mult <= MULTS; mult++) {
-                final double adjustedValue = value * mult;
-                if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
-                    sum += adjustedValue;
-                    count++;
-                    sum /= mult;
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public interface Receiver {
-        void updatePitch(double frequency);
     }
 }
