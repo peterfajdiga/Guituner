@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/button_pitchview_width"
+    android:layout_width="0dp"
     android:layout_height="@dimen/selection_bar_height"
+    android:layout_weight="1"
+    android:minWidth="@dimen/button_pitchview_width"
     android:padding="12dp"
     android:background="?attr/selectableItemBackground"/>

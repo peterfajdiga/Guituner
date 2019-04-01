@@ -35,26 +35,20 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="@dimen/selection_bar_height"
+        android:layout_gravity="bottom|center_horizontal"
+        android:fillViewport="true"
         android:background="@color/background">
 
-        <HorizontalScrollView
+        <LinearLayout
+            android:id="@+id/shortcutcontainer"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/selection_bar_height"
-            android:layout_gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"/>
 
-            <LinearLayout
-                android:id="@+id/shortcutcontainer"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/selection_bar_height"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"/>
-
-        </HorizontalScrollView>
-
-    </FrameLayout>
+    </HorizontalScrollView>
 
 </FrameLayout>

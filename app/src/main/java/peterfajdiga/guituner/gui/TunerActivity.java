@@ -87,8 +87,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         for (final Tone shortcutTone : shortcutTones) {
             final Button button = (Button)(getLayoutInflater().inflate(R.layout.button_pitchview, null));
             button.setLayoutParams(new LinearLayout.LayoutParams(
-                    (int)getResources().getDimension(R.dimen.button_pitchview_width),
-                    (int)getResources().getDimension(R.dimen.selection_bar_height)
+                    0,
+                    (int)getResources().getDimension(R.dimen.selection_bar_height),
+                    1
             ));
             setupToneShortcutButton(button, shortcutTone, targetPitchView);
             shortcutContainer.addView(button);
