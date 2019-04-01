@@ -4,8 +4,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import peterfajdiga.guituner.general.General;
-
 public class BeepThread extends Thread {
 
     private static final int SAMPLE_RATE = 44100;

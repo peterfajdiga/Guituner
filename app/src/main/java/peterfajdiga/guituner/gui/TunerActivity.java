@@ -2,11 +2,11 @@ package peterfajdiga.guituner.gui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.pitchdetection.PitchDetector;
+import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
@@ -23,9 +25,11 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
     private FrequencySetterRunnable frequencySetterRunnable;
     private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
+    private static final int SAMPLE_RATE = 4000;
 
     private boolean initialized = false;
     PitchDetectorThread pitchDetectorThread;
+    final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
     Recorder recorder;
 
     private void initialize() {
@@ -34,7 +38,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setHighestFrequency(Recorder.SAMPLE_RATE / 2.0);
+        pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
         setupToneShortcutButtons(pitchView);
@@ -149,9 +153,9 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
             return;
         }
 
-        pitchDetectorThread = new PitchDetectorThread(this);
+        pitchDetectorThread = new PitchDetectorThread(this, pitchDetector);
         pitchDetectorThread.startThread();
-        recorder = new Recorder(pitchDetectorThread);
+        recorder = new Recorder(pitchDetectorThread, SAMPLE_RATE);
         recorder.startThread();
 
         final PitchView pitchView = findViewById(R.id.pitchview);
@@ -165,7 +169,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         }
         findViewById(R.id.selectionbg).setVisibility(View.VISIBLE);
         soundOnClickListener.setFrequency(focusedFrequency);
-        pitchDetectorThread.onFocusChanged(focusedFrequency);
+        pitchDetector.setFocusedFrequency(focusedFrequency);
     }
 
     @Override
@@ -174,7 +178,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
             return;
         }
         findViewById(R.id.selectionbg).setVisibility(View.INVISIBLE);
-        pitchDetectorThread.onFocusChanged(0.0);
+        pitchDetector.removeFocusedFrequency();
     }
 
     private boolean checkMicPermission() {

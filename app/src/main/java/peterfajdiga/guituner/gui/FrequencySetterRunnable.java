@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.gui;
 
 import android.view.View;
-import android.widget.TextView;
 
 import peterfajdiga.guituner.R;
 

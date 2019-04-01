@@ -1,18 +1,18 @@
 package peterfajdiga.guituner.pitchdetection;
 
-import peterfajdiga.guituner.gui.PitchView;
 import peterfajdiga.guituner.recording.ShortBufferReceiver;
 import peterfajdiga.guituner.recording.StoppableThread;
 
-public class PitchDetectorThread extends StoppableThread implements ShortBufferReceiver, PitchView.OnFocusChangedListener {
+public class PitchDetectorThread extends StoppableThread implements ShortBufferReceiver {
 
     private final Receiver receiver;
     private volatile boolean working = false;
     private short[] buffer;
-    private PitchDetector pitchDetector = new PitchDetector();
+    private PitchDetector pitchDetector;
 
-    public PitchDetectorThread(final Receiver receiver) {
+    public PitchDetectorThread(final Receiver receiver, final PitchDetector pitchDetector) {
         this.receiver = receiver;
+        this.pitchDetector = pitchDetector;
     }
 
     // called by another thread
@@ -26,12 +26,6 @@ public class PitchDetectorThread extends StoppableThread implements ShortBufferR
         notify();
     }
 
-    // called by another thread
-    @Override
-    public void setSampleRate(final int sampleRate) {
-        this.pitchDetector.sampleRate = sampleRate;
-    }
-
     @Override
     public synchronized void run() {
         try {
@@ -41,7 +35,7 @@ public class PitchDetectorThread extends StoppableThread implements ShortBufferR
                 try {
                     final double pitch = pitchDetector.findPitch(buffer);
                     receiver.updatePitch(pitch);
-                } catch (final NoPitchFoundException e) {
+                } catch (final PitchDetector.NoPitchFoundException e) {
                     // no problem, we'll find a pitch next time
                 }
                 working = false;
@@ -50,20 +44,6 @@ public class PitchDetectorThread extends StoppableThread implements ShortBufferR
             throw new RuntimeException("PitchDetectorThread stopped");
         }
     }
-
-    @Override
-    public void onFocusChanged(final double focusedFrequency) {
-        this.pitchDetector.focusedMode = true;
-        this.pitchDetector.focusedFrequency = focusedFrequency;
-    }
-
-    @Override
-    public void onFocusRemoved() {
-        this.pitchDetector.focusedMode = false;
-    }
-
-
-    public static class NoPitchFoundException extends Exception {}
 
     public interface Receiver {
         void updatePitch(double frequency);
