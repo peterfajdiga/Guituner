@@ -23,7 +23,8 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     private volatile boolean working = false;
     private short[] buffer;
     private int sampleRate;
-    private double focusedFrequency = 0.0;
+    private boolean focusedMode = false;
+    private double focusedFrequency;
 
     public PitchDetector(final Receiver receiver) {
         this.receiver = receiver;
@@ -125,7 +126,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             return FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd;
         }
 
-        if (focusedFrequency > 0.0) {
+        if (focusedMode) {
             final double focusedFrequencyRadius = FOCUSED_BIN_RADIUS * ((double)sampleRate / buffer.length);
             final boolean gcdLegal     = General.nearlyEqual(gcd    , focusedFrequency, focusedFrequencyRadius);
             final boolean minFreqLegal = General.nearlyEqual(minFreq, focusedFrequency, focusedFrequencyRadius);
@@ -162,7 +163,7 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
         final int startIndex;
         final List<Double> harmonics = new ArrayList<>();
-        if (focusedFrequency > 0.0) {
+        if (focusedMode) {
             final double binWidth = (double)sampleRate / freqSpace.length;
             final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
             final int maxBin = General.max(values, focusedIndex, FOCUSED_BIN_RADIUS);
@@ -193,12 +194,13 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
 
     @Override
     public void onFocusChanged(final double focusedFrequency) {
+        this.focusedMode = true;
         this.focusedFrequency = focusedFrequency;
     }
 
     @Override
     public void onFocusRemoved() {
-        this.focusedFrequency = 0.0;
+        this.focusedMode = false;
     }
 
 
