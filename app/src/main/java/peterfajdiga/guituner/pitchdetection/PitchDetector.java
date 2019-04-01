@@ -53,10 +53,15 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
             while (threadEnabled) {
                 wait();
                 working = true;
-                findPitch();
+                try {
+                    final double pitch = findPitch(buffer);
+                    receiver.updatePitch(pitch);
+                } catch (final NoPitchFoundException e) {
+                    // no problem, we'll find a pitch next time
+                }
                 working = false;
             }
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             throw new RuntimeException("PitchDetector thread stopped");
         }
     }
@@ -144,10 +149,10 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
     }
 
     // called by this thread
-    private void findPitch() {
+    private double findPitch(final short[] buffer) throws NoPitchFoundException {
         if (buffer.length == 0) {
             // invalid buffer
-            return;
+            throw new NoPitchFoundException();
         }
 
         final Complex[] freqSpace = Fourier.fft(buffer);
@@ -187,9 +192,9 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         }
 
         if (harmonics.isEmpty()) {
-            return;
+            throw new NoPitchFoundException();
         }
-        receiver.updatePitch(findFundamental(harmonics));
+        return findFundamental(harmonics);
     }
 
     @Override
@@ -203,6 +208,8 @@ public class PitchDetector extends StoppableThread implements ShortBufferReceive
         this.focusedMode = false;
     }
 
+
+    public static class NoPitchFoundException extends Exception {}
 
     private static class FundamentalCandidate {
 
