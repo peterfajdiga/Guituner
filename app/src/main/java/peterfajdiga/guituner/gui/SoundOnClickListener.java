@@ -2,7 +2,7 @@ package peterfajdiga.guituner.gui;
 
 import android.view.View;
 
-import peterfajdiga.guituner.sound.BeepThread;
+import peterfajdiga.guituner.beep.BeepThread;
 
 public class SoundOnClickListener implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.sound;
+package peterfajdiga.guituner.beep;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
