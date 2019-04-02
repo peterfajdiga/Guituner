@@ -7,10 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
@@ -81,19 +81,34 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         });
     }
 
+    private static void ensureCorrectChildCount(final LayoutInflater layoutInflater, final ViewGroup container, final int layoutResourceId, final int count) {
+        final int currentCount = container.getChildCount();
+        final int childrenToAdd = count - currentCount;
+        for (int i = 0; i < childrenToAdd; i++) {
+            layoutInflater.inflate(layoutResourceId, container, true);
+        }
+        for (int i = 0; i > childrenToAdd; i--) {
+            container.removeViewAt(0);
+        }
+    }
+
     private void setupToneShortcutButtons(final PitchView targetPitchView) {
         final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
-        shortcutContainer.removeAllViews();
-        for (final Tone shortcutTone : shortcutTones) {
-            final Button button = (Button)(getLayoutInflater().inflate(R.layout.button_pitchview, null));
-            button.setLayoutParams(new LinearLayout.LayoutParams(
-                    0,
-                    (int)getResources().getDimension(R.dimen.selection_bar_height),
-                    1
-            ));
-            setupToneShortcutButton(button, shortcutTone, targetPitchView);
-            shortcutContainer.addView(button);
+        final int n = shortcutTones.length;
+        ensureCorrectChildCount(getLayoutInflater(), shortcutContainer, R.layout.button_pitchview, n);
+        for (int i = 0; i < n; i++) {
+            final Button button = (Button)shortcutContainer.getChildAt(i);
+            setupToneShortcutButton(button, shortcutTones[i], targetPitchView);
         }
+    }
+
+    private void removeHighlightFromShortcutButtons() {
+        final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
+        final int n = shortcutContainer.getChildCount();
+        for (int i = 0; i < n; i++) {
+            shortcutContainer.getChildAt(i).setSelected(false);
+        }
+        shortcutContainer.getChildAt(2).setSelected(true);
     }
 
     private void finishWithoutMicPermission() {
@@ -180,6 +195,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         }
         findViewById(R.id.selectionbg).setVisibility(View.INVISIBLE);
         pitchDetector.removeFocusedFrequency();
+        removeHighlightFromShortcutButtons();
     }
 
     private boolean checkMicPermission() {
