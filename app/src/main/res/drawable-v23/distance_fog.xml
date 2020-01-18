@@ -2,9 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/distance_fog_top"
-        android:right="?android:scrollbarSize"/>
+        android:right="?android:scrollbarSize"
+        android:height="@dimen/distance_fog_size"/>
     <item
         android:drawable="@drawable/distance_fog_btm"
         android:right="?android:scrollbarSize"
+        android:height="@dimen/distance_fog_size"
         android:gravity="bottom"/>
 </layer-list>
