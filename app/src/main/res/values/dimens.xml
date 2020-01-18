@@ -2,4 +2,6 @@
 <resources>
     <dimen name="selection_bar_height">48dp</dimen>
     <dimen name="button_pitchview_width">48dp</dimen>
+    <dimen name="scrollbar_width">4dp</dimen>
+    <dimen name="distance_fog_size">24dp</dimen>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/distance_fog_top"
+        android:right="@dimen/scrollbar_width"
+        android:height="@dimen/distance_fog_size"/>
+    <item
+        android:drawable="@drawable/distance_fog_btm"
+        android:right="@dimen/scrollbar_width"
+        android:height="@dimen/distance_fog_size"
+        android:gravity="bottom"/>
+</layer-list>
