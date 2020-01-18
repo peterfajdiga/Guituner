@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="peterfajdiga.guituner.gui.TunerActivity">
 
-    <peterfajdiga.guituner.gui.PitchView
-        android:id="@+id/pitchview"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <LinearLayout
-        android:id="@+id/selectionbg"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="@color/selectionBackground"
-        android:visibility="invisible">
+        <peterfajdiga.guituner.gui.PitchView
+            android:id="@+id/pitchview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <Button android:id="@+id/unpinbtn"
-            android:layout_width="@dimen/button_pitchview_width"
-            android:layout_height="@dimen/selection_bar_height"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_unlock_black_24dp" />
+        <LinearLayout
+            android:id="@+id/selectionbg"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/selectionBackground"
+            android:visibility="invisible">
 
-        <Button android:id="@+id/soundbtn"
-            android:layout_width="@dimen/button_pitchview_width"
-            android:layout_height="@dimen/selection_bar_height"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_music_note_black_24dp" />
+            <Button android:id="@+id/unpinbtn"
+                android:layout_width="@dimen/button_pitchview_width"
+                android:layout_height="@dimen/selection_bar_height"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawableLeft="@drawable/ic_unlock_black_24dp" />
 
-    </LinearLayout>
+            <Button android:id="@+id/soundbtn"
+                android:layout_width="@dimen/button_pitchview_width"
+                android:layout_height="@dimen/selection_bar_height"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawableLeft="@drawable/ic_music_note_black_24dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
         android:fillViewport="true"
         android:background="@color/background">
 
@@ -51,4 +58,4 @@
 
     </HorizontalScrollView>
 
-</FrameLayout>
+</LinearLayout>
