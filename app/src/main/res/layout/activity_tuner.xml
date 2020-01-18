@@ -24,7 +24,7 @@
             android:layout_height="@dimen/selection_bar_height"
             android:padding="12dp"
             android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_close_black_24dp" />
+            android:drawableLeft="@drawable/ic_unlock_black_24dp" />
 
         <Button android:id="@+id/soundbtn"
             android:layout_width="@dimen/button_pitchview_width"
