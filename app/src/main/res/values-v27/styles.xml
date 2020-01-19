@@ -9,7 +9,7 @@
 
         <!-- Navigation bar -->
         <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@android:color/background_dark</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>
