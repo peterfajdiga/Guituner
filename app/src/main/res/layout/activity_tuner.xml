@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@color/selectionBackground"
+            android:background="@color/selection_background"
             android:visibility="invisible">
 
             <Button android:id="@+id/unpinbtn"

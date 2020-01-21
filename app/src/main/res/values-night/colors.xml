@@ -3,5 +3,5 @@
     <color name="background">#212121</color>
     <color name="primary_text">#DEFFFFFF</color>
     <color name="secondary_text">#99FFFFFF</color>
-    <color name="selectionBackground">#20FFFFFF</color>
+    <color name="selection_background">#20FFFFFF</color>
 </resources>
