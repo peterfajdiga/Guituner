@@ -183,7 +183,20 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         if (!initialized) {
             return;
         }
-        findViewById(R.id.selectionbg).setVisibility(View.VISIBLE);
+        AlphaVisibility.showView(findViewById(R.id.selectionbg));
+        soundOnClickListener.setFrequency(focusedFrequency);
+        pitchDetector.setFocusedFrequency(focusedFrequency);
+    }
+
+    @Override
+    public void onFocusChanged(final double focusedFrequency, final float clickX, final float clickY) {
+        if (!initialized) {
+            return;
+        }
+        final View selectionBg = findViewById(R.id.selectionbg);
+        final int centerX = Math.round(clickX - selectionBg.getX());
+        final int centerY = Math.round(clickY - selectionBg.getY());
+        RippleVisibility.showViewWithRipple(selectionBg, centerX, centerY);
         soundOnClickListener.setFrequency(focusedFrequency);
         pitchDetector.setFocusedFrequency(focusedFrequency);
     }
@@ -193,7 +206,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         if (!initialized) {
             return;
         }
-        findViewById(R.id.selectionbg).setVisibility(View.INVISIBLE);
+        AlphaVisibility.hideView(findViewById(R.id.selectionbg));
         pitchDetector.removeFocusedFrequency();
         removeHighlightFromShortcutButtons();
     }

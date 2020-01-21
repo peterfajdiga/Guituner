@@ -105,7 +105,7 @@ public class PitchView extends ScrollView {
                     display.selectToneByY(event.getY() + getScrollY());
                     focusOnFrequency(display.selectedTone.frequency);
                     if (onFocusChangedListener != null) {
-                        onFocusChangedListener.onFocusChanged(display.selectedTone.frequency);
+                        onFocusChangedListener.onFocusChanged(display.selectedTone.frequency, event.getX(), event.getY());
                     }
                 } else if (display.selectedTone != null && lastDeltaY < SNAP_DELTA_Y) {
                     focusOnFrequency(display.selectedTone.frequency);
@@ -157,6 +157,7 @@ public class PitchView extends ScrollView {
 
     public interface OnFocusChangedListener {
         void onFocusChanged(double focusedFrequency);
+        void onFocusChanged(double focusedFrequency, float clickX, float clickY); // for animation
         void onFocusRemoved();
     }
 
