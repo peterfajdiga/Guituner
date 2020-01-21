@@ -9,10 +9,12 @@ import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.View;
 
+import java.util.Arrays;
+
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 
-public class PitchViewInner extends View {
+class PitchViewDisplay extends View {
 
     private static final boolean HIGH_F_ON_TOP = true;
     private static final float TONE_OFFSET_X_RATIO = 0.5f;
@@ -28,23 +30,19 @@ public class PitchViewInner extends View {
     private static final Paint paint_freq = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq_light = new Paint();
 
-    private float dp;
+    private final float dp;
     private int width, height;
     private float edgeToneOffsetY, toneLineStartLeftX, toneLineStartRightX, toneLineEndLeftX, toneLineEndRightX;
 
     private final android.graphics.Rect textBounds = new Rect();
 
-    double detectedFrequency = 0.0;
-    Tone[] tones = toneList;
-    Tone selectedTone = null;
+    private Tone[] tones;
+    private Tone highlightedTone = null;
+    private double detectedFrequency = 0.0;
 
-    public PitchViewInner(Context context) {
+    public PitchViewDisplay(final Context context) {
         super(context);
-        init(context);
-    }
 
-
-    private void init(final Context context) {
         final Resources r = context.getResources();
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
 
@@ -67,6 +65,41 @@ public class PitchViewInner extends View {
         paint_freq_light.setStrokeWidth(1);
     }
 
+    public void setDetectedFrequency(final double frequency) {
+        this.detectedFrequency = frequency;
+        invalidate();
+    }
+
+    public void setHighestFrequency(final double frequency) {
+        int n_detectableTones = 0;
+        for (Tone tone : fullToneList) {
+            if (tone.frequency > frequency) break;
+            n_detectableTones++;
+        }
+        tones = Arrays.copyOf(fullToneList, n_detectableTones);
+
+        if (highlightedTone != null && highlightedTone.frequency > frequency) {
+            unselectTone();
+        }
+    }
+
+    public Tone getToneFromY(final float y) {
+        return getNearestTone(getFrequencyFromY(y));
+    }
+
+    public void selectTone(final Tone tone) {
+        highlightedTone = tone;
+        invalidate();
+    }
+
+    public void unselectTone() {
+        highlightedTone = null;
+        invalidate();
+    }
+
+    public Tone getHighlightedTone() {
+        return highlightedTone;
+    }
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
@@ -84,7 +117,7 @@ public class PitchViewInner extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
 
         // draw detected frequency
         if (detectedFrequency > 0.0) {
@@ -126,7 +159,7 @@ public class PitchViewInner extends View {
         for (Tone tone : tones) {
             final float toneY = getFrequencyY(tone.frequency);
 
-            final Paint paint = selectedTone == null || selectedTone == tone ? paint_tone : paint_tone_inactive;
+            final Paint paint = highlightedTone == null || highlightedTone == tone ? paint_tone : paint_tone_inactive;
             paint.getTextBounds(tone.name, 0, tone.name.length(), textBounds);
 
             canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint);
@@ -144,7 +177,7 @@ public class PitchViewInner extends View {
         }
     }
 
-    private Path getTriangle(float x, float y, final boolean pointRight) {
+    private Path getTriangle(float x, final float y, final boolean pointRight) {
         final float size = 4.0f * dp;  // TODO: define constant
         final Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
@@ -217,23 +250,21 @@ public class PitchViewInner extends View {
         return Math.exp(logFreq);
     }
 
-    void selectToneByY(final float y) {
-        final double frequency = getFrequencyFromY(y);
-        // find nearest Tone
+    private Tone getNearestTone(final double frequency) {
+        // TODO: optimise
         double minDiff = Double.MAX_VALUE;
+        Tone nearestTone = null;
         for (Tone tone : tones) {
             final double diff = Math.abs(tone.frequency - frequency);
             if (diff < minDiff) {
                 minDiff = diff;
-                selectedTone = tone;
+                nearestTone = tone;
             }
         }
-        invalidate();
+        return nearestTone;
     }
 
-
-
-    static final Tone[] toneList = {
+    static final Tone[] fullToneList = {
             Tone.A0,
             Tone.A0s,
             Tone.B0,

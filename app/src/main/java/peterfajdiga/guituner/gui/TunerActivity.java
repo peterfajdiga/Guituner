@@ -76,7 +76,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                targetPitchView.setFocus(tone);
+                targetPitchView.focusOn(tone);
             }
         });
     }
