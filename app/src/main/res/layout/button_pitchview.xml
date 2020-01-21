@@ -5,4 +5,5 @@
     android:layout_weight="1"
     android:minWidth="@dimen/button_pitchview_width"
     android:padding="12dp"
-    android:background="?attr/selectableItemBackground"/>
+    android:background="?attr/selectableItemBackground"
+    android:textColor="@color/primary_text"/>

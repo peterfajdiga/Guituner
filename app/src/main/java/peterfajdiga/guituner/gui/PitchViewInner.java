@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.View;
 
+import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 
 public class PitchViewInner extends View {
@@ -49,20 +50,20 @@ public class PitchViewInner extends View {
 
         paint_tone.setTextSize(24 * dp);
         paint_tone.setTextAlign(Paint.Align.CENTER);
-        paint_tone.setColor(r.getColor(android.R.color.primary_text_light));
+        paint_tone.setColor(r.getColor(R.color.primary_text));
         paint_tone.setStrokeWidth(dp);
 
         paint_tone_inactive.setTextSize(24 * dp);
         paint_tone_inactive.setTextAlign(Paint.Align.CENTER);
-        paint_tone_inactive.setColor(r.getColor(android.R.color.tertiary_text_light));
+        paint_tone_inactive.setColor(r.getColor(R.color.secondary_text));
         paint_tone_inactive.setStrokeWidth(dp);
 
         paint_freq.setTextSize(12 * dp);
         paint_freq.setTextAlign(Paint.Align.RIGHT);
-        paint_freq.setColor(r.getColor(android.R.color.tertiary_text_light));
+        paint_freq.setColor(r.getColor(R.color.secondary_text));
         paint_freq.setStrokeWidth(dp);
 
-        paint_freq_light.setColor(r.getColor(android.R.color.tertiary_text_light));
+        paint_freq_light.setColor(r.getColor(R.color.secondary_text));
         paint_freq_light.setStrokeWidth(1);
     }
 
