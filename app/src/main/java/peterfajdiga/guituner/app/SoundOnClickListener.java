@@ -4,7 +4,7 @@ import android.view.View;
 
 import peterfajdiga.guituner.beep.BeepThread;
 
-public class SoundOnClickListener implements View.OnClickListener {
+class SoundOnClickListener implements View.OnClickListener {
     private double frequency = 440.0;
 
     @Override

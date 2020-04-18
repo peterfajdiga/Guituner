@@ -5,7 +5,7 @@ import android.view.View;
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.gui.PitchView;
 
-public class FrequencySetterRunnable implements Runnable {
+class FrequencySetterRunnable implements Runnable {
     private double frequency;
     private final View contentView;
 
