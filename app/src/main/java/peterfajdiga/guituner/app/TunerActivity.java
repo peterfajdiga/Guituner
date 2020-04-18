@@ -24,7 +24,7 @@ import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
-public class TunerActivity extends AppCompatActivity implements PitchView.OnFocusChangedListener {
+public class TunerActivity extends AppCompatActivity {
     private Preferences preferences;
     private FrequencySetterRunnable frequencySetterRunnable;
     private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
@@ -172,40 +172,40 @@ public class TunerActivity extends AppCompatActivity implements PitchView.OnFocu
         recorder.startThread();
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setOnFocusChangedListener(this);
-    }
+        pitchView.setOnFocusChangedListener(new PitchView.OnFocusChangedListener() {
+            @Override
+            public void onFocusChanged(final double focusedFrequency) {
+                if (!initialized) {
+                    return;
+                }
+                AlphaVisibility.showView(findViewById(R.id.selectionbg));
+                soundOnClickListener.setFrequency(focusedFrequency);
+                pitchDetector.setFocusedFrequency(focusedFrequency);
+            }
 
-    @Override
-    public void onFocusChanged(final double focusedFrequency) {
-        if (!initialized) {
-            return;
-        }
-        AlphaVisibility.showView(findViewById(R.id.selectionbg));
-        soundOnClickListener.setFrequency(focusedFrequency);
-        pitchDetector.setFocusedFrequency(focusedFrequency);
-    }
+            @Override
+            public void onFocusChanged(final double focusedFrequency, final float clickX, final float clickY) {
+                if (!initialized) {
+                    return;
+                }
+                final View selectionBg = findViewById(R.id.selectionbg);
+                final int centerX = Math.round(clickX - selectionBg.getX());
+                final int centerY = Math.round(clickY - selectionBg.getY());
+                RippleVisibility.showViewWithRipple(selectionBg, centerX, centerY);
+                soundOnClickListener.setFrequency(focusedFrequency);
+                pitchDetector.setFocusedFrequency(focusedFrequency);
+            }
 
-    @Override
-    public void onFocusChanged(final double focusedFrequency, final float clickX, final float clickY) {
-        if (!initialized) {
-            return;
-        }
-        final View selectionBg = findViewById(R.id.selectionbg);
-        final int centerX = Math.round(clickX - selectionBg.getX());
-        final int centerY = Math.round(clickY - selectionBg.getY());
-        RippleVisibility.showViewWithRipple(selectionBg, centerX, centerY);
-        soundOnClickListener.setFrequency(focusedFrequency);
-        pitchDetector.setFocusedFrequency(focusedFrequency);
-    }
-
-    @Override
-    public void onFocusRemoved() {
-        if (!initialized) {
-            return;
-        }
-        AlphaVisibility.hideView(findViewById(R.id.selectionbg));
-        pitchDetector.removeFocusedFrequency();
-        removeHighlightFromShortcutButtons();
+            @Override
+            public void onFocusRemoved() {
+                if (!initialized) {
+                    return;
+                }
+                AlphaVisibility.hideView(findViewById(R.id.selectionbg));
+                pitchDetector.removeFocusedFrequency();
+                removeHighlightFromShortcutButtons();
+            }
+        });
     }
 
     private boolean checkMicPermission() {
