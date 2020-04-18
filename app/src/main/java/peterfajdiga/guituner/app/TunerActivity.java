@@ -8,10 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
@@ -19,13 +16,13 @@ import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
+import peterfajdiga.guituner.gui.ToneShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
 public class TunerActivity extends AppCompatActivity {
-    private Preferences preferences;
     private FrequencySetterRunnable frequencySetterRunnable;
     private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
@@ -39,14 +36,13 @@ public class TunerActivity extends AppCompatActivity {
     private void initialize() {
         setContentView(R.layout.activity_tuner);
 
-        preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
         final PitchView pitchView = findViewById(R.id.pitchview);
         pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
-        setupToneShortcutButtons(pitchView);
+        setupToneShortcuts(pitchView);
 
         initialized = true;
     }
@@ -67,45 +63,16 @@ public class TunerActivity extends AppCompatActivity {
         });
     }
 
-    private void setupToneShortcutButton(@NonNull final Button button, @NonNull final Tone tone, @NonNull final PitchView targetPitchView) {
-        button.setText(tone.name);
-        button.setOnClickListener(new View.OnClickListener() {
+    private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
+        final Preferences preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
+        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
+        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_pitchview);
+        toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
-            public void onClick(final View view) {
+            public void OnToneClick(final Tone tone) {
                 targetPitchView.focusOn(tone);
             }
         });
-    }
-
-    private static void ensureCorrectChildCount(final LayoutInflater layoutInflater, final ViewGroup container, final int layoutResourceId, final int count) {
-        final int currentCount = container.getChildCount();
-        final int childrenToAdd = count - currentCount;
-        for (int i = 0; i < childrenToAdd; i++) {
-            layoutInflater.inflate(layoutResourceId, container, true);
-        }
-        for (int i = 0; i > childrenToAdd; i--) {
-            container.removeViewAt(0);
-        }
-    }
-
-    private void setupToneShortcutButtons(@NonNull final PitchView targetPitchView) {
-        final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
-        final Tone[] tones = preferences.getShortcutTones();
-        final int n = tones.length;
-        ensureCorrectChildCount(getLayoutInflater(), shortcutContainer, R.layout.button_pitchview, n);
-        for (int i = 0; i < n; i++) {
-            final Button button = (Button)shortcutContainer.getChildAt(i);
-            setupToneShortcutButton(button, tones[i], targetPitchView);
-        }
-    }
-
-    private void removeHighlightFromShortcutButtons() {
-        final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
-        final int n = shortcutContainer.getChildCount();
-        for (int i = 0; i < n; i++) {
-            shortcutContainer.getChildAt(i).setSelected(false);
-        }
-        shortcutContainer.getChildAt(2).setSelected(true);
     }
 
     private void finishWithoutMicPermission() {
@@ -203,7 +170,9 @@ public class TunerActivity extends AppCompatActivity {
                 }
                 AlphaVisibility.hideView(findViewById(R.id.selectionbg));
                 pitchDetector.removeFocusedFrequency();
-                removeHighlightFromShortcutButtons();
+
+                final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
+                toneShortcutsBar.removeHighlight();
             }
         });
     }

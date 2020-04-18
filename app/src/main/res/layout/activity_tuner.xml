@@ -51,7 +51,7 @@
         android:fillViewport="true"
         android:background="@color/background">
 
-        <LinearLayout
+        <peterfajdiga.guituner.gui.ToneShortcutsBar
             android:id="@+id/shortcutcontainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
