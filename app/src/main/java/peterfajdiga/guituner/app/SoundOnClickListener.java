@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.gui;
+package peterfajdiga.guituner.app;
 
 import android.view.View;
 

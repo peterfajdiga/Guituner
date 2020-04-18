@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.gui;
+package peterfajdiga.guituner.app;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.gui.AlphaVisibility;
+import peterfajdiga.guituner.gui.PitchView;
+import peterfajdiga.guituner.gui.RippleVisibility;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
