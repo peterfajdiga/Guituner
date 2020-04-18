@@ -24,7 +24,7 @@ import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
-public class TunerActivity extends AppCompatActivity implements PitchDetectorThread.Receiver, PitchView.OnFocusChangedListener {
+public class TunerActivity extends AppCompatActivity implements PitchView.OnFocusChangedListener {
     private Preferences preferences;
     private FrequencySetterRunnable frequencySetterRunnable;
     private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
@@ -144,12 +144,6 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
     }
 
     @Override
-    public void updatePitch(final double frequency) {
-        final View contentView = findViewById(android.R.id.content);
-        contentView.post(frequencySetterRunnable.setFrequency(frequency));
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         if (!initialized) {
@@ -166,7 +160,13 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
             return;
         }
 
-        pitchDetectorThread = new PitchDetectorThread(this, pitchDetector);
+        pitchDetectorThread = new PitchDetectorThread(new PitchDetectorThread.Receiver() {
+            @Override
+            public void updatePitch(final double frequency) {
+                final View contentView = findViewById(android.R.id.content);
+                contentView.post(frequencySetterRunnable.setFrequency(frequency));
+            }
+        }, pitchDetector);
         pitchDetectorThread.startThread();
         recorder = new Recorder(pitchDetectorThread, SAMPLE_RATE);
         recorder.startThread();
