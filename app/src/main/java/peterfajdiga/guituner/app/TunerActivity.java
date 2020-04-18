@@ -1,6 +1,7 @@
 package peterfajdiga.guituner.app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -24,8 +25,9 @@ import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
 public class TunerActivity extends AppCompatActivity implements PitchDetectorThread.Receiver, PitchView.OnFocusChangedListener {
+    private Preferences preferences;
     private FrequencySetterRunnable frequencySetterRunnable;
-    private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
+    private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
     private static final int SAMPLE_RATE = 4000;
 
@@ -37,6 +39,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
     private void initialize() {
         setContentView(R.layout.activity_tuner);
 
+        preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
         final PitchView pitchView = findViewById(R.id.pitchview);
@@ -64,16 +67,7 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         });
     }
 
-    private static final Tone[] shortcutTones = new Tone[]{
-            Tone.E2,
-            Tone.A2,
-            Tone.D3,
-            Tone.G3,
-            Tone.B3,
-            Tone.E4
-    };
-
-    private void setupToneShortcutButton(final Button button, final Tone tone, final PitchView targetPitchView) {
+    private void setupToneShortcutButton(@NonNull final Button button, @NonNull final Tone tone, @NonNull final PitchView targetPitchView) {
         button.setText(tone.name);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,13 +88,14 @@ public class TunerActivity extends AppCompatActivity implements PitchDetectorThr
         }
     }
 
-    private void setupToneShortcutButtons(final PitchView targetPitchView) {
+    private void setupToneShortcutButtons(@NonNull final PitchView targetPitchView) {
         final ViewGroup shortcutContainer = findViewById(R.id.shortcutcontainer);
-        final int n = shortcutTones.length;
+        final Tone[] tones = preferences.getShortcutTones();
+        final int n = tones.length;
         ensureCorrectChildCount(getLayoutInflater(), shortcutContainer, R.layout.button_pitchview, n);
         for (int i = 0; i < n; i++) {
             final Button button = (Button)shortcutContainer.getChildAt(i);
-            setupToneShortcutButton(button, shortcutTones[i], targetPitchView);
+            setupToneShortcutButton(button, tones[i], targetPitchView);
         }
     }
 

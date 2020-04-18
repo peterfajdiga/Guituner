@@ -1,5 +1,7 @@
 package peterfajdiga.guituner.general;
 
+import androidx.annotation.NonNull;
+
 public class Tone {
     public final double frequency;
     public final String name;
@@ -8,6 +10,10 @@ public class Tone {
     private Tone(final double frequency, final String name) {
         this.frequency = frequency;
         this.name = name;
+    }
+
+    public String toString() {
+        return this.name;
     }
 
     public static final Tone C0   = new Tone(ToneFrequencies.C0 , "C0");
@@ -118,4 +124,118 @@ public class Tone {
     public static final Tone A8   = new Tone(ToneFrequencies.A8 , "A8");
     public static final Tone A8s  = new Tone(ToneFrequencies.A8s, "A8#");
     public static final Tone B8   = new Tone(ToneFrequencies.B8 , "B8");
+
+    public static Tone fromString(@NonNull final String toneString) throws NumberFormatException {
+        switch (toneString) {
+            case "C0": return C0;
+            case "C0#": return C0s;
+            case "D0": return D0;
+            case "D0#": return D0s;
+            case "E0": return E0;
+            case "F0": return F0;
+            case "F0#": return F0s;
+            case "G0": return G0;
+            case "G0#": return G0s;
+            case "A0": return A0;
+            case "A0#": return A0s;
+            case "B0": return B0;
+            case "C1": return C1;
+            case "C1#": return C1s;
+            case "D1": return D1;
+            case "D1#": return D1s;
+            case "E1": return E1;
+            case "F1": return F1;
+            case "F1#": return F1s;
+            case "G1": return G1;
+            case "G1#": return G1s;
+            case "A1": return A1;
+            case "A1#": return A1s;
+            case "B1": return B1;
+            case "C2": return C2;
+            case "C2#": return C2s;
+            case "D2": return D2;
+            case "D2#": return D2s;
+            case "E2": return E2;
+            case "F2": return F2;
+            case "F2#": return F2s;
+            case "G2": return G2;
+            case "G2#": return G2s;
+            case "A2": return A2;
+            case "A2#": return A2s;
+            case "B2": return B2;
+            case "C3": return C3;
+            case "C3#": return C3s;
+            case "D3": return D3;
+            case "D3#": return D3s;
+            case "E3": return E3;
+            case "F3": return F3;
+            case "F3#": return F3s;
+            case "G3": return G3;
+            case "G3#": return G3s;
+            case "A3": return A3;
+            case "A3#": return A3s;
+            case "B3": return B3;
+            case "C4": return C4;
+            case "C4#": return C4s;
+            case "D4": return D4;
+            case "D4#": return D4s;
+            case "E4": return E4;
+            case "F4": return F4;
+            case "F4#": return F4s;
+            case "G4": return G4;
+            case "G4#": return G4s;
+            case "A4": return A4;
+            case "A4#": return A4s;
+            case "B4": return B4;
+            case "C5": return C5;
+            case "C5#": return C5s;
+            case "D5": return D5;
+            case "D5#": return D5s;
+            case "E5": return E5;
+            case "F5": return F5;
+            case "F5#": return F5s;
+            case "G5": return G5;
+            case "G5#": return G5s;
+            case "A5": return A5;
+            case "A5#": return A5s;
+            case "B5": return B5;
+            case "C6": return C6;
+            case "C6#": return C6s;
+            case "D6": return D6;
+            case "D6#": return D6s;
+            case "E6": return E6;
+            case "F6": return F6;
+            case "F6#": return F6s;
+            case "G6": return G6;
+            case "G6#": return G6s;
+            case "A6": return A6;
+            case "A6#": return A6s;
+            case "B6": return B6;
+            case "C7": return C7;
+            case "C7#": return C7s;
+            case "D7": return D7;
+            case "D7#": return D7s;
+            case "E7": return E7;
+            case "F7": return F7;
+            case "F7#": return F7s;
+            case "G7": return G7;
+            case "G7#": return G7s;
+            case "A7": return A7;
+            case "A7#": return A7s;
+            case "B7": return B7;
+            case "C8": return C8;
+            case "C8#": return C8s;
+            case "D8": return D8;
+            case "D8#": return D8s;
+            case "E8": return E8;
+            case "F8": return F8;
+            case "F8#": return F8s;
+            case "G8": return G8;
+            case "G8#": return G8s;
+            case "A8": return A8;
+            case "A8#": return A8s;
+            case "B8": return B8;
+        }
+        throw new NumberFormatException();
+    }
 }
