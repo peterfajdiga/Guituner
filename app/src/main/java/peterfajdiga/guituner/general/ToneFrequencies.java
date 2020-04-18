@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.general;
 
 public class ToneFrequencies {
-
     private ToneFrequencies() {}  // make class static
 
     public static final double C0   = 16.35;

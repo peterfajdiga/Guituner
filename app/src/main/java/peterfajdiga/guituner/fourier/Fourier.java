@@ -3,7 +3,7 @@ package peterfajdiga.guituner.fourier;
 import peterfajdiga.guituner.general.General;
 
 public class Fourier {
-    private Fourier() {}
+    private Fourier() {}  // make class static
 
     private static Complex[] bitReverseCopy(final Complex[] original) {
         final int n = original.length;

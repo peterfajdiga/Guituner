@@ -8,7 +8,6 @@ import android.widget.ScrollView;
 import peterfajdiga.guituner.general.Tone;
 
 public class PitchView extends ScrollView {
-
     private static final int SNAP_DELTA_Y = 10;
     private static final float TONE_PRESS_MOVE_TOLERANCE = 10;
 
@@ -159,7 +158,7 @@ public class PitchView extends ScrollView {
 
     public interface OnFocusChangedListener {
         void onFocusChanged(double focusedFrequency);
-        void onFocusChanged(double focusedFrequency, float clickX, float clickY); // for animation
+        void onFocusChanged(double focusedFrequency, float clickX, float clickY);  // for animation
         void onFocusRemoved();
     }
 }

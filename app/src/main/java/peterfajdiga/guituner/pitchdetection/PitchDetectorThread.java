@@ -4,7 +4,6 @@ import peterfajdiga.guituner.recording.ShortBufferReceiver;
 import peterfajdiga.guituner.recording.StoppableThread;
 
 public class PitchDetectorThread extends StoppableThread implements ShortBufferReceiver {
-
     private final Receiver receiver;
     private volatile boolean working = false;
     private short[] buffer;

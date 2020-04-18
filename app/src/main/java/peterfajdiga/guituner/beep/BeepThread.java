@@ -5,7 +5,6 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 
 public class BeepThread extends Thread {
-
     private static final int SAMPLE_RATE = 44100;
     private static final double BASE_AMPLITUDE = Short.MAX_VALUE * 0.2;
     private static final double MAX_AMPLITUDE  = Short.MAX_VALUE * 0.9;

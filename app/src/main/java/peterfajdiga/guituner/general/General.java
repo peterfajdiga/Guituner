@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.general;
 
 public class General {
-
     private General() {}  // make class static
 
     /**

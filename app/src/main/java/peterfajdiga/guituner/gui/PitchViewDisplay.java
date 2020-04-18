@@ -15,7 +15,6 @@ import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 
 class PitchViewDisplay extends View {
-
     private static final boolean HIGH_F_ON_TOP = true;
     private static final float TONE_OFFSET_X_RATIO = 0.5f;
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;

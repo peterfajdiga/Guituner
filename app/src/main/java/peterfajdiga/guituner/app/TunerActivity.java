@@ -24,7 +24,6 @@ import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
 public class TunerActivity extends AppCompatActivity implements PitchDetectorThread.Receiver, PitchView.OnFocusChangedListener {
-
     private FrequencySetterRunnable frequencySetterRunnable;
     private SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;

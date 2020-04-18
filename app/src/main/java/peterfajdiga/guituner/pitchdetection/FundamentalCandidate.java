@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.pitchdetection;
 
 class FundamentalCandidate {
-
     static final double MAX_ERROR = 2.0;
     private static final int MULTS = 5;
 

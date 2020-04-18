@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.general;
 
 public class Tone {
-
     public final double frequency;
     public final String name;
 

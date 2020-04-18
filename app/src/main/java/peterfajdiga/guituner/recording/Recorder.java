@@ -7,7 +7,6 @@ import android.media.MediaRecorder;
 import java.util.Arrays;
 
 public class Recorder extends StoppableThread {
-
     private final ShortBufferReceiver receiver;
     private final int sampleRate;
     private int bufferSize;  // in bytes
