@@ -65,6 +65,15 @@ public class ToneShortcutsBar extends LinearLayout {
                 }
             }
         });
+        button.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                if (receiver == null) {
+                    return false;
+                }
+                return receiver.OnToneLongClick(tone);
+            }
+        });
     }
 
     public void removeHighlight() {
@@ -77,5 +86,6 @@ public class ToneShortcutsBar extends LinearLayout {
 
     public interface Receiver {
         void OnToneClick(Tone tone);
+        boolean OnToneLongClick(Tone tone);
     }
 }

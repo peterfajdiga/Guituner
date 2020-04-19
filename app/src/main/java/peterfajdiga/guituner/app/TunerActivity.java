@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
@@ -72,7 +74,19 @@ public class TunerActivity extends AppCompatActivity {
             public void OnToneClick(final Tone tone) {
                 targetPitchView.focusOn(tone);
             }
+
+            @Override
+            public boolean OnToneLongClick(final Tone tone) {
+                showShortcutTonesPreferenceDialog();
+                return true;
+            }
         });
+    }
+
+    private void showShortcutTonesPreferenceDialog() {
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(R.layout.dialog_shortcut_tones_preference);
+        dialog.show();
     }
 
     private void finishWithoutMicPermission() {
