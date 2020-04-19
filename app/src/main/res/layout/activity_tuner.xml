@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            style="?android:attr/buttonBarStyle"
             android:background="@color/selection_background"
             android:visibility="invisible">
 
@@ -31,6 +32,7 @@
                 android:layout_width="@dimen/button_pitchview_width"
                 android:layout_height="@dimen/selection_bar_height"
                 android:padding="12dp"
+                style="?android:attr/buttonBarButtonStyle"
                 android:background="?attr/selectableItemBackground"
                 android:drawableLeft="@drawable/ic_unlock_24dp" />
 
@@ -38,6 +40,7 @@
                 android:layout_width="@dimen/button_pitchview_width"
                 android:layout_height="@dimen/selection_bar_height"
                 android:padding="12dp"
+                style="?android:attr/buttonBarButtonStyle"
                 android:background="?attr/selectableItemBackground"
                 android:drawableLeft="@drawable/ic_music_note_24dp" />
 
@@ -56,7 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal"
+            style="?android:attr/buttonBarStyle"/>
 
     </HorizontalScrollView>
 
