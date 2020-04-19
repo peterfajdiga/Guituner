@@ -66,7 +66,7 @@ public class TunerActivity extends AppCompatActivity {
     private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
         final Preferences preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_pitchview);
+        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
             public void OnToneClick(final Tone tone) {
