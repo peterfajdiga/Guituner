@@ -7,6 +7,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class LabelledRadioGroup extends RadioGroup {
     private final Context context;
@@ -21,9 +22,13 @@ public class LabelledRadioGroup extends RadioGroup {
         this.context = context;
     }
 
-    public void addRadioButtons(@NonNull String[] labels) {
+    public void addRadioButtons(@NonNull String[] labels, @Nullable final String selectedLabel) {
         for (final String label : labels) {
-            addView(createRadioButton(label));
+            final View buttonView = createRadioButton(label);
+            addView(buttonView);
+            if (label.equals(selectedLabel)) {
+                check(buttonView.getId());
+            }
         }
     }
 

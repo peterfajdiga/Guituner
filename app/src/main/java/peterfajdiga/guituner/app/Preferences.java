@@ -16,10 +16,14 @@ class Preferences {
         this.prefs = prefs;
     }
 
-    @NonNull Tone[] getShortcutTones() {
+    @NonNull String getShortcutTonesString() {
         final String tonesString = prefs.getString(shortcutTonesKey, shortcutTonesDefault);
         assert tonesString != null;
-        return parseTonesString(tonesString);
+        return tonesString;
+    }
+
+    @NonNull Tone[] getShortcutTones() {
+        return parseTonesString(getShortcutTonesString());
     }
 
     private static @NonNull Tone[] parseTonesString(@NonNull final String tonesString) {

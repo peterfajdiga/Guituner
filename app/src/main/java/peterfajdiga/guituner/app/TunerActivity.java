@@ -26,6 +26,7 @@ import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
 import peterfajdiga.guituner.recording.Recorder;
 
 public class TunerActivity extends AppCompatActivity {
+    private Preferences preferences;
     private FrequencySetterRunnable frequencySetterRunnable;
     private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
@@ -39,6 +40,7 @@ public class TunerActivity extends AppCompatActivity {
     private void initialize() {
         setContentView(R.layout.activity_tuner);
 
+        preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
         final PitchView pitchView = findViewById(R.id.pitchview);
@@ -67,7 +69,6 @@ public class TunerActivity extends AppCompatActivity {
     }
 
     private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
-        final Preferences preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
         toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
@@ -89,9 +90,10 @@ public class TunerActivity extends AppCompatActivity {
                 "E2,A2,D3,G3,B3,E4",
                 "D2,A2,D3,G3,B3,E4"
         };
+        final String selectedTonesString = preferences.getShortcutTonesString();
 
         final LabelledRadioGroup container = new LabelledRadioGroup(this);
-        container.addRadioButtons(tonesStrings);
+        container.addRadioButtons(tonesStrings, selectedTonesString);
 
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(container);
