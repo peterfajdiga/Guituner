@@ -18,7 +18,7 @@ import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
-import peterfajdiga.guituner.gui.ToneRadioGroup;
+import peterfajdiga.guituner.gui.LabelledRadioGroup;
 import peterfajdiga.guituner.gui.ToneShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
@@ -90,8 +90,8 @@ public class TunerActivity extends AppCompatActivity {
                 "D2,A2,D3,G3,B3,E4"
         };
 
-        final ToneRadioGroup container = new ToneRadioGroup(this);
-        container.addTonesStrings(tonesStrings);
+        final LabelledRadioGroup container = new LabelledRadioGroup(this);
+        container.addRadioButtons(tonesStrings);
 
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(container);

@@ -8,29 +8,29 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 
-public class ToneRadioGroup extends RadioGroup {
+public class LabelledRadioGroup extends RadioGroup {
     private final Context context;
 
-    public ToneRadioGroup(final Context context) {
+    public LabelledRadioGroup(final Context context) {
         super(context);
         this.context = context;
     }
 
-    public ToneRadioGroup(final Context context, final AttributeSet attrs) {
+    public LabelledRadioGroup(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
     }
 
-    public void addTonesStrings(@NonNull String[] tonesStrings) {
-        for (final String tonesString : tonesStrings) {
-            addView(createRadioButton(tonesString));
+    public void addRadioButtons(@NonNull String[] labels) {
+        for (final String label : labels) {
+            addView(createRadioButton(label));
         }
     }
 
     @NonNull
-    private View createRadioButton(@NonNull final String tonesString) {
+    private View createRadioButton(@NonNull final String label) {
         final RadioButton button = new RadioButton(context);
-        button.setText(tonesString);
+        button.setText(label);
         return button;
     }
 }
