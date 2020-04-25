@@ -5,19 +5,22 @@ import androidx.annotation.NonNull;
 import peterfajdiga.guituner.gui.ItemedRadioGroup;
 
 class Tuning implements ItemedRadioGroup.Item {
+    final String name;
     final String tonesString;
 
-    Tuning(@NonNull final String tonesString) {
+    Tuning(@NonNull final String name, @NonNull final String tonesString) {
+        this.name = name;
         this.tonesString = tonesString;
     }
 
     @Override
     public CharSequence getButtonText() {
-        return tonesString;
+        return name + "\n" + tonesString;
     }
 
     static final Tuning[] tunings = new Tuning[] {
-            new Tuning("E2,A2,D3,G3,B3,E4"),
-            new Tuning("D2,A2,D3,G3,B3,E4"),
+            // TODO: localize names
+            new Tuning("Standard", "E2,A2,D3,G3,B3,E4"),
+            new Tuning("Drop D", "D2,A2,D3,G3,B3,E4"),
     };
 }
