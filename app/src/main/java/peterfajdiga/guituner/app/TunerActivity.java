@@ -2,13 +2,18 @@ package peterfajdiga.guituner.app;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -36,6 +41,8 @@ public class TunerActivity extends AppCompatActivity {
     PitchDetectorThread pitchDetectorThread;
     final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
     Recorder recorder;
+
+    private String customTuning;
 
     private void initialize() {
         setContentView(R.layout.activity_tuner);
@@ -103,7 +110,7 @@ public class TunerActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(final Tuning item) {
                 if (item instanceof CustomTuning) {
-                    Toast.makeText(getBaseContext(), "TODO", Toast.LENGTH_SHORT).show();
+                    showCustomTuningDialog();
                     return;
                 }
                 preferences.saveShortcutTones(item.tonesString);
@@ -114,6 +121,31 @@ public class TunerActivity extends AppCompatActivity {
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(container);
         dialog.show();
+    }
+
+    private void showCustomTuningDialog() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Custom tuning"); // TODO: localize
+
+        final EditText editText = new EditText(this);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        dialogBuilder.setView(editText);
+
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, final int which) {
+                customTuning = editText.getText().toString();
+                // TODO: refresh bottom sheet
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, final int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialogBuilder.show();
     }
 
     private void finishWithoutMicPermission() {
