@@ -2,18 +2,14 @@ package peterfajdiga.guituner.app;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.InputType;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
@@ -89,7 +85,13 @@ public class TunerActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(final Tuning item) {
                         if (item instanceof CustomTuning) {
-                            showCustomTuningDialog();
+                            CustomTuningDialog.show(context, new CustomTuningDialog.OnConfirmListener() {
+                                @Override
+                                public void onConfirm(final String input) {
+                                    customTuning = input;
+                                    // TODO: refresh bottom sheet
+                                }
+                            });
                             return;
                         }
                         preferences.saveShortcutTones(item.tonesString);
@@ -103,31 +105,6 @@ public class TunerActivity extends AppCompatActivity {
 
     private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
         toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
-    }
-
-    private void showCustomTuningDialog() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Custom tuning"); // TODO: localize
-
-        final EditText editText = new EditText(this);
-        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        dialogBuilder.setView(editText);
-
-        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, final int which) {
-                customTuning = editText.getText().toString();
-                // TODO: refresh bottom sheet
-            }
-        });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, final int which) {
-                dialog.cancel();
-            }
-        });
-
-        dialogBuilder.show();
     }
 
     private void finishWithoutMicPermission() {
