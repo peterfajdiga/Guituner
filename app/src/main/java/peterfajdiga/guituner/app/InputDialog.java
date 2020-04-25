@@ -8,7 +8,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-public class InputDialog {
+class InputDialog {
     private InputDialog() {}  // make class static
 
     static void show(@NonNull final Context context, @NonNull final CharSequence title, @NonNull final OnConfirmListener onConfirmListener) {
