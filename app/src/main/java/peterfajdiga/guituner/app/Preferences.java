@@ -26,6 +26,12 @@ class Preferences {
         return parseTonesString(getShortcutTonesString());
     }
 
+    void saveShortcutTones(@NonNull final String shortcutTonesString) {
+        final SharedPreferences.Editor prefsEditor = prefs.edit();
+        prefsEditor.putString(shortcutTonesKey, shortcutTonesString);
+        prefsEditor.apply();
+    }
+
     private static @NonNull Tone[] parseTonesString(@NonNull final String tonesString) {
         final String[] toneStrings = tonesString.split(",");
         final int n = toneStrings.length;

@@ -70,7 +70,7 @@ public class TunerActivity extends AppCompatActivity {
 
     private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
+        updateToneShortcuts(toneShortcutsBar);
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
             public void OnToneClick(final Tone tone) {
@@ -85,6 +85,10 @@ public class TunerActivity extends AppCompatActivity {
         });
     }
 
+    private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
+        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
+    }
+
     private void showShortcutTonesPreferenceDialog() {
         final String[] tonesStrings = new String[] {
                 "E2,A2,D3,G3,B3,E4",
@@ -94,6 +98,15 @@ public class TunerActivity extends AppCompatActivity {
 
         final LabelledRadioGroup container = new LabelledRadioGroup(this);
         container.addRadioButtons(tonesStrings, selectedTonesString);
+
+        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
+        container.setReceiver(new LabelledRadioGroup.Receiver() {
+            @Override
+            public void onCheckedChanged(final String label) {
+                preferences.saveShortcutTones(label);
+                updateToneShortcuts(toneShortcutsBar);
+            }
+        });
 
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(container);
