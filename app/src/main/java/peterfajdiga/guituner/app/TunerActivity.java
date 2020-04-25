@@ -18,7 +18,7 @@ import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
-import peterfajdiga.guituner.gui.LabelledRadioGroup;
+import peterfajdiga.guituner.gui.ItemedRadioGroup;
 import peterfajdiga.guituner.gui.ToneShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
@@ -90,20 +90,22 @@ public class TunerActivity extends AppCompatActivity {
     }
 
     private void showShortcutTonesPreferenceDialog() {
-        final String[] tonesStrings = new String[] {
-                "E2,A2,D3,G3,B3,E4",
-                "D2,A2,D3,G3,B3,E4"
+        final Tuning[] tunings = new Tuning[] {
+                new Tuning("E2,A2,D3,G3,B3,E4"),
+                new Tuning("D2,A2,D3,G3,B3,E4"),
         };
         final String selectedTonesString = preferences.getShortcutTonesString();
 
-        final LabelledRadioGroup container = new LabelledRadioGroup(this);
-        container.addRadioButtons(tonesStrings, selectedTonesString);
+        final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(this);
+        for (final Tuning tuning : tunings) {
+            container.addItem(tuning, tuning.tonesString.equals(selectedTonesString));
+        }
 
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        container.setReceiver(new LabelledRadioGroup.Receiver() {
+        container.setReceiver(new ItemedRadioGroup.Receiver<Tuning>() {
             @Override
-            public void onCheckedChanged(final String label) {
-                preferences.saveShortcutTones(label);
+            public void onCheckedChanged(final Tuning item) {
+                preferences.saveShortcutTones(item.tonesString);
                 updateToneShortcuts(toneShortcutsBar);
             }
         });
