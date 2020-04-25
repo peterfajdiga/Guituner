@@ -8,12 +8,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-public class CustomTuningDialog {
-    private CustomTuningDialog() {}  // make class static
+public class InputDialog {
+    private InputDialog() {}  // make class static
 
-    static void show(@NonNull final Context context, @NonNull final OnConfirmListener onConfirmListener) {
+    static void show(@NonNull final Context context, @NonNull final CharSequence title, @NonNull final OnConfirmListener onConfirmListener) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setTitle("Custom tuning"); // TODO: localize
+        dialogBuilder.setTitle(title);
 
         final EditText editText = new EditText(context);
         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);

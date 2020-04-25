@@ -85,7 +85,8 @@ public class TunerActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(final Tuning item) {
                         if (item instanceof CustomTuning) {
-                            CustomTuningDialog.show(context, new CustomTuningDialog.OnConfirmListener() {
+                            // TODO: localize "Custom tuning"
+                            InputDialog.show(context, "Custom tuning", new InputDialog.OnConfirmListener() {
                                 @Override
                                 public void onConfirm(final String input) {
                                     customTuning = input;
