@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
@@ -77,6 +75,7 @@ public class TunerActivity extends AppCompatActivity {
 
     private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
+        final Context context = this;
         updateToneShortcuts(toneShortcutsBar);
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
@@ -86,7 +85,17 @@ public class TunerActivity extends AppCompatActivity {
 
             @Override
             public boolean OnToneLongClick(final Tone tone) {
-                showShortcutTonesPreferenceDialog();
+                ShortcutTonesPreferenceDialog.show(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
+                    @Override
+                    public void onCheckedChanged(final Tuning item) {
+                        if (item instanceof CustomTuning) {
+                            showCustomTuningDialog();
+                            return;
+                        }
+                        preferences.saveShortcutTones(item.tonesString);
+                        updateToneShortcuts(toneShortcutsBar);
+                    }
+                });
                 return true;
             }
         });
@@ -94,33 +103,6 @@ public class TunerActivity extends AppCompatActivity {
 
     private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
         toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
-    }
-
-    private void showShortcutTonesPreferenceDialog() {
-        final String selectedTonesString = preferences.getShortcutTonesString();
-
-        final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(this);
-        for (final Tuning tuning : Tuning.tunings) {
-            container.addItem(tuning, tuning.tonesString.equals(selectedTonesString));
-        }
-        container.addItem(new CustomTuning(), false);
-
-        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        container.setReceiver(new ItemedRadioGroup.Receiver<Tuning>() {
-            @Override
-            public void onCheckedChanged(final Tuning item) {
-                if (item instanceof CustomTuning) {
-                    showCustomTuningDialog();
-                    return;
-                }
-                preferences.saveShortcutTones(item.tonesString);
-                updateToneShortcuts(toneShortcutsBar);
-            }
-        });
-
-        final BottomSheetDialog dialog = new BottomSheetDialog(this);
-        dialog.setContentView(container);
-        dialog.show();
     }
 
     private void showCustomTuningDialog() {
