@@ -90,14 +90,10 @@ public class TunerActivity extends AppCompatActivity {
     }
 
     private void showShortcutTonesPreferenceDialog() {
-        final Tuning[] tunings = new Tuning[] {
-                new Tuning("E2,A2,D3,G3,B3,E4"),
-                new Tuning("D2,A2,D3,G3,B3,E4"),
-        };
         final String selectedTonesString = preferences.getShortcutTonesString();
 
         final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(this);
-        for (final Tuning tuning : tunings) {
+        for (final Tuning tuning : Tuning.tunings) {
             container.addItem(tuning, tuning.tonesString.equals(selectedTonesString));
         }
 

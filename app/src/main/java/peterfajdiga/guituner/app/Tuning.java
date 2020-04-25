@@ -15,4 +15,9 @@ class Tuning implements ItemedRadioGroup.Item {
     public CharSequence getButtonText() {
         return tonesString;
     }
+
+    static final Tuning[] tunings = new Tuning[] {
+            new Tuning("E2,A2,D3,G3,B3,E4"),
+            new Tuning("D2,A2,D3,G3,B3,E4"),
+    };
 }
