@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:foreground="@drawable/distance_fog">
 
-        <peterfajdiga.guituner.gui.PitchView
+        <peterfajdiga.guituner.gui.views.PitchView
             android:id="@+id/pitchview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -54,7 +54,7 @@
         android:fillViewport="true"
         android:background="@color/background">
 
-        <peterfajdiga.guituner.gui.ToneShortcutsBar
+        <peterfajdiga.guituner.gui.views.ToneShortcutsBar
             android:id="@+id/shortcutcontainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

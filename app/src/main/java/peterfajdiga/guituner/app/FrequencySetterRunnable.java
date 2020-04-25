@@ -3,7 +3,7 @@ package peterfajdiga.guituner.app;
 import android.view.View;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.gui.PitchView;
+import peterfajdiga.guituner.gui.views.PitchView;
 
 class FrequencySetterRunnable implements Runnable {
     private double frequency;

@@ -2,7 +2,7 @@ package peterfajdiga.guituner.app;
 
 import androidx.annotation.NonNull;
 
-import peterfajdiga.guituner.gui.ItemedRadioGroup;
+import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
 class Tuning implements ItemedRadioGroup.Item {
     final String name;

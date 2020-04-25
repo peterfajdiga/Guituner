@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.gui;
+package peterfajdiga.guituner.gui.views;
 
 import android.content.Context;
 import android.content.res.Resources;
