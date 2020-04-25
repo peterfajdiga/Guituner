@@ -96,11 +96,16 @@ public class TunerActivity extends AppCompatActivity {
         for (final Tuning tuning : Tuning.tunings) {
             container.addItem(tuning, tuning.tonesString.equals(selectedTonesString));
         }
+        container.addItem(new CustomTuning(), false);
 
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
         container.setReceiver(new ItemedRadioGroup.Receiver<Tuning>() {
             @Override
             public void onCheckedChanged(final Tuning item) {
+                if (item instanceof CustomTuning) {
+                    Toast.makeText(getBaseContext(), "TODO", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 preferences.saveShortcutTones(item.tonesString);
                 updateToneShortcuts(toneShortcutsBar);
             }
