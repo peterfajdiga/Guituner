@@ -17,16 +17,14 @@ class InputDialog {
         final EditText editText = new EditText(context);
         dialogBuilder.setView(editText);
 
-        // TODO: Localize "OK"
-        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, final int which) {
                 onConfirmListener.onConfirm(editText.getText().toString());
             }
         });
 
-        // TODO: Localize "Cancel"
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, final int which) {
                 dialog.cancel();
