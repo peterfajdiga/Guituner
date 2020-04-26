@@ -54,7 +54,7 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
         this.receiver = receiver;
     }
 
-    public void addItem(@NonNull final ItemType item, final boolean checked) {
+    public void addItem(@NonNull final ItemType item, final boolean checked, final boolean clickable) {
         final View buttonView = createRadioButton(item);
         addView(buttonView);
 
@@ -62,6 +62,15 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
         itemsMap.put(id, item);
         if (checked) {
             check(id);
+        }
+
+        if (clickable) {
+            buttonView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    receiver.onClick(item);
+                }
+            });
         }
     }
 
@@ -78,5 +87,6 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
 
     public interface Receiver<ItemType> {
         void onCheckedChanged(ItemType item);
+        void onClick(ItemType item);
     }
 }

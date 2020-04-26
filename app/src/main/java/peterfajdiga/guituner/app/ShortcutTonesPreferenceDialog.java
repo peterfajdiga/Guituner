@@ -19,9 +19,9 @@ class ShortcutTonesPreferenceDialog {
 
         final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(context);
         for (final Tuning tuning : Tuning.tunings) {
-            container.addItem(tuning, tuning.tonesString.equals(selectedTonesString));
+            container.addItem(tuning, tuning.tonesString.equals(selectedTonesString), false);
         }
-        container.addItem(new CustomTuning(), false);
+        container.addItem(new CustomTuning(), false, true);
 
         container.setReceiver(radioGroupReceiver);
 

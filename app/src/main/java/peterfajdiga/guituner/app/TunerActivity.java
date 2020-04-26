@@ -89,18 +89,17 @@ public class TunerActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(final Tuning item) {
                         if (item instanceof CustomTuning) {
-                            // TODO: localize "Custom tuning"
-                            InputDialog.show(context, "Custom tuning", "G1 D2 A2 E3 B3 F4#", new InputDialog.OnConfirmListener() {
-                                @Override
-                                public void onConfirm(final CharSequence input) {
-                                    customTuning = input.toString().toUpperCase();
-                                    // TODO: refresh bottom sheet
-                                }
-                            }, new TuningValidator());
+                            // TODO
                             return;
                         }
                         preferences.saveShortcutTones(item.tonesString);
                         updateToneShortcuts(toneShortcutsBar);
+                    }
+
+                    @Override
+                    public void onClick(final Tuning item) {
+                        assert item instanceof CustomTuning;
+                        showCustomTuningDialog();
                     }
                 });
                 return true;
@@ -110,6 +109,17 @@ public class TunerActivity extends AppCompatActivity {
 
     private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
         toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
+    }
+
+    private void showCustomTuningDialog() {
+        // TODO: localize "Custom tuning"
+        InputDialog.show(this, "Custom tuning", "G1 D2 A2 E3 B3 F4#", new InputDialog.OnConfirmListener() {
+            @Override
+            public void onConfirm(final CharSequence input) {
+                customTuning = input.toString().toUpperCase();
+                // TODO: refresh bottom sheet
+            }
+        }, new TuningValidator());
     }
 
     private void finishWithoutMicPermission() {
