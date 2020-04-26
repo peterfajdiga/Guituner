@@ -17,12 +17,14 @@ public class InputDialog {
     // TODO: build only once
     public static void show(@NonNull final Context context,
                      @NonNull final CharSequence title,
+                     @NonNull final CharSequence hint,
                      @NonNull final OnConfirmListener onConfirmListener,
                      @Nullable final Validator validator) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle(title);
 
         final EditText editText = new EditText(context);
+        editText.setHint(hint);
         dialogBuilder.setView(editText);
 
         dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

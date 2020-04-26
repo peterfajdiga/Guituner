@@ -90,7 +90,7 @@ public class TunerActivity extends AppCompatActivity {
                     public void onCheckedChanged(final Tuning item) {
                         if (item instanceof CustomTuning) {
                             // TODO: localize "Custom tuning"
-                            InputDialog.show(context, "Custom tuning", new InputDialog.OnConfirmListener() {
+                            InputDialog.show(context, "Custom tuning", "G1 D2 A2 E3 B3 F4#", new InputDialog.OnConfirmListener() {
                                 @Override
                                 public void onConfirm(final CharSequence input) {
                                     customTuning = input.toString().toUpperCase();
