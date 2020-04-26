@@ -92,8 +92,8 @@ public class TunerActivity extends AppCompatActivity {
                             // TODO: localize "Custom tuning"
                             InputDialog.show(context, "Custom tuning", new InputDialog.OnConfirmListener() {
                                 @Override
-                                public void onConfirm(final String input) {
-                                    customTuning = input.toUpperCase();
+                                public void onConfirm(final CharSequence input) {
+                                    customTuning = input.toString().toUpperCase();
                                     // TODO: refresh bottom sheet
                                 }
                             }, new TuningValidator());

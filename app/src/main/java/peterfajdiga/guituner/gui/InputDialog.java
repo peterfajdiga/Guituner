@@ -28,7 +28,7 @@ public class InputDialog {
         dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, final int which) {
-                onConfirmListener.onConfirm(editText.getText().toString());
+                onConfirmListener.onConfirm(editText.getText());
             }
         });
 
@@ -63,6 +63,6 @@ public class InputDialog {
     }
 
     public interface OnConfirmListener {
-        void onConfirm(String input);
+        void onConfirm(CharSequence input);
     }
 }
