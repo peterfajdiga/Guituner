@@ -2,7 +2,6 @@ package peterfajdiga.guituner.app;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ class InputDialog {
         dialogBuilder.setTitle(title);
 
         final EditText editText = new EditText(context);
-        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         dialogBuilder.setView(editText);
 
         // TODO: Localize "OK"
