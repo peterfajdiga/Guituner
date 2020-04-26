@@ -20,10 +20,10 @@ public class TonesString {
 
     public static boolean validateTonesString(@NonNull final String tonesString) {
         try {
-            parseTonesString(tonesString);
+            final Tone[] tones = parseTonesString(tonesString);
+            return tones.length > 0;
         } catch (final NumberFormatException e) {
             return false;
         }
-        return true;
     }
 }
