@@ -92,7 +92,7 @@ public class TunerActivity extends AppCompatActivity {
                                     customTuning = input;
                                     // TODO: refresh bottom sheet
                                 }
-                            });
+                            }, new TuningValidator());
                             return;
                         }
                         preferences.saveShortcutTones(item.tonesString);
