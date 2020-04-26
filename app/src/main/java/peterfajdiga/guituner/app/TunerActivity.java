@@ -15,6 +15,7 @@ import android.widget.Toast;
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
+import peterfajdiga.guituner.gui.InputDialog;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;

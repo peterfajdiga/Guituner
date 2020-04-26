@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.app;
+package peterfajdiga.guituner.gui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-class InputDialog {
+public class InputDialog {
     private InputDialog() {}  // make class static
 
     // TODO: build only once
-    static void show(@NonNull final Context context,
+    public static void show(@NonNull final Context context,
                      @NonNull final CharSequence title,
                      @NonNull final OnConfirmListener onConfirmListener,
                      @Nullable final Validator validator) {
@@ -58,11 +58,11 @@ class InputDialog {
         }
     }
 
-    interface Validator {
+    public interface Validator {
         boolean isValid(CharSequence input);
     }
 
-    interface OnConfirmListener {
+    public interface OnConfirmListener {
         void onConfirm(String input);
     }
 }
