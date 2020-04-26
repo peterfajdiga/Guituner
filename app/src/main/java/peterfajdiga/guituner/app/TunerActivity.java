@@ -75,7 +75,6 @@ public class TunerActivity extends AppCompatActivity {
 
     private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        final Context context = this;
         updateToneShortcuts(toneShortcutsBar);
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
@@ -85,23 +84,7 @@ public class TunerActivity extends AppCompatActivity {
 
             @Override
             public boolean OnToneLongClick(final Tone tone) {
-                ShortcutTonesPreferenceDialog.show(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
-                    @Override
-                    public void onCheckedChanged(final Tuning item) {
-                        if (item instanceof CustomTuning) {
-                            // TODO
-                            return;
-                        }
-                        preferences.saveShortcutTones(item.tonesString);
-                        updateToneShortcuts(toneShortcutsBar);
-                    }
-
-                    @Override
-                    public void onClick(final Tuning item) {
-                        assert item instanceof CustomTuning;
-                        showCustomTuningDialog();
-                    }
-                });
+                showShortcutTonesPreferenceDialog();
                 return true;
             }
         });
@@ -109,6 +92,27 @@ public class TunerActivity extends AppCompatActivity {
 
     private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
         toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
+    }
+
+    private void showShortcutTonesPreferenceDialog() {
+        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
+        ShortcutTonesPreferenceDialog.show(this, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
+            @Override
+            public void onCheckedChanged(final Tuning item) {
+                if (item instanceof CustomTuning) {
+                    // TODO
+                    return;
+                }
+                preferences.saveShortcutTones(item.tonesString);
+                updateToneShortcuts(toneShortcutsBar);
+            }
+
+            @Override
+            public void onClick(final Tuning item) {
+                assert item instanceof CustomTuning;
+                showCustomTuningDialog();
+            }
+        });
     }
 
     private void showCustomTuningDialog() {
