@@ -39,9 +39,10 @@ class InputDialog {
             }
         });
 
-        final AlertDialog dialog = dialogBuilder.create();
-        final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        final AlertDialog dialog = dialogBuilder.show();
+
         if (validator != null) {
+            final Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
@@ -55,7 +56,6 @@ class InputDialog {
                 }
             });
         }
-        dialog.show();
     }
 
     interface Validator {
