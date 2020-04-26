@@ -20,7 +20,7 @@ class Tuning implements ItemedRadioGroup.Item {
 
     static final Tuning[] tunings = new Tuning[] {
             // TODO: localize names
-            new Tuning("Standard", "E2,A2,D3,G3,B3,E4"),
-            new Tuning("Drop D", "D2,A2,D3,G3,B3,E4"),
+            new Tuning("Standard", "E2 A2 D3 G3 B3 E4"),
+            new Tuning("Drop D", "D2 A2 D3 G3 B3 E4"),
     };
 }
