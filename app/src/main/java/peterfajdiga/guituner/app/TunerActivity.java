@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
+import peterfajdiga.guituner.app.tuning.CustomTuning;
+import peterfajdiga.guituner.app.tuning.Tuning;
+import peterfajdiga.guituner.app.tuning.TuningValidator;
 import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.InputDialog;

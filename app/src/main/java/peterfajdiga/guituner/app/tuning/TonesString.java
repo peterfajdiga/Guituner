@@ -1,14 +1,14 @@
-package peterfajdiga.guituner.app;
+package peterfajdiga.guituner.app.tuning;
 
 import androidx.annotation.NonNull;
 
 import peterfajdiga.guituner.general.Tone;
 
-class TonesString {
+public class TonesString {
     private TonesString() {}  // make class static
 
     @NonNull
-    static Tone[] parseTonesString(@NonNull final String tonesString) throws NumberFormatException {
+    public static Tone[] parseTonesString(@NonNull final String tonesString) throws NumberFormatException {
         final String[] toneStrings = tonesString.split(" ");
         final int n = toneStrings.length;
         final Tone[] tones = new Tone[n];
@@ -18,7 +18,7 @@ class TonesString {
         return tones;
     }
 
-    static boolean validateTonesString(@NonNull final String tonesString) {
+    public static boolean validateTonesString(@NonNull final String tonesString) {
         try {
             parseTonesString(tonesString);
         } catch (final NumberFormatException e) {

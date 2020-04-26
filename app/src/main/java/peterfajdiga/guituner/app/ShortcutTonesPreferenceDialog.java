@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import peterfajdiga.guituner.app.tuning.CustomTuning;
+import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
 class ShortcutTonesPreferenceDialog {

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import peterfajdiga.guituner.app.tuning.TonesString;
 import peterfajdiga.guituner.general.Tone;
 
 class Preferences {
