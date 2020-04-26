@@ -11,6 +11,7 @@ import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 class ShortcutTonesPreferenceDialog {
     private ShortcutTonesPreferenceDialog() {}  // make class static
 
+    // TODO: build only once
     static void show(@NonNull final Context context, @NonNull final Preferences preferences, @NonNull final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver) {
         final String selectedTonesString = preferences.getShortcutTonesString();
 

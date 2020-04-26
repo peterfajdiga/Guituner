@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 class InputDialog {
     private InputDialog() {}  // make class static
 
+    // TODO: build only once
     static void show(@NonNull final Context context, @NonNull final CharSequence title, @NonNull final OnConfirmListener onConfirmListener) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle(title);
