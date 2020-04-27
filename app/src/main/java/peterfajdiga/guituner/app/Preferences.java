@@ -7,27 +7,29 @@ import androidx.annotation.NonNull;
 import peterfajdiga.guituner.app.tuning.TonesString;
 import peterfajdiga.guituner.general.Tone;
 
-class Preferences {
+public class Preferences {
     private static final String shortcutTonesKey = "shortcutTones";
     private static final String shortcutTonesDefault = "E2 A2 D3 G3 B3 E4";
 
     private final SharedPreferences prefs;
 
-    Preferences(@NonNull final SharedPreferences prefs) {
+    public Preferences(@NonNull final SharedPreferences prefs) {
         this.prefs = prefs;
     }
 
-    @NonNull String getShortcutTonesString() {
+    @NonNull
+    public String getShortcutTonesString() {
         final String tonesString = prefs.getString(shortcutTonesKey, shortcutTonesDefault);
         assert tonesString != null;
         return tonesString;
     }
 
-    @NonNull Tone[] getShortcutTones() {
+    @NonNull
+    public Tone[] getShortcutTones() {
         return TonesString.parseTonesString(getShortcutTonesString());
     }
 
-    void saveShortcutTones(@NonNull final String shortcutTonesString) throws NumberFormatException {
+    public void saveShortcutTones(@NonNull final String shortcutTonesString) throws NumberFormatException {
         if (!TonesString.validateTonesString(shortcutTonesString)) {
             throw new NumberFormatException();
         }

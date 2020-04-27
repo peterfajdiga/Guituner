@@ -1,7 +1,6 @@
 package peterfajdiga.guituner.app;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,15 +13,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.tuning.CustomTuning;
-import peterfajdiga.guituner.app.tuning.Tuning;
-import peterfajdiga.guituner.app.tuning.TuningValidator;
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.app.tuning.TuningGui;
 import peterfajdiga.guituner.gui.AlphaVisibility;
-import peterfajdiga.guituner.gui.InputDialog;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
-import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
@@ -37,12 +31,10 @@ public class TunerActivity extends AppCompatActivity {
     private static final int SAMPLE_RATE = 4000;
 
     private boolean initialized = false;
-    PitchDetectorThread pitchDetectorThread;
-    final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
-    Recorder recorder;
-
-    private Dialog shortcutTonesPreferenceDialog;
-    private String customTuning;
+    private PitchDetectorThread pitchDetectorThread;
+    private final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
+    private Recorder recorder;
+    private TuningGui tuningGui;
 
     private void initialize() {
         setContentView(R.layout.activity_tuner);
@@ -54,7 +46,13 @@ public class TunerActivity extends AppCompatActivity {
         pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
-        setupToneShortcuts(pitchView);
+        tuningGui = new TuningGui(
+                this,
+                preferences,
+                getLayoutInflater(),
+                pitchView,
+                (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
+        );
 
         initialized = true;
     }
@@ -73,62 +71,6 @@ public class TunerActivity extends AppCompatActivity {
                 pitchView.removeFocus();
             }
         });
-    }
-
-    private void setupToneShortcuts(@NonNull final PitchView targetPitchView) {
-        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        updateToneShortcuts(toneShortcutsBar);
-        toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
-            @Override
-            public void OnToneClick(final Tone tone) {
-                targetPitchView.focusOn(tone);
-            }
-
-            @Override
-            public boolean OnToneLongClick(final Tone tone) {
-                showShortcutTonesPreferenceDialog();
-                return true;
-            }
-        });
-    }
-
-    private void updateToneShortcuts(@NonNull final ToneShortcutsBar toneShortcutsBar) {
-        toneShortcutsBar.setupTones(preferences.getShortcutTones(), getLayoutInflater(), R.layout.button_tone_shortcut);
-    }
-
-    private void showShortcutTonesPreferenceDialog() {
-        final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        if (shortcutTonesPreferenceDialog == null) {
-            shortcutTonesPreferenceDialog = ShortcutTonesPreferenceDialog.create(this, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
-                @Override
-                public void onCheckedChanged(final Tuning item) {
-                    if (item instanceof CustomTuning) {
-                        // TODO
-                        return;
-                    }
-                    preferences.saveShortcutTones(item.tonesString);
-                    updateToneShortcuts(toneShortcutsBar);
-                }
-
-                @Override
-                public void onClick(final Tuning item) {
-                    assert item instanceof CustomTuning;
-                    showCustomTuningDialog();
-                }
-            });
-        }
-        shortcutTonesPreferenceDialog.show();
-    }
-
-    private void showCustomTuningDialog() {
-        // TODO: localize "Custom tuning"
-        InputDialog.show(this, "Custom tuning", "G1 D2 A2 E3 B3 F4#", new InputDialog.OnConfirmListener() {
-            @Override
-            public void onConfirm(final CharSequence input) {
-                customTuning = input.toString().toUpperCase();
-                // TODO: refresh bottom sheet
-            }
-        }, new TuningValidator());
     }
 
     private void finishWithoutMicPermission() {

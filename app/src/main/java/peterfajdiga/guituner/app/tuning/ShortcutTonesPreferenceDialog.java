@@ -1,4 +1,4 @@
-package peterfajdiga.guituner.app;
+package peterfajdiga.guituner.app.tuning;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import peterfajdiga.guituner.app.Preferences;
 import peterfajdiga.guituner.app.tuning.CustomTuning;
 import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
