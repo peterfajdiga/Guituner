@@ -1,6 +1,5 @@
-package peterfajdiga.guituner.app.tuning;
+package peterfajdiga.guituner.app.parts;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 
@@ -8,6 +7,9 @@ import androidx.annotation.NonNull;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.Preferences;
+import peterfajdiga.guituner.app.tuning.CustomTuning;
+import peterfajdiga.guituner.app.tuning.Tuning;
+import peterfajdiga.guituner.app.tuning.TuningValidator;
 import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.InputDialog;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
@@ -21,7 +23,7 @@ public class TuningGui {
     private final PitchView pitchView;
     private final ToneShortcutsBar toneShortcutsBar;
 
-    private Dialog shortcutTonesPreferenceDialog;
+    private ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
     private String customTuning;
 
     public TuningGui(@NonNull final Context context,
@@ -39,28 +41,26 @@ public class TuningGui {
 
     private void initialize() {
         setupToneShortcuts();
+        shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
+            @Override
+            public void onCheckedChanged(final Tuning item) {
+                if (item instanceof CustomTuning) {
+                    // TODO
+                    return;
+                }
+                preferences.saveShortcutTones(item.tonesString);
+                updateToneShortcuts();
+            }
+
+            @Override
+            public void onClick(final Tuning item) {
+                assert item instanceof CustomTuning;
+                showCustomTuningDialog();
+            }
+        });
     }
 
     private void showShortcutTonesPreferenceDialog() {
-        if (shortcutTonesPreferenceDialog == null) {
-            shortcutTonesPreferenceDialog = ShortcutTonesPreferenceDialog.create(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
-                @Override
-                public void onCheckedChanged(final Tuning item) {
-                    if (item instanceof CustomTuning) {
-                        // TODO
-                        return;
-                    }
-                    preferences.saveShortcutTones(item.tonesString);
-                    updateToneShortcuts();
-                }
-
-                @Override
-                public void onClick(final Tuning item) {
-                    assert item instanceof CustomTuning;
-                    showCustomTuningDialog();
-                }
-            });
-        }
         shortcutTonesPreferenceDialog.show();
     }
 

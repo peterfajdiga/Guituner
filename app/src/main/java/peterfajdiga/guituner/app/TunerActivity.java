@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.tuning.TuningGui;
+import peterfajdiga.guituner.app.parts.TuningGui;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
