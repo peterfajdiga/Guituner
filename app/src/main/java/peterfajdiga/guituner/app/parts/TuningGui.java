@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.Preferences;
 import peterfajdiga.guituner.app.tuning.CustomTuning;
 import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.app.tuning.TuningValidator;
-import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.InputDialog;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 import peterfajdiga.guituner.gui.views.PitchView;
@@ -22,8 +20,8 @@ public class TuningGui {
     private final LayoutInflater layoutInflater;
     private final PitchView pitchView;
     private final ToneShortcutsBar toneShortcutsBar;
-
-    private ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
+    private final ToneShortcuts toneShortcuts;
+    private final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
     private String customTuning;
 
     public TuningGui(@NonNull final Context context,
@@ -36,12 +34,7 @@ public class TuningGui {
         this.layoutInflater = layoutInflater;
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
-        initialize();
-    }
-
-    private void initialize() {
-        setupToneShortcuts();
-        shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
+        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
             @Override
             public void onCheckedChanged(final Tuning item) {
                 if (item instanceof CustomTuning) {
@@ -49,7 +42,7 @@ public class TuningGui {
                     return;
                 }
                 preferences.saveShortcutTones(item.tonesString);
-                updateToneShortcuts();
+                toneShortcuts.updateToneShortcuts();
             }
 
             @Override
@@ -58,10 +51,7 @@ public class TuningGui {
                 showCustomTuningDialog();
             }
         });
-    }
-
-    private void showShortcutTonesPreferenceDialog() {
-        shortcutTonesPreferenceDialog.show();
+        this.toneShortcuts = new ToneShortcuts(preferences, layoutInflater, pitchView, toneShortcutsBar, this.shortcutTonesPreferenceDialog);
     }
 
     private void showCustomTuningDialog() {
@@ -73,25 +63,5 @@ public class TuningGui {
                 // TODO: refresh bottom sheet
             }
         }, new TuningValidator());
-    }
-
-    private void setupToneShortcuts() {
-        updateToneShortcuts();
-        toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
-            @Override
-            public void OnToneClick(final Tone tone) {
-                pitchView.focusOn(tone);
-            }
-
-            @Override
-            public boolean OnToneLongClick(final Tone tone) {
-                showShortcutTonesPreferenceDialog();
-                return true;
-            }
-        });
-    }
-
-    private void updateToneShortcuts() {
-        toneShortcutsBar.setupTones(preferences.getShortcutTones(), layoutInflater, R.layout.button_tone_shortcut);
     }
 }
