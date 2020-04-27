@@ -1,6 +1,7 @@
 package peterfajdiga.guituner.app;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class TunerActivity extends AppCompatActivity {
     final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
     Recorder recorder;
 
+    private Dialog shortcutTonesPreferenceDialog;
     private String customTuning;
 
     private void initialize() {
@@ -96,23 +98,26 @@ public class TunerActivity extends AppCompatActivity {
 
     private void showShortcutTonesPreferenceDialog() {
         final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-        ShortcutTonesPreferenceDialog.show(this, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
-            @Override
-            public void onCheckedChanged(final Tuning item) {
-                if (item instanceof CustomTuning) {
-                    // TODO
-                    return;
+        if (shortcutTonesPreferenceDialog == null) {
+            shortcutTonesPreferenceDialog = ShortcutTonesPreferenceDialog.create(this, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
+                @Override
+                public void onCheckedChanged(final Tuning item) {
+                    if (item instanceof CustomTuning) {
+                        // TODO
+                        return;
+                    }
+                    preferences.saveShortcutTones(item.tonesString);
+                    updateToneShortcuts(toneShortcutsBar);
                 }
-                preferences.saveShortcutTones(item.tonesString);
-                updateToneShortcuts(toneShortcutsBar);
-            }
 
-            @Override
-            public void onClick(final Tuning item) {
-                assert item instanceof CustomTuning;
-                showCustomTuningDialog();
-            }
-        });
+                @Override
+                public void onClick(final Tuning item) {
+                    assert item instanceof CustomTuning;
+                    showCustomTuningDialog();
+                }
+            });
+        }
+        shortcutTonesPreferenceDialog.show();
     }
 
     private void showCustomTuningDialog() {

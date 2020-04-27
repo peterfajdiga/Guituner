@@ -1,5 +1,6 @@
 package peterfajdiga.guituner.app;
 
+import android.app.Dialog;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,7 @@ import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 class ShortcutTonesPreferenceDialog {
     private ShortcutTonesPreferenceDialog() {}  // make class static
 
-    // TODO: build only once
-    static void show(@NonNull final Context context, @NonNull final Preferences preferences, @NonNull final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver) {
+    static Dialog create(@NonNull final Context context, @NonNull final Preferences preferences, @NonNull final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver) {
         final String selectedTonesString = preferences.getShortcutTonesString();
 
         final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(context);
@@ -27,6 +27,6 @@ class ShortcutTonesPreferenceDialog {
 
         final BottomSheetDialog dialog = new BottomSheetDialog(context);
         dialog.setContentView(container);
-        dialog.show();
+        return dialog;
     }
 }
