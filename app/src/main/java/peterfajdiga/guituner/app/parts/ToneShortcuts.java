@@ -15,21 +15,23 @@ class ToneShortcuts {
     private final LayoutInflater layoutInflater;
     private final PitchView pitchView;
     private final ToneShortcutsBar toneShortcutsBar;
-    private final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
+    private ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
 
     ToneShortcuts(
             @NonNull final Preferences preferences,
             @NonNull final LayoutInflater layoutInflater,
             @NonNull final PitchView pitchView,
-            @NonNull final ToneShortcutsBar toneShortcutsBar,
-            @NonNull final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog
+            @NonNull final ToneShortcutsBar toneShortcutsBar
     ) {
         this.preferences = preferences;
         this.layoutInflater = layoutInflater;
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
-        this.shortcutTonesPreferenceDialog = shortcutTonesPreferenceDialog;
         initialize();
+    }
+
+    public void setShortcutTonesPreferenceDialog(final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog) {
+        this.shortcutTonesPreferenceDialog = shortcutTonesPreferenceDialog;
     }
 
     private void initialize() {

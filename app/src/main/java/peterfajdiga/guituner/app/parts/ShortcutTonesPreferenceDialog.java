@@ -15,27 +15,48 @@ import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 class ShortcutTonesPreferenceDialog {
     private final Context context;
     private final Preferences preferences;
-    private final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver;
+    private final ToneShortcuts toneShortcuts;
+    private final CustomTuningDialog customTuningDialog;
 
     private Dialog dialog = null;
 
     ShortcutTonesPreferenceDialog(
             @NonNull final Context context,
             @NonNull final Preferences preferences,
-            @NonNull final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver) {
+            @NonNull final ToneShortcuts toneShortcuts,
+            @NonNull final CustomTuningDialog customTuningDialog) {
         this.context = context;
         this.preferences = preferences;
-        this.radioGroupReceiver = radioGroupReceiver;
+        this.toneShortcuts = toneShortcuts;
+        this.customTuningDialog = customTuningDialog;
     }
 
     void show() {
         if (dialog == null) {
-            dialog = create(context, preferences, radioGroupReceiver);
+            dialog = create();
         }
         dialog.show();
     }
 
-    static Dialog create(@NonNull final Context context, @NonNull final Preferences preferences, @NonNull final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver) {
+    Dialog create() {
+        final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver = new ItemedRadioGroup.Receiver<Tuning>() {
+            @Override
+            public void onCheckedChanged(final Tuning item) {
+                if (item instanceof CustomTuning) {
+                    // TODO
+                    return;
+                }
+                preferences.saveShortcutTones(item.tonesString);
+                toneShortcuts.updateToneShortcuts();
+            }
+
+            @Override
+            public void onClick(final Tuning item) {
+                assert item instanceof CustomTuning;
+                customTuningDialog.showCustomTuningDialog();
+            }
+        };
+
         final String selectedTonesString = preferences.getShortcutTonesString();
 
         final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(context);

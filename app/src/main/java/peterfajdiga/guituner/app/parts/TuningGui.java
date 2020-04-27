@@ -6,9 +6,6 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 
 import peterfajdiga.guituner.app.Preferences;
-import peterfajdiga.guituner.app.tuning.CustomTuning;
-import peterfajdiga.guituner.app.tuning.Tuning;
-import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
 
@@ -33,23 +30,8 @@ public class TuningGui {
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
         this.customTuningDialog = new CustomTuningDialog(context);
-        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, new ItemedRadioGroup.Receiver<Tuning>() {
-            @Override
-            public void onCheckedChanged(final Tuning item) {
-                if (item instanceof CustomTuning) {
-                    // TODO
-                    return;
-                }
-                preferences.saveShortcutTones(item.tonesString);
-                toneShortcuts.updateToneShortcuts();
-            }
-
-            @Override
-            public void onClick(final Tuning item) {
-                assert item instanceof CustomTuning;
-                customTuningDialog.showCustomTuningDialog();
-            }
-        });
-        this.toneShortcuts = new ToneShortcuts(preferences, layoutInflater, pitchView, toneShortcutsBar, this.shortcutTonesPreferenceDialog);
+        this.toneShortcuts = new ToneShortcuts(preferences, layoutInflater, pitchView, toneShortcutsBar);
+        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, toneShortcuts, customTuningDialog);
+        toneShortcuts.setShortcutTonesPreferenceDialog(shortcutTonesPreferenceDialog);
     }
 }
