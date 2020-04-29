@@ -45,7 +45,9 @@ class ShortcutTonesPreferenceDialog {
     }
 
     void setCustomTuning(@NonNull final String customTuning) {
-        assert TonesString.validateTonesString(customTuning);
+        if (!TonesString.validateTonesString(customTuning)) {
+            return;
+        }
         if (isCustomTuningSelected()) {
             setShortcutTones(customTuning);
         }
