@@ -34,7 +34,6 @@ public class TunerActivity extends AppCompatActivity {
     private PitchDetectorThread pitchDetectorThread;
     private final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
     private Recorder recorder;
-    private ToneShortcuts toneShortcuts;
 
     private void initialize() {
         setContentView(R.layout.activity_tuner);
@@ -46,13 +45,14 @@ public class TunerActivity extends AppCompatActivity {
         pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
-        toneShortcuts = new ToneShortcuts(
+        final ToneShortcuts toneShortcuts = new ToneShortcuts(
                 this,
                 preferences,
                 getLayoutInflater(),
                 pitchView,
                 (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
         );
+        toneShortcuts.initialize();
 
         initialized = true;
     }

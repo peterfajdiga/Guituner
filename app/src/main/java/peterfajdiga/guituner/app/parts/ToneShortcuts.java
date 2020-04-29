@@ -30,10 +30,9 @@ public class ToneShortcuts {
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
         this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, this);
-        initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         updateToneShortcuts();
         toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
             @Override
