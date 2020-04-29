@@ -11,6 +11,9 @@ public class Preferences {
     private static final String shortcutTonesKey = "shortcutTones";
     private static final String shortcutTonesDefault = "E2 A2 D3 G3 B3 E4";
 
+    private static final String shortcutTonesCustomKey = "shortcutTonesCustom";
+    private static final String shortcutTonesCustomDefault = "G1 D2 A2 E3 B3 F4#";
+
     private final SharedPreferences prefs;
 
     public Preferences(@NonNull final SharedPreferences prefs) {
@@ -19,9 +22,7 @@ public class Preferences {
 
     @NonNull
     public String getShortcutTonesString() {
-        final String tonesString = prefs.getString(shortcutTonesKey, shortcutTonesDefault);
-        assert tonesString != null;
-        return tonesString;
+        return getStringNonNull(shortcutTonesKey, shortcutTonesDefault);
     }
 
     @NonNull
@@ -30,11 +31,36 @@ public class Preferences {
     }
 
     public void saveShortcutTones(@NonNull final String shortcutTonesString) throws NumberFormatException {
-        if (!TonesString.validateTonesString(shortcutTonesString)) {
+        saveTonesString(shortcutTonesKey, shortcutTonesString);
+    }
+
+    @NonNull
+    public String getShortcutTonesCustomString() {
+        return getStringNonNull(shortcutTonesCustomKey, shortcutTonesCustomDefault);
+    }
+
+    @NonNull
+    public Tone[] getShortcutTonesCustom() {
+        return TonesString.parseTonesString(getShortcutTonesCustomString());
+    }
+
+    public void saveShortcutTonesCustom(@NonNull final String shortcutTonesCustomString) throws NumberFormatException {
+        saveTonesString(shortcutTonesCustomKey, shortcutTonesCustomString);
+    }
+
+    @NonNull
+    private String getStringNonNull(@NonNull final String key, @NonNull final String defaultValue) {
+        final String value = prefs.getString(key, defaultValue);
+        assert value != null;
+        return value;
+    }
+
+    private void saveTonesString(@NonNull final String key, @NonNull final String tonesString) throws NumberFormatException {
+        if (!TonesString.validateTonesString(tonesString)) {
             throw new NumberFormatException();
         }
         final SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString(shortcutTonesKey, shortcutTonesString);
+        prefsEditor.putString(key, tonesString);
         prefsEditor.apply();
     }
 }

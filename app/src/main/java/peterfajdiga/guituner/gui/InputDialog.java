@@ -18,6 +18,7 @@ public class InputDialog {
     public static void show(@NonNull final Context context,
                      @NonNull final CharSequence title,
                      @NonNull final CharSequence hint,
+                     @NonNull final CharSequence defaultValue,
                      @NonNull final OnConfirmListener onConfirmListener,
                      @Nullable final Validator validator) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
@@ -25,6 +26,7 @@ public class InputDialog {
 
         final EditText editText = new EditText(context);
         editText.setHint(hint);
+        editText.setText(defaultValue);
         dialogBuilder.setView(editText);
 
         dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
