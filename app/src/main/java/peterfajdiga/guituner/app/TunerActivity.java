@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.parts.TuningGui;
+import peterfajdiga.guituner.app.parts.ToneShortcuts;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
@@ -34,7 +34,7 @@ public class TunerActivity extends AppCompatActivity {
     private PitchDetectorThread pitchDetectorThread;
     private final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
     private Recorder recorder;
-    private TuningGui tuningGui;
+    private ToneShortcuts toneShortcuts;
 
     private void initialize() {
         setContentView(R.layout.activity_tuner);
@@ -46,7 +46,7 @@ public class TunerActivity extends AppCompatActivity {
         pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
-        tuningGui = new TuningGui(
+        toneShortcuts = new ToneShortcuts(
                 this,
                 preferences,
                 getLayoutInflater(),

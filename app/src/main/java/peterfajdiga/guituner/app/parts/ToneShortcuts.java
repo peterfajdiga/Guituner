@@ -11,14 +11,14 @@ import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
 
-class ToneShortcuts {
+public class ToneShortcuts {
     private final Preferences preferences;
     private final LayoutInflater layoutInflater;
     private final PitchView pitchView;
     private final ToneShortcutsBar toneShortcutsBar;
     private final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
 
-    ToneShortcuts(
+    public ToneShortcuts(
             @NonNull final Context context,
             @NonNull final Preferences preferences,
             @NonNull final LayoutInflater layoutInflater,
