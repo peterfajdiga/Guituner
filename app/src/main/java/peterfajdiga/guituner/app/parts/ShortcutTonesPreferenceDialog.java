@@ -23,12 +23,11 @@ class ShortcutTonesPreferenceDialog {
     ShortcutTonesPreferenceDialog(
             @NonNull final Context context,
             @NonNull final Preferences preferences,
-            @NonNull final ToneShortcuts toneShortcuts,
-            @NonNull final CustomTuningDialog customTuningDialog) {
+            @NonNull final ToneShortcuts toneShortcuts) {
         this.context = context;
         this.preferences = preferences;
         this.toneShortcuts = toneShortcuts;
-        this.customTuningDialog = customTuningDialog;
+        this.customTuningDialog = new CustomTuningDialog(context);
     }
 
     void show() {

@@ -1,5 +1,6 @@
 package peterfajdiga.guituner.app.parts;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
@@ -15,9 +16,10 @@ class ToneShortcuts {
     private final LayoutInflater layoutInflater;
     private final PitchView pitchView;
     private final ToneShortcutsBar toneShortcutsBar;
-    private ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
+    private final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
 
     ToneShortcuts(
+            @NonNull final Context context,
             @NonNull final Preferences preferences,
             @NonNull final LayoutInflater layoutInflater,
             @NonNull final PitchView pitchView,
@@ -27,11 +29,8 @@ class ToneShortcuts {
         this.layoutInflater = layoutInflater;
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
+        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, this);
         initialize();
-    }
-
-    public void setShortcutTonesPreferenceDialog(final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog) {
-        this.shortcutTonesPreferenceDialog = shortcutTonesPreferenceDialog;
     }
 
     private void initialize() {

@@ -30,8 +30,7 @@ public class TuningGui {
         this.pitchView = pitchView;
         this.toneShortcutsBar = toneShortcutsBar;
         this.customTuningDialog = new CustomTuningDialog(context);
-        this.toneShortcuts = new ToneShortcuts(preferences, layoutInflater, pitchView, toneShortcutsBar);
-        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, toneShortcuts, customTuningDialog);
-        toneShortcuts.setShortcutTonesPreferenceDialog(shortcutTonesPreferenceDialog);
+        this.toneShortcuts = new ToneShortcuts(context, preferences, layoutInflater, pitchView, toneShortcutsBar);
+        this.shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(context, preferences, toneShortcuts);
     }
 }
