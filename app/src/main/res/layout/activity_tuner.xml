@@ -54,13 +54,29 @@
         android:fillViewport="true"
         android:background="@color/background">
 
-        <peterfajdiga.guituner.gui.views.ToneShortcutsBar
-            android:id="@+id/shortcutcontainer"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <peterfajdiga.guituner.gui.views.ToneShortcutsBar
+            android:id="@+id/shortcutcontainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             style="?android:attr/buttonBarStyle"/>
+
+        <Button android:id="@+id/tuning_setup_button"
+            android:layout_width="@dimen/button_pitchview_width"
+            android:layout_height="@dimen/selection_bar_height"
+            android:padding="12dp"
+            style="?android:attr/buttonBarButtonStyle"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_edit_24dp" />
+
+        </LinearLayout>
 
     </HorizontalScrollView>
 

@@ -4,7 +4,8 @@
     android:layout_height="@dimen/selection_bar_height"
     android:layout_weight="1"
     android:minWidth="@dimen/button_pitchview_width"
-    android:padding="12dp"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="4dp"
     style="?android:attr/buttonBarButtonStyle"
     android:background="?attr/selectableItemBackground"
     android:textColor="@color/primary_text"/>
