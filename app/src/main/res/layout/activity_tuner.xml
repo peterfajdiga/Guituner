@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layoutDirection="ltr"
             style="?android:attr/buttonBarStyle"
             android:background="@color/selection_background"
             android:visibility="invisible">
@@ -74,7 +75,7 @@
             android:padding="12dp"
             style="?android:attr/buttonBarButtonStyle"
             android:background="?attr/selectableItemBackground"
-            android:drawableRight="@drawable/ic_edit_24dp" />
+            android:drawableEnd="@drawable/ic_edit_24dp" />
 
         </LinearLayout>
 
