@@ -74,7 +74,7 @@
             android:padding="12dp"
             style="?android:attr/buttonBarButtonStyle"
             android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_edit_24dp" />
+            android:drawableRight="@drawable/ic_edit_24dp" />
 
         </LinearLayout>
 
