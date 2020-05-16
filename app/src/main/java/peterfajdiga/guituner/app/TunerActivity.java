@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import peterfajdiga.guituner.R;
+import peterfajdiga.guituner.app.parts.ShortcutTonesPreferenceDialog;
 import peterfajdiga.guituner.app.parts.ToneShortcuts;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.views.PitchView;
@@ -45,16 +46,29 @@ public class TunerActivity extends AppCompatActivity {
         pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
 
         setupSelectionButtons();
+        initToneShortcuts();
+
+        initialized = true;
+    }
+
+    private void initToneShortcuts() {
         final ToneShortcuts toneShortcuts = new ToneShortcuts(
                 this,
                 preferences,
                 getLayoutInflater(),
-                pitchView,
+                (PitchView)findViewById(R.id.pitchview),
                 (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
         );
         toneShortcuts.initialize();
 
-        initialized = true;
+        final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(this, preferences, toneShortcuts);
+        final View tuningSetupButton = findViewById(R.id.tuning_setup_button);
+        tuningSetupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                shortcutTonesPreferenceDialog.show();
+            }
+        });
     }
 
     private void setupSelectionButtons() {

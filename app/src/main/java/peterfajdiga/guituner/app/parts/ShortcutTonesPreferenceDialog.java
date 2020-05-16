@@ -14,7 +14,7 @@ import peterfajdiga.guituner.app.tuning.TonesString;
 import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
-class ShortcutTonesPreferenceDialog {
+public class ShortcutTonesPreferenceDialog {
     private final Context context;
     private final Preferences preferences;
     private final ToneShortcuts toneShortcuts;
@@ -22,7 +22,7 @@ class ShortcutTonesPreferenceDialog {
 
     private Dialog dialog = null;
 
-    ShortcutTonesPreferenceDialog(
+    public ShortcutTonesPreferenceDialog(
             @NonNull final Context context,
             @NonNull final Preferences preferences,
             @NonNull final ToneShortcuts toneShortcuts) {
@@ -32,7 +32,7 @@ class ShortcutTonesPreferenceDialog {
         this.customTuningDialog = new CustomTuningDialog(context, this);
     }
 
-    void show() {
+    public void show() {
         if (dialog == null) {
             dialog = create();
         }
