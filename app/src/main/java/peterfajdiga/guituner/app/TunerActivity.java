@@ -53,7 +53,6 @@ public class TunerActivity extends AppCompatActivity {
 
     private void initToneShortcuts() {
         final ToneShortcuts toneShortcuts = new ToneShortcuts(
-                this,
                 preferences,
                 getLayoutInflater(),
                 (PitchView)findViewById(R.id.pitchview),
