@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: consider using ListView or RecyclerView instead
 public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends RadioGroup {
     private final Map<Integer, ItemType> itemsMap = new HashMap<>();
     private final Context context;

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import peterfajdiga.guituner.general.Tone;
 
+// TODO: consider using ListView or RecyclerView instead
 public class ToneShortcutsBar extends LinearLayout {
     private Receiver receiver;
 
