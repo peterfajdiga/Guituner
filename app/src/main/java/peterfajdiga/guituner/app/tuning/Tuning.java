@@ -1,7 +1,10 @@
 package peterfajdiga.guituner.app.tuning;
 
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 
+import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
 public class Tuning implements ItemedRadioGroup.Item {
@@ -18,9 +21,11 @@ public class Tuning implements ItemedRadioGroup.Item {
         return name + "\n" + tonesString;
     }
 
-    public static final Tuning[] tunings = new Tuning[] {
-            // TODO: localize names
-            new Tuning("Standard", "E2 A2 D3 G3 B3 E4"),
-            new Tuning("Drop D", "D2 A2 D3 G3 B3 E4"),
-    };
+    @NonNull
+    public static Tuning[] getBuiltInTunings(@NonNull final Resources resources) {
+        return new Tuning[] {
+                new Tuning(resources.getString(R.string.tuning_standard), "E2 A2 D3 G3 B3 E4"),
+                new Tuning(resources.getString(R.string.tuning_drop_d), "D2 A2 D3 G3 B3 E4"),
+        };
+    }
 }

@@ -87,7 +87,7 @@ public class ShortcutTonesPreferenceDialog {
         };
 
         final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(context);
-        for (final Tuning tuning : Tuning.tunings) {
+        for (final Tuning tuning : Tuning.getBuiltInTunings(context.getResources())) {
             container.addItem(tuning, tuning.tonesString.equals(selectedTonesString), false);
         }
         final String customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
