@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.Preferences;
 import peterfajdiga.guituner.app.tuning.CustomTuning;
 import peterfajdiga.guituner.app.tuning.TonesString;
@@ -89,7 +90,8 @@ public class ShortcutTonesPreferenceDialog {
         for (final Tuning tuning : Tuning.tunings) {
             container.addItem(tuning, tuning.tonesString.equals(selectedTonesString), false);
         }
-        container.addItem(new CustomTuning(customTuningString), customTuningString.equals(selectedTonesString), true);
+        final String customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
+        container.addItem(new CustomTuning(customTuningLocalizedString, customTuningString), customTuningString.equals(selectedTonesString), true);
 
         container.setReceiver(radioGroupReceiver);
         return container;
