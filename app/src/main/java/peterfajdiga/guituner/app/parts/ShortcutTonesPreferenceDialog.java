@@ -2,6 +2,7 @@ package peterfajdiga.guituner.app.parts;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -86,12 +87,14 @@ public class ShortcutTonesPreferenceDialog {
             }
         };
 
-        final ItemedRadioGroup<Tuning> container = new ItemedRadioGroup<>(context);
+
+
+        final ItemedRadioGroup<Tuning> container = getRadioGroup();
         for (final Tuning tuning : Tuning.getBuiltInTunings(context.getResources())) {
-            container.addItem(tuning, R.layout.button_tuning, tuning.tonesString.equals(selectedTonesString), false);
+            container.addItem(tuning, R.layout.radio_button_tuning, tuning.tonesString.equals(selectedTonesString), false);
         }
         final String customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
-        container.addItem(new CustomTuning(customTuningLocalizedString, customTuningString), R.layout.button_tuning, customTuningString.equals(selectedTonesString), true);
+        container.addItem(new CustomTuning(customTuningLocalizedString, customTuningString), R.layout.radio_button_tuning, customTuningString.equals(selectedTonesString), true);
 
         container.setReceiver(radioGroupReceiver);
         return container;
@@ -101,5 +104,10 @@ public class ShortcutTonesPreferenceDialog {
         final BottomSheetDialog dialog = new BottomSheetDialog(context);
         dialog.setContentView(createContentView());
         return dialog;
+    }
+
+    private ItemedRadioGroup<Tuning> getRadioGroup() {
+        final LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        return (ItemedRadioGroup<Tuning>) layoutInflater.inflate(R.layout.radio_group_tuning, null, false);
     }
 }
