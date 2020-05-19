@@ -2,10 +2,12 @@ package peterfajdiga.guituner.gui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -55,8 +57,8 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
         this.receiver = receiver;
     }
 
-    public void addItem(@NonNull final ItemType item, final boolean checked, final boolean clickable) {
-        final View buttonView = createRadioButton(item);
+    public void addItem(@NonNull final ItemType item, @LayoutRes final int buttonResource, final boolean checked, final boolean clickable) throws IllegalArgumentException {
+        final View buttonView = createRadioButton(item, buttonResource);
         addView(buttonView);
 
         final int id = buttonView.getId();
@@ -76,8 +78,13 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
     }
 
     @NonNull
-    private View createRadioButton(@NonNull final ItemType item) {
-        final RadioButton button = new RadioButton(context);
+    private View createRadioButton(@NonNull final ItemType item, @LayoutRes final int buttonResource) throws IllegalArgumentException {
+        final LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View inflatedView = layoutInflater.inflate(buttonResource, this, false);
+        if (!(inflatedView instanceof RadioButton)) {
+            throw new IllegalArgumentException("buttonResource is not a RadioButton layout resource");
+        }
+        final RadioButton button = (RadioButton)inflatedView;
         button.setText(item.getButtonText());
         return button;
     }
