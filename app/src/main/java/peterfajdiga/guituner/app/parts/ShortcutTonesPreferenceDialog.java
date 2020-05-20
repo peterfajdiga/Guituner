@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -72,6 +73,12 @@ public class ShortcutTonesPreferenceDialog {
     }
 
     private View createContentView() {
+        final NestedScrollView container = new NestedScrollView(context);
+        container.addView(createRadioGroup());
+        return container;
+    }
+
+    private View createRadioGroup() {
         final String selectedTonesString = preferences.getShortcutTonesString();
         final String customTuningString = preferences.getShortcutTonesCustomString();
 
