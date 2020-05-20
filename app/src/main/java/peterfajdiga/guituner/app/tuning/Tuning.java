@@ -49,7 +49,21 @@ public class Tuning implements ItemedRadioGroup.Item {
     ) {
         return new Tuning[] {
                 new Tuning(resources.getString(R.string.tuning_standard), "E2 A2 D3 G3 B3 E4", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " - 1", "D2# G2# C3# F3# A3# D4#", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " - 2", "D2 G2 C3 F3 A3 D4", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " + 1", "F2 A2# D3# G3# C4 F4", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " + 2", "F2# B2 E3 A3 C4# F4#", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " + 3", "G2 C3 F3 A3# D4 G4", style),
+                new Tuning(resources.getString(R.string.tuning_standard) + " + 4", "G2# C3# F3# B3 D4# G4#", style),
+
                 new Tuning(resources.getString(R.string.tuning_drop_d), "D2 A2 D3 G3 B3 E4", style),
+                new Tuning(resources.getString(R.string.tuning_drop_d) + " - 1", "C2# G2# C3# F3# A3# D4#", style),
+                new Tuning(resources.getString(R.string.tuning_drop_d) + " - 2", "C2 G2 C3 F3 A3 D4", style),
+
+                new Tuning(resources.getString(R.string.tuning_open_d), "D2 A2 D3 F3# A3 D4", style),
+                new Tuning(resources.getString(R.string.tuning_open_c), "C3 E3 G3 C4 E4 G4", style),
+                new Tuning(resources.getString(R.string.tuning_open_g), "D2 G2 D3 G3 B3 D4", style),
+                new Tuning(resources.getString(R.string.tuning_open_a), "E2 A2 E3 A3 C4# E4", style),
         };
     }
 

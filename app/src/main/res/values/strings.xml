@@ -4,5 +4,9 @@
 
     <string name="tuning_standard">Standard</string>
     <string name="tuning_drop_d">Drop D</string>
+    <string name="tuning_open_d">Open D</string>
+    <string name="tuning_open_c">Open C</string>
+    <string name="tuning_open_g">Open G</string>
+    <string name="tuning_open_a">Open A</string>
     <string name="tuning_custom">Custom tuning</string>
 </resources>
