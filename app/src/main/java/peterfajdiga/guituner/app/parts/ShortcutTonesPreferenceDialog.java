@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -87,8 +88,13 @@ public class ShortcutTonesPreferenceDialog {
             }
         };
 
+        final Tuning.Style radioButtonStyle = new Tuning.Style(
+            ContextCompat.getColor(context, R.color.secondary_text),
+            context.getResources().getDimensionPixelSize(R.dimen.secondary_text)
+        );
+
         final ItemedRadioGroup<Tuning> container = getRadioGroup();
-        for (final Tuning tuning : Tuning.getBuiltInTunings(context)) {
+        for (final Tuning tuning : Tuning.getBuiltInTunings(context.getResources(), radioButtonStyle)) {
             container.addItem(
                     tuning,
                     R.layout.radio_button_tuning,
@@ -99,7 +105,7 @@ public class ShortcutTonesPreferenceDialog {
 
         final String customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
         container.addItem(
-                new CustomTuning(customTuningLocalizedString, customTuningString, context),
+                new CustomTuning(customTuningLocalizedString, customTuningString, radioButtonStyle),
                 R.layout.radio_button_tuning,
                 customTuningString.equals(selectedTonesString),
                 true
