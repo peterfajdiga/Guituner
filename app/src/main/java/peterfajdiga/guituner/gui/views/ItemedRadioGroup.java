@@ -57,7 +57,12 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
         this.receiver = receiver;
     }
 
-    public void addItem(@NonNull final ItemType item, @LayoutRes final int buttonResource, final boolean checked, final boolean clickable) throws IllegalArgumentException {
+    public void addItem(
+            @NonNull final ItemType item,
+            @LayoutRes final int buttonResource,
+            final boolean checked,
+            final boolean clickable
+    ) throws IllegalArgumentException {
         final View buttonView = createRadioButton(item, buttonResource);
         addView(buttonView);
 
@@ -78,7 +83,10 @@ public class ItemedRadioGroup<ItemType extends ItemedRadioGroup.Item> extends Ra
     }
 
     @NonNull
-    private View createRadioButton(@NonNull final ItemType item, @LayoutRes final int buttonResource) throws IllegalArgumentException {
+    private View createRadioButton(
+            @NonNull final ItemType item,
+            @LayoutRes final int buttonResource
+    ) throws IllegalArgumentException {
         final LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View inflatedView = layoutInflater.inflate(buttonResource, this, false);
         if (!(inflatedView instanceof RadioButton)) {
