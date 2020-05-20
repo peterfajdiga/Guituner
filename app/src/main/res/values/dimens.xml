@@ -3,4 +3,6 @@
     <dimen name="selection_bar_height">48dp</dimen>
     <dimen name="button_pitchview_width">48dp</dimen>
     <dimen name="distance_fog_size">24dp</dimen>
+    <dimen name="primary_text">14sp</dimen>
+    <dimen name="secondary_text">12sp</dimen>
 </resources>

@@ -4,4 +4,6 @@
     android:layout_height="48dp"
     android:layout_marginStart="8dp"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp"/>
+    android:paddingEnd="8dp"
+    android:textColor="@color/primary_text"
+    android:textSize="@dimen/primary_text"/>

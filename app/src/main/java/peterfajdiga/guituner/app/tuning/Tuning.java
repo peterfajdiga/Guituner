@@ -2,9 +2,9 @@ package peterfajdiga.guituner.app.tuning;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
@@ -18,12 +18,14 @@ public class Tuning implements ItemedRadioGroup.Item {
     public final String tonesString;
 
     private final int secondaryColor;
+    private final int secondarySize;
 
     public Tuning(@NonNull final String name, @NonNull final String tonesString, @NonNull final Context context) {
         this.name = name;
         this.tonesString = tonesString;
 
         this.secondaryColor = ContextCompat.getColor(context, R.color.secondary_text);
+        this.secondarySize = context.getResources().getDimensionPixelSize(R.dimen.secondary_text);
     }
 
     @Override
@@ -31,6 +33,12 @@ public class Tuning implements ItemedRadioGroup.Item {
         final SpannableString str = new SpannableString(name + "\n" + tonesString);
         str.setSpan(
                 new ForegroundColorSpan(secondaryColor),
+                name.length() + 1,
+                str.length(),
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+        );
+        str.setSpan(
+                new AbsoluteSizeSpan(this.secondarySize),
                 name.length() + 1,
                 str.length(),
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE
