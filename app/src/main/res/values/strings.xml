@@ -8,7 +8,8 @@
     <string name="tuning_open_c">Open C</string>
     <string name="tuning_open_g">Open G</string>
     <string name="tuning_open_a">Open A</string>
-    <string name="tuning_all_fourths">All Fourths</string>
     <string name="tuning_major_thirds">Major thirds</string>
+    <string name="tuning_all_fourths">All fourths</string>
+    <string name="tuning_all_fifths">All fifths</string>
     <string name="tuning_custom">Custom tuning</string>
 </resources>
