@@ -16,5 +16,6 @@
     <string name="tuning_cello_standard">Cello standard</string>
     <string name="tuning_double_bass_standard">Double bass standard</string>
     <string name="tuning_ukulele_soprano">Ukulele standard</string>
+    <string name="tuning_banjo_open_g">Banjo open G</string>
     <string name="tuning_custom">Custom tuning</string>
 </resources>

@@ -80,6 +80,7 @@ public class Tuning implements ItemedRadioGroup.Item {
                 new Tuning(resources.getString(R.string.tuning_cello_standard), "C2 G2 D3 A3", style),
                 new Tuning(resources.getString(R.string.tuning_double_bass_standard), "E1 A1 D2 G2", style),
                 new Tuning(resources.getString(R.string.tuning_ukulele_soprano), "G4 C4 E4 A4", style),
+                new Tuning(resources.getString(R.string.tuning_banjo_open_g), "G4 D3 G3 B3 D4", style),
         };
     }
 
