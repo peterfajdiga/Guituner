@@ -11,5 +11,6 @@
     <string name="tuning_major_thirds">Major thirds</string>
     <string name="tuning_all_fourths">All fourths</string>
     <string name="tuning_all_fifths">All fifths</string>
+    <string name="tuning_ukulele_soprano">Ukulele standard</string>
     <string name="tuning_custom">Custom tuning</string>
 </resources>

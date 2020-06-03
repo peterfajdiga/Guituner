@@ -74,6 +74,8 @@ public class Tuning implements ItemedRadioGroup.Item {
                 new Tuning(resources.getString(R.string.tuning_all_fourths), "E2 A2 D3 G3 C4 F4", style),
                 new Tuning(resources.getString(R.string.tuning_major_thirds), "G2# C3 E3 G3# C4 E4", style),
                 new Tuning(resources.getString(R.string.tuning_all_fifths), "C2 G2 D3 A3 E4 B4", style),
+
+                new Tuning(resources.getString(R.string.tuning_ukulele_soprano), "G4 C4 E4 A4", style),
         };
     }
 
