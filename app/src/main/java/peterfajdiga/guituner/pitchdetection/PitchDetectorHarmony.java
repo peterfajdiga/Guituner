@@ -12,10 +12,10 @@ public class PitchDetectorHarmony implements PitchDetector {
     private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
     private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
-    private static final int HARMONICS_DROP_RADIUS = 16;
+    private static final int HARMONICS_DROP_RADIUS_INV = 128;
     private static final double FUNDAMENTAL_WEIGHT_GCD = 0.5;
     private static final double FUNDAMENTAL_WEIGHT_MINFREQ = 0.5;
-    private static final int FOCUSED_BIN_RADIUS = 10;
+    private static final int FOCUSED_BIN_RADIUS_INV = 204;
 
     private final int sampleRate;
     private boolean focusedMode = false;
@@ -50,6 +50,9 @@ public class PitchDetectorHarmony implements PitchDetector {
             sum += values[i];
         }
         final double floor = sum / freqSpace.length;
+
+        final int FOCUSED_BIN_RADIUS = halfN / FOCUSED_BIN_RADIUS_INV;
+        final int HARMONICS_DROP_RADIUS = halfN / HARMONICS_DROP_RADIUS_INV;
 
         final int startIndex;
         final List<Double> harmonics = new ArrayList<>();
@@ -148,7 +151,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         }
 
         if (focusedMode) {
-            final double focusedFrequencyRadius = FOCUSED_BIN_RADIUS * ((double)sampleRate / buffer.length);
+            final double focusedFrequencyRadius = (double)sampleRate / (2.0 * (double)FOCUSED_BIN_RADIUS_INV);
             final boolean gcdLegal     = General.nearlyEqual(gcd    , focusedFrequency, focusedFrequencyRadius);
             final boolean minFreqLegal = General.nearlyEqual(minFreq, focusedFrequency, focusedFrequencyRadius);
             if (gcdLegal && !minFreqLegal) {
