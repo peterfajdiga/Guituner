@@ -29,21 +29,24 @@ public class TunerActivity extends AppCompatActivity {
     private FrequencySetterRunnable frequencySetterRunnable;
     private final SoundOnClickListener soundOnClickListener = new SoundOnClickListener();
     private static final int MIC_PERMISSION_REQUEST = 1001;
-    private static final int SAMPLE_RATE = 4000;
 
     private boolean initialized = false;
+    private int sampleRate;
     private PitchDetectorThread pitchDetectorThread;
-    private final PitchDetector pitchDetector = new PitchDetectorHarmony(SAMPLE_RATE);
+    private PitchDetector pitchDetector;
     private Recorder recorder;
 
     private void initialize() {
-        setContentView(R.layout.activity_tuner);
+        sampleRate = Recorder.getLowestSupportedSampleRate();
+        pitchDetector = new PitchDetectorHarmony(sampleRate);
 
         preferences = new Preferences(getPreferences(Context.MODE_PRIVATE));
         frequencySetterRunnable = new FrequencySetterRunnable(findViewById(android.R.id.content));
 
+        setContentView(R.layout.activity_tuner);
+
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setHighestFrequency(SAMPLE_RATE / 2.0);
+        pitchView.setHighestFrequency(sampleRate / 2.0);
 
         setupSelectionButtons();
         initToneShortcuts();
@@ -146,7 +149,7 @@ public class TunerActivity extends AppCompatActivity {
             }
         }, pitchDetector);
         pitchDetectorThread.startThread();
-        recorder = new Recorder(pitchDetectorThread, SAMPLE_RATE);
+        recorder = new Recorder(pitchDetectorThread, sampleRate);
         recorder.startThread();
 
         final PitchView pitchView = findViewById(R.id.pitchview);

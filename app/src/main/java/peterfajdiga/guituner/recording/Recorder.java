@@ -26,7 +26,7 @@ public class Recorder extends StoppableThread {
 //            bufferSize = sampleRate * 2;
         }
         bufferSize = General.ceilPow2(bufferSize);*/
-        bufferSize = 4096;
+        bufferSize = 4096;  // TODO: make a constant
 
         buffer = new short[bufferSize / 2];
     }
@@ -57,4 +57,32 @@ public class Recorder extends StoppableThread {
         record.stop();
         record.release();
     }
+
+    public static int getLowestSupportedSampleRate() {
+        for (final int sampleRate : SAMPLE_RATES) {
+            if (isSupportedSampleRate(sampleRate)) {
+                return sampleRate;
+            }
+        }
+        throw new RuntimeException("No sampling rate supported");  // TODO: handle differently
+    }
+
+    private static boolean isSupportedSampleRate(final int sampleRate) {
+        final int result = AudioRecord.getMinBufferSize(
+                sampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
+        );
+        return result != AudioRecord.ERROR_BAD_VALUE && result != AudioRecord.ERROR;
+    }
+
+    private static final int[] SAMPLE_RATES = {
+            4000,
+            8000,
+            11025,
+            16000,
+            22050,
+            44100,
+            48000
+    };
 }
