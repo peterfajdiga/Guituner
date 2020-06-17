@@ -9,26 +9,14 @@ import java.util.Arrays;
 public class Recorder extends StoppableThread {
     private final ShortBufferReceiver receiver;
     private final int sampleRate;
-    private int bufferSize;  // in bytes
+    private final int bufferSize;  // in bytes
     private final short[] buffer;
 
     public Recorder(final ShortBufferReceiver receiver, final int sampleRate) {
         this.receiver = receiver;
         this.sampleRate = sampleRate;
-
-        /*bufferSize = AudioRecord.getMinBufferSize(
-                sampleRate,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT
-        );
-        if (bufferSize == AudioRecord.ERROR || bufferSize == AudioRecord.ERROR_BAD_VALUE) {
-            throw new RuntimeException("bufferSize: " + bufferSize);  // TODO: remove
-//            bufferSize = sampleRate * 2;
-        }
-        bufferSize = General.ceilPow2(bufferSize);*/
-        bufferSize = 4096;  // TODO: make a constant
-
-        buffer = new short[bufferSize / 2];
+        this.bufferSize = getBufferSizeForSampleRate(sampleRate);
+        this.buffer = new short[bufferSize / 2];
     }
 
     @Override
@@ -85,4 +73,20 @@ public class Recorder extends StoppableThread {
             44100,
             48000
     };
+
+    private static int getBufferSizeForSampleRate(final int sampleRate) {
+        if (sampleRate < 8000) {
+            return 4096;
+        }
+        if (sampleRate < 16000) {
+            return 8192;
+        }
+        if (sampleRate < 32000) {
+            return 16384;
+        }
+        if (sampleRate < 64000) {
+            return 32768;
+        }
+        return 65536;
+    }
 }
