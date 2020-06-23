@@ -6,8 +6,8 @@ import android.media.AudioTrack;
 
 public class BeepThread extends Thread {
     private static final int SAMPLE_RATE = 44100;
-    private static final double BASE_AMPLITUDE = Short.MAX_VALUE * 0.2;
-    private static final double MAX_AMPLITUDE  = Short.MAX_VALUE * 0.9;
+    private static final double BASE_AMPLITUDE = Short.MAX_VALUE * 0.2;  // TODO: remove
+    private static final double MAX_AMPLITUDE  = Short.MAX_VALUE * 0.9;  // TODO: remove
 
     private final double frequency;
     private final int n_samples;
@@ -31,10 +31,7 @@ public class BeepThread extends Thread {
                 AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize, AudioTrack.MODE_STREAM);
 
-        double amplitude = BASE_AMPLITUDE / dbaGain(frequency);
-        if (amplitude > MAX_AMPLITUDE) {
-            amplitude = MAX_AMPLITUDE;
-        }
+        double amplitude = Short.MAX_VALUE;
 
         // Sine wave
         short[] buffer = new short[n_samples];
@@ -56,6 +53,7 @@ public class BeepThread extends Thread {
         }
     }
 
+    // TODO: remove all below
     private static final double DBA_N1 = 12200.0 * 12200.0;
     private static final double DBA_N2 = 20.6 * 20.6;
     private static final double DBA_N3 = 107.7 * 107.7;
