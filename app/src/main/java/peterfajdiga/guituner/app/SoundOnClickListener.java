@@ -2,14 +2,15 @@ package peterfajdiga.guituner.app;
 
 import android.view.View;
 
-import peterfajdiga.guituner.beep.BeepThread;
+import peterfajdiga.guituner.beep.Beeper;
 
 class SoundOnClickListener implements View.OnClickListener {
     private double frequency = 440.0;
+    private final Beeper player = new Beeper();
 
     @Override
     public void onClick(View view) {
-        new BeepThread(frequency, 2.0).start();
+        player.play(frequency);
     }
 
     public void setFrequency(final double frequency) {
