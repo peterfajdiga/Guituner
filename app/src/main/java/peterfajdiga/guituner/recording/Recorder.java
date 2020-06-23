@@ -6,11 +6,14 @@ import android.media.MediaRecorder;
 
 import java.util.Arrays;
 
-public class Recorder extends StoppableThread {
+import peterfajdiga.guituner.general.Stoppable;
+
+public class Recorder extends Thread implements Stoppable {
     private final ShortBufferReceiver receiver;
     private final int sampleRate;
     private final int bufferSize;  // in bytes
     private final short[] buffer;
+    private boolean threadEnabled = true;
 
     public Recorder(final ShortBufferReceiver receiver, final int sampleRate) {
         this.receiver = receiver;
@@ -88,5 +91,10 @@ public class Recorder extends StoppableThread {
             return 32768;
         }
         return 65536;
+    }
+
+    @Override
+    public void signalStop() {
+        threadEnabled = false;
     }
 }

@@ -1,13 +1,14 @@
 package peterfajdiga.guituner.pitchdetection;
 
 import peterfajdiga.guituner.recording.ShortBufferReceiver;
-import peterfajdiga.guituner.recording.StoppableThread;
+import peterfajdiga.guituner.general.Stoppable;
 
-public class PitchDetectorThread extends StoppableThread implements ShortBufferReceiver {
+public class PitchDetectorThread extends Thread implements ShortBufferReceiver, Stoppable {
     private final Receiver receiver;
     private volatile boolean working = false;
     private short[] buffer;
     private PitchDetector pitchDetector;
+    private boolean threadEnabled = true;
 
     public PitchDetectorThread(final Receiver receiver, final PitchDetector pitchDetector) {
         this.receiver = receiver;
@@ -42,6 +43,11 @@ public class PitchDetectorThread extends StoppableThread implements ShortBufferR
         } catch (final InterruptedException e) {
             throw new RuntimeException("PitchDetectorThread stopped");
         }
+    }
+
+    @Override
+    public void signalStop() {
+        threadEnabled = false;
     }
 
     public interface Receiver {

@@ -130,8 +130,8 @@ public class TunerActivity extends AppCompatActivity {
         if (!initialized) {
             return;
         }
-        pitchDetectorThread.stopThread();
-        recorder.stopThread();
+        pitchDetectorThread.signalStop();
+        recorder.signalStop();
     }
 
     @Override
@@ -148,9 +148,9 @@ public class TunerActivity extends AppCompatActivity {
                 contentView.post(frequencySetterRunnable.setFrequency(frequency));
             }
         }, pitchDetector);
-        pitchDetectorThread.startThread();
+        pitchDetectorThread.start();
         recorder = new Recorder(pitchDetectorThread, sampleRate);
-        recorder.startThread();
+        recorder.start();
 
         final PitchView pitchView = findViewById(R.id.pitchview);
         pitchView.setOnFocusChangedListener(new PitchView.OnFocusChangedListener() {
