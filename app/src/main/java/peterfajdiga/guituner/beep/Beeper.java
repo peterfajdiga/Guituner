@@ -48,9 +48,9 @@ public class Beeper {
     private static short[] generateAttenuatedSineWave(final double frequency) {
         final double amplitude = Short.MAX_VALUE;
         final short[] buffer = new short[BUFFER_SIZE];
-        for (int i = 0; i < SAMPLE_RATE; i++) {
+        for (int i = 0; i < BUFFER_SIZE; i++) {
             final double sineSample = Math.sin(2.0*Math.PI * i * frequency / SAMPLE_RATE);
-            double attenuation = 1.0 - (double)i / BUFFER_SIZE;
+            double attenuation = 1.0 - (double)i / (double)BUFFER_SIZE;
             attenuation *= attenuation;
             buffer[i] = (short)(sineSample * attenuation * amplitude);
         }
