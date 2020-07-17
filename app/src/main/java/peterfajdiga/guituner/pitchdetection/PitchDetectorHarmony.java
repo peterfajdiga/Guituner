@@ -111,34 +111,34 @@ public class PitchDetectorHarmony implements PitchDetector {
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
-    // TODO: handle empty
-    private double findFundamental(final List<Double> harmonics) {
+    private double findFundamental(@NonNull final List<Double> harmonics) {
         final List<FundamentalCandidate> candidates = getFundamentalCandidates(harmonics);
-        final double gcd = getStrongestFundamentalCandidate(candidates).getFundamental();
+        final double fundamental = getStrongestFundamentalCandidate(candidates).getFundamental();
 
-        double minFreq = Double.MAX_VALUE;
-        for (Double value : harmonics) {
-            if (value > MIN_FREQUENCY && value < minFreq) {
-                minFreq = value;
+        double minDetected = Double.MAX_VALUE;
+        for (Double harmonic : harmonics) {
+            if (harmonic > MIN_FREQUENCY && harmonic < minDetected) {
+                minDetected = harmonic;
             }
         }
 
-        if (Math.abs(minFreq - gcd) < FundamentalCandidate.MAX_ERROR) {
-            return FUNDAMENTAL_WEIGHT_MINFREQ * minFreq + FUNDAMENTAL_WEIGHT_GCD * gcd;
+        if (Math.abs(minDetected - fundamental) < FundamentalCandidate.MAX_ERROR) {
+            // the lowest detected frequency and the calculated fundamental frequency are roughly the same
+            return FUNDAMENTAL_WEIGHT_MINFREQ * minDetected + FUNDAMENTAL_WEIGHT_GCD * fundamental;
         }
 
         if (focusedMode) {
             final double focusedFrequencyRadius = (double)sampleRate / (2.0 * (double)FOCUSED_BIN_RADIUS_INV);
-            final boolean gcdLegal     = Math.abs(gcd     - focusedFrequency) < focusedFrequencyRadius;
-            final boolean minFreqLegal = Math.abs(minFreq - focusedFrequency) < focusedFrequencyRadius;
-            if (gcdLegal && !minFreqLegal) {
-                return gcd;
+            final boolean fundamentalLegal = Math.abs(fundamental - focusedFrequency) < focusedFrequencyRadius;
+            final boolean minDetectedLegal = Math.abs(minDetected - focusedFrequency) < focusedFrequencyRadius;
+            if (fundamentalLegal && !minDetectedLegal) {
+                return fundamental;
             }
-            if (minFreqLegal && !gcdLegal) {
-                return minFreq;
+            if (minDetectedLegal && !fundamentalLegal) {
+                return minDetected;
             }
         }
-        return Math.min(minFreq, gcd);
+        return Math.min(minDetected, fundamental);
     }
 
     @NonNull
