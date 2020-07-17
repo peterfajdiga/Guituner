@@ -32,7 +32,7 @@ public class PreferencesTest {
         actual = preferences.getShortcutTones();
         assertArrayEquals(expected, actual);
 
-        sharedPreferencesMock.prefs.put("shortcutTones", "A1#,E4,B0,G4,G4#");
+        sharedPreferencesMock.prefs.put("shortcutTones", "A1# E4 B0 G4 G4#");
         expected = new Tone[]{
                 Tone.A1s,
                 Tone.E4,
