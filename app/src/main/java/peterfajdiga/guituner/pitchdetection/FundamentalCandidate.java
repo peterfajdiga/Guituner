@@ -20,7 +20,11 @@ class FundamentalCandidate {
         return count;
     }
 
-    // return true if added
+    /**
+     * if the given frequency is a harmonic, add it to this fundamental candidate
+     * @param harmonic harmonic to add
+     * @return true if harmonic was added
+     */
     boolean addHarmonic(final double harmonic) {
         final double fundamental = getFundamental();
         for (int mult = 1; mult <= MULTS; mult++) {
