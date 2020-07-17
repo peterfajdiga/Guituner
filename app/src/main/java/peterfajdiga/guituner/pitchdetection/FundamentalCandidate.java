@@ -12,16 +12,16 @@ class FundamentalCandidate {
         count = 1;
     }
 
-    double avg() {
+    double getFundamental() {
         return sum / count;
     }
 
     // return true if added
     boolean addHarmonic(final double harmonic) {
-        final double avg = avg();
+        final double fundamental = getFundamental();
         for (int mult = 1; mult <= MULTS; mult++) {
             final double adjustedHarmonic = harmonic / mult;
-            if (Math.abs(avg - adjustedHarmonic) <= MAX_ERROR) {
+            if (Math.abs(fundamental - adjustedHarmonic) <= MAX_ERROR) {
                 sum += adjustedHarmonic;
                 count++;
                 return true;
@@ -29,7 +29,7 @@ class FundamentalCandidate {
         }
         for (int mult = 1; mult <= MULTS; mult++) {
             final double adjustedHarmonic = harmonic * mult;
-            if (Math.abs(avg - adjustedHarmonic) <= MAX_ERROR) {
+            if (Math.abs(fundamental - adjustedHarmonic) <= MAX_ERROR) {
                 sum += adjustedHarmonic;
                 count++;
                 sum /= mult;

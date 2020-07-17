@@ -135,7 +135,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         for (FundamentalCandidate candidate : candidates) {
             if (candidate.count > maxCount) {
                 maxCount = candidate.count;
-                gcd = candidate.avg();
+                gcd = candidate.getFundamental();
             }
         }
 
