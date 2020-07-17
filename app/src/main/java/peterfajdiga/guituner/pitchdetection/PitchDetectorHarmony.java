@@ -118,7 +118,7 @@ public class PitchDetectorHarmony implements PitchDetector {
                 }
                 boolean addedToExistingCandidate = false;
                 for (FundamentalCandidate candidate : candidates) {
-                    if (candidate.add(delta)) {
+                    if (candidate.addHarmonic(delta)) {
                         addedToExistingCandidate = true;
                         break;
                     }

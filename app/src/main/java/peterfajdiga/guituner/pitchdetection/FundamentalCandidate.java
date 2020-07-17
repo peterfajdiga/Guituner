@@ -17,20 +17,20 @@ class FundamentalCandidate {
     }
 
     // return true if added
-    boolean add(final double value) {
+    boolean addHarmonic(final double harmonic) {
         final double avg = avg();
         for (int mult = 1; mult <= MULTS; mult++) {
-            final double adjustedValue = value / mult;
-            if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
-                sum += adjustedValue;
+            final double adjustedHarmonic = harmonic / mult;
+            if (Math.abs(avg - adjustedHarmonic) <= MAX_ERROR) {
+                sum += adjustedHarmonic;
                 count++;
                 return true;
             }
         }
         for (int mult = 1; mult <= MULTS; mult++) {
-            final double adjustedValue = value * mult;
-            if (Math.abs(avg - adjustedValue) <= MAX_ERROR) {
-                sum += adjustedValue;
+            final double adjustedHarmonic = harmonic * mult;
+            if (Math.abs(avg - adjustedHarmonic) <= MAX_ERROR) {
+                sum += adjustedHarmonic;
                 count++;
                 sum /= mult;
                 return true;
