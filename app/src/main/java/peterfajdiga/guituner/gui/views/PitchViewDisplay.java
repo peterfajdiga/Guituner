@@ -251,7 +251,7 @@ class PitchViewDisplay extends View {
 
     private Tone getNearestTone(final double frequency) {
         // TODO: optimise
-        double minDiff = Double.MAX_VALUE;
+        double minDiff = Double.POSITIVE_INFINITY;
         Tone nearestTone = null;
         for (Tone tone : tones) {
             final double diff = Math.abs(tone.frequency - frequency);

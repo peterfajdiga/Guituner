@@ -22,8 +22,8 @@ public class General {
      * @return       index of max element
      */
     public static int max(final double[] values, final int start, final int end) {
-        int maxIndex = Integer.MIN_VALUE;
-        double maxValue = Double.MIN_VALUE;
+        int maxIndex = -1;
+        double maxValue = Double.NEGATIVE_INFINITY;
         for (int i = start; i < end; i++) {
             final double value = values[i];
             if (value > maxValue) {
