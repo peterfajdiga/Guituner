@@ -11,8 +11,8 @@ import peterfajdiga.guituner.fourier.Fourier;
 import peterfajdiga.guituner.general.General;
 
 public class PitchDetectorHarmony implements PitchDetector {
-    private static final double NOISE_THRESHOLD = 20.0;
-    private static final double NOISE_THRESHOLD_FOCUSED = 2.0;
+    private static final double NOISE_THRESHOLD = 10.0;
+    private static final double NOISE_THRESHOLD_FOCUSED = 1.0;
     private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS_INV = 128;
@@ -51,7 +51,7 @@ public class PitchDetectorHarmony implements PitchDetector {
             values[i] = freqSpace[i].abs();
             sum += values[i];
         }
-        final double floor = sum / freqSpace.length;
+        double floor = sum / halfN;
 
         final int FOCUSED_BIN_RADIUS = halfN / FOCUSED_BIN_RADIUS_INV;
         final int HARMONICS_DROP_RADIUS = halfN / HARMONICS_DROP_RADIUS_INV;
