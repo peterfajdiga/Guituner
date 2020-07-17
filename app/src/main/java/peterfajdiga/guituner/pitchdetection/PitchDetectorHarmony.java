@@ -69,7 +69,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         final int startIndex;
         final List<Double> harmonics = new ArrayList<>();
         if (focusedMode) {
-            final double binWidth = (double)sampleRate / freqSpace.length;
+            final double binWidth = (double)sampleRate / (double)freqSpace.length;
             final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
             final int maxBin = General.max(absolutes, focusedIndex, FOCUSED_BIN_RADIUS);
             if (maxBin >= 0 && absolutes[maxBin] / floor > NOISE_THRESHOLD_FOCUSED) {
@@ -85,7 +85,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         while (harmonics.size() < MAX_HARMONICS) {
             final int maxBin = General.max(absolutes, startIndex, endIndex);
             if (maxBin < 0 || absolutes[maxBin] / floor < NOISE_THRESHOLD) {
-                break;  // no more harmonics
+                break;  // there are no more harmonics
             }
             harmonics.add(getFrequency(freqSpace, maxBin));
             General.dropAround(absolutes, maxBin, HARMONICS_DROP_RADIUS);
@@ -154,8 +154,8 @@ public class PitchDetectorHarmony implements PitchDetector {
     @NonNull
     private static List<FundamentalCandidate> getFundamentalCandidates(@NonNull final List<Double> harmonics) {
         final List<FundamentalCandidate> candidates = new ArrayList<>();
-        for (double value0 : harmonics) {
-            for (double value1 : harmonics) {
+        for (final double value0 : harmonics) {
+            for (final double value1 : harmonics) {
                 final double delta = Math.abs(value1 - value0);
                 if (delta < MIN_FREQUENCY) {
                     continue;
@@ -167,7 +167,7 @@ public class PitchDetectorHarmony implements PitchDetector {
     }
 
     private static void addHarmonicToFundamentalCandidates(@NonNull final List<FundamentalCandidate> candidates, final double harmonic) {
-        for (FundamentalCandidate candidate : candidates) {
+        for (final FundamentalCandidate candidate : candidates) {
             if (candidate.addHarmonic(harmonic)) {
                 return;
             }
