@@ -16,8 +16,7 @@ public class PitchDetectorHarmony implements PitchDetector {
     private static final double MIN_FREQUENCY = 20.0;
     private static final int MAX_HARMONICS = 24;
     private static final int HARMONICS_DROP_RADIUS_INV = 128;
-    private static final double FUNDAMENTAL_WEIGHT_GCD = 0.5;
-    private static final double FUNDAMENTAL_WEIGHT_MINFREQ = 0.5;
+    private static final double FUNDAMENTAL_WEIGHT_MIN_DETECTED = 0.5;
     private static final int FOCUSED_BIN_RADIUS_INV = 204;
 
     private final int sampleRate;
@@ -124,7 +123,7 @@ public class PitchDetectorHarmony implements PitchDetector {
 
         if (Math.abs(minDetected - fundamental) < FundamentalCandidate.MAX_ERROR) {
             // the lowest detected frequency and the calculated fundamental frequency are roughly the same
-            return FUNDAMENTAL_WEIGHT_MINFREQ * minDetected + FUNDAMENTAL_WEIGHT_GCD * fundamental;
+            return FUNDAMENTAL_WEIGHT_MIN_DETECTED * minDetected + (1.0 - FUNDAMENTAL_WEIGHT_MIN_DETECTED) * fundamental;
         }
 
         if (focusedMode) {
