@@ -3,7 +3,8 @@
     <item
         android:drawable="@drawable/distance_fog_top"
         android:right="?android:scrollbarSize"
-        android:height="@dimen/distance_fog_size"/>
+        android:height="@dimen/distance_fog_size"
+        android:gravity="top"/>
     <item
         android:drawable="@drawable/distance_fog_btm"
         android:right="?android:scrollbarSize"
