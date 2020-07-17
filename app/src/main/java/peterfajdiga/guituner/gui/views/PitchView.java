@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
+import androidx.annotation.NonNull;
+
 import peterfajdiga.guituner.general.Tone;
 
 public class PitchView extends ScrollView {
@@ -125,7 +127,7 @@ public class PitchView extends ScrollView {
         }
     }
 
-    private void setFocusedToneFromClick(final Tone tone, final float clickX, final float clickY) {
+    private void setFocusedToneFromClick(@NonNull final Tone tone, final float clickX, final float clickY) {
         display.selectTone(tone);
         if (onFocusChangedListener != null) {
             onFocusChangedListener.onFocusChanged(tone.frequency, clickX, clickY);
