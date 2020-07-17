@@ -111,8 +111,9 @@ public class PitchDetectorHarmony implements PitchDetector {
     }
 
     private double findFundamental(@NonNull final List<Double> harmonics) {
-        final List<FundamentalCandidate> candidates = getFundamentalCandidates(harmonics);
-        final double fundamental = getStrongestFundamentalCandidate(candidates).getFundamental();
+        final List<FundamentalCandidate> fundamentalCandidates = getFundamentalCandidates(harmonics);
+        final FundamentalCandidate strongestCandidate = getStrongestFundamentalCandidate(fundamentalCandidates);
+        final double fundamental = strongestCandidate != null ? strongestCandidate.getFundamental() : Double.POSITIVE_INFINITY;
         final double minDetected = minValidFrequency(harmonics);
 
         if (Math.abs(minDetected - fundamental) < FundamentalCandidate.MAX_ERROR) {
