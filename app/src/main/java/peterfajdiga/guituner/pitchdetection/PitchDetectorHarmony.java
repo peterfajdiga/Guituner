@@ -107,7 +107,7 @@ public class PitchDetectorHarmony implements PitchDetector {
 
     private static final double TAU_CONST_A = Math.sqrt(6.0)/24.0;
     private static final double TAU_CONST_B = Math.sqrt(2.0/3.0);
-    private double tau(final double x) {
+    private static double tau(final double x) {
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
