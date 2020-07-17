@@ -4,8 +4,8 @@ class FundamentalCandidate {
     static final double MAX_ERROR = 2.0;
     private static final int MULTS = 5;
 
-    double sum;
-    int count;
+    private double sum;
+    private int count;
 
     FundamentalCandidate(final double value) {
         sum = value;
@@ -14,6 +14,10 @@ class FundamentalCandidate {
 
     double getFundamental() {
         return sum / count;
+    }
+
+    int getHarmonicCount() {
+        return count;
     }
 
     // return true if added

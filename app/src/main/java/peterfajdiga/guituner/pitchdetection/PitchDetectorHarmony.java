@@ -133,8 +133,8 @@ public class PitchDetectorHarmony implements PitchDetector {
         int maxCount = Integer.MIN_VALUE;
         double gcd = Double.MAX_VALUE;
         for (FundamentalCandidate candidate : candidates) {
-            if (candidate.count > maxCount) {
-                maxCount = candidate.count;
+            if (candidate.getHarmonicCount() > maxCount) {
+                maxCount = candidate.getHarmonicCount();
                 gcd = candidate.getFundamental();
             }
         }
