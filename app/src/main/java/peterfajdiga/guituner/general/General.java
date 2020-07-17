@@ -14,10 +14,6 @@ public class General {
         return n;
     }
 
-    public static boolean nearlyEqual(final double a, final double b, final double eps) {
-        return Math.abs(a - b) < eps;
-    }
-
     /**
      * find index of greatest element in given array between indices start and end
      * @param values array in which to search

@@ -152,8 +152,8 @@ public class PitchDetectorHarmony implements PitchDetector {
 
         if (focusedMode) {
             final double focusedFrequencyRadius = (double)sampleRate / (2.0 * (double)FOCUSED_BIN_RADIUS_INV);
-            final boolean gcdLegal     = General.nearlyEqual(gcd    , focusedFrequency, focusedFrequencyRadius);
-            final boolean minFreqLegal = General.nearlyEqual(minFreq, focusedFrequency, focusedFrequencyRadius);
+            final boolean gcdLegal     = Math.abs(gcd     - focusedFrequency) < focusedFrequencyRadius;
+            final boolean minFreqLegal = Math.abs(minFreq - focusedFrequency) < focusedFrequencyRadius;
             if (gcdLegal && !minFreqLegal) {
                 return gcd;
             }
