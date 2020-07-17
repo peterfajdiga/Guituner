@@ -4,9 +4,7 @@ public class General {
     private General() {}  // make class static
 
     /**
-     * finds the nearest power of two above given value
-     * @param value input value
-     * @return      nearest power of two above input value
+     * return the lowest power of two that is greater or equal to the given value
      */
     public static int ceilPow2(final int value) {
         int n = Integer.highestOneBit(value);
