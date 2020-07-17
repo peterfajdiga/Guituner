@@ -82,7 +82,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         if (harmonics.isEmpty()) {
             throw new PitchDetector.NoPitchFoundException();
         }
-        return findFundamental(buffer, harmonics);
+        return findFundamental(harmonics);
     }
 
     private double getFrequency(final Complex[] X, final int index) {
@@ -108,10 +108,10 @@ public class PitchDetectorHarmony implements PitchDetector {
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
-    private double findFundamental(final short[] buffer, final List<Double> values) {
+    private double findFundamental(final List<Double> harmonics) {
         final List<FundamentalCandidate> candidates = new ArrayList<>();
-        for (double value0 : values) {
-            for (double value1 : values) {
+        for (double value0 : harmonics) {
+            for (double value1 : harmonics) {
                 final double delta = Math.abs(value1 - value0);
                 if (delta < MIN_FREQUENCY) {
                     continue;
@@ -140,7 +140,7 @@ public class PitchDetectorHarmony implements PitchDetector {
         }
 
         double minFreq = Double.MAX_VALUE;
-        for (Double value : values) {
+        for (Double value : harmonics) {
             if (value > MIN_FREQUENCY && value < minFreq) {
                 minFreq = value;
             }
