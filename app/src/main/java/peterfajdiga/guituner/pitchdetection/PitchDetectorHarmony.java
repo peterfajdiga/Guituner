@@ -1,5 +1,8 @@
 package peterfajdiga.guituner.pitchdetection;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,36 +111,10 @@ public class PitchDetectorHarmony implements PitchDetector {
         return 0.25 * Math.log(3.0*x*x + 6.0*x + 1.0) - TAU_CONST_A * Math.log((x + 1.0 - TAU_CONST_B) / (x + 1.0 + TAU_CONST_B));
     }
 
+    // TODO: handle empty
     private double findFundamental(final List<Double> harmonics) {
-        final List<FundamentalCandidate> candidates = new ArrayList<>();
-        for (double value0 : harmonics) {
-            for (double value1 : harmonics) {
-                final double delta = Math.abs(value1 - value0);
-                if (delta < MIN_FREQUENCY) {
-                    continue;
-                }
-                boolean addedToExistingCandidate = false;
-                for (FundamentalCandidate candidate : candidates) {
-                    if (candidate.addHarmonic(delta)) {
-                        addedToExistingCandidate = true;
-                        break;
-                    }
-                }
-                if (!addedToExistingCandidate) {
-                    candidates.add(new FundamentalCandidate(delta));
-                }
-            }
-        }
-
-        // return candidate with highest count
-        int maxCount = Integer.MIN_VALUE;
-        double gcd = Double.MAX_VALUE;
-        for (FundamentalCandidate candidate : candidates) {
-            if (candidate.getHarmonicCount() > maxCount) {
-                maxCount = candidate.getHarmonicCount();
-                gcd = candidate.getFundamental();
-            }
-        }
+        final List<FundamentalCandidate> candidates = getFundamentalCandidates(harmonics);
+        final double gcd = getStrongestFundamentalCandidate(candidates).getFundamental();
 
         double minFreq = Double.MAX_VALUE;
         for (Double value : harmonics) {
@@ -162,5 +139,45 @@ public class PitchDetectorHarmony implements PitchDetector {
             }
         }
         return Math.min(minFreq, gcd);
+    }
+
+    @NonNull
+    private static List<FundamentalCandidate> getFundamentalCandidates(@NonNull final List<Double> harmonics) {
+        final List<FundamentalCandidate> candidates = new ArrayList<>();
+        for (double value0 : harmonics) {
+            for (double value1 : harmonics) {
+                final double delta = Math.abs(value1 - value0);
+                if (delta < MIN_FREQUENCY) {
+                    continue;
+                }
+                addHarmonicToFundamentalCandidates(candidates, delta);
+            }
+        }
+        return candidates;
+    }
+
+    private static void addHarmonicToFundamentalCandidates(@NonNull final List<FundamentalCandidate> candidates, final double harmonic) {
+        for (FundamentalCandidate candidate : candidates) {
+            if (candidate.addHarmonic(harmonic)) {
+                return;
+            }
+        }
+
+        // harmonic was not added to any existing fundamental candidates, so create a new one
+        candidates.add(new FundamentalCandidate(harmonic));
+    }
+
+    @Nullable
+    private static FundamentalCandidate getStrongestFundamentalCandidate(@NonNull final List<FundamentalCandidate> candidates) {
+        int maxStrength = Integer.MIN_VALUE;
+        FundamentalCandidate strongestCandidate = null;
+        for (FundamentalCandidate candidate : candidates) {
+            final int strength = candidate.getHarmonicCount();
+            if (strength > maxStrength) {
+                maxStrength = strength;
+                strongestCandidate = candidate;
+            }
+        }
+        return strongestCandidate;
     }
 }
