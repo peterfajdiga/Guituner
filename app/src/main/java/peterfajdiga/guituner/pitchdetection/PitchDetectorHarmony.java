@@ -43,13 +43,23 @@ public class PitchDetectorHarmony implements PitchDetector {
         }
 
         final Complex[] freqSpace = Fourier.fft(buffer);
-        final int halfN = buffer.length / 2;
+        final List<Double> harmonics = getHarmonics(freqSpace);
+
+        if (harmonics.isEmpty()) {
+            throw new PitchDetector.NoPitchFoundException();
+        }
+        return findFundamental(harmonics);
+    }
+
+    @NonNull
+    private List<Double> getHarmonics(@NonNull final Complex[] freqSpace) {
+        final int halfN = freqSpace.length / 2;
 
         double sum = 0.0;
-        final double[] values = new double[halfN];
+        final double[] absolutes = new double[halfN];
         for (int i = 0; i < halfN; i++) {
-            values[i] = freqSpace[i].abs();
-            sum += values[i];
+            absolutes[i] = freqSpace[i].abs();
+            sum += absolutes[i];
         }
         double floor = sum / halfN;
 
@@ -61,30 +71,26 @@ public class PitchDetectorHarmony implements PitchDetector {
         if (focusedMode) {
             final double binWidth = (double)sampleRate / freqSpace.length;
             final int focusedIndex = (int)Math.round(focusedFrequency / binWidth);
-            final int maxBin = General.max(values, focusedIndex, FOCUSED_BIN_RADIUS);
-            if (maxBin >= 0 && values[maxBin] / floor > NOISE_THRESHOLD_FOCUSED) {
+            final int maxBin = General.max(absolutes, focusedIndex, FOCUSED_BIN_RADIUS);
+            if (maxBin >= 0 && absolutes[maxBin] / floor > NOISE_THRESHOLD_FOCUSED) {
                 harmonics.add(getFrequency(freqSpace, maxBin));
-                General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
+                General.dropAround(absolutes, maxBin, HARMONICS_DROP_RADIUS);
             }
             startIndex = General.getStart(focusedIndex, FOCUSED_BIN_RADIUS);
         } else {
             startIndex = 0;
         }
 
-        final int endIndex = values.length;
+        final int endIndex = absolutes.length;
         while (harmonics.size() < MAX_HARMONICS) {
-            final int maxBin = General.max(values, startIndex, endIndex);
-            if (maxBin < 0 || values[maxBin] / floor < NOISE_THRESHOLD) {
+            final int maxBin = General.max(absolutes, startIndex, endIndex);
+            if (maxBin < 0 || absolutes[maxBin] / floor < NOISE_THRESHOLD) {
                 break;  // no more harmonics
             }
             harmonics.add(getFrequency(freqSpace, maxBin));
-            General.dropAround(values, maxBin, HARMONICS_DROP_RADIUS);
+            General.dropAround(absolutes, maxBin, HARMONICS_DROP_RADIUS);
         }
-
-        if (harmonics.isEmpty()) {
-            throw new PitchDetector.NoPitchFoundException();
-        }
-        return findFundamental(harmonics);
+        return harmonics;
     }
 
     private double getFrequency(final Complex[] X, final int index) {
