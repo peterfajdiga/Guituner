@@ -161,9 +161,6 @@ public class PitchDetectorHarmony implements PitchDetector {
                 return minFreq;
             }
         }
-        if (minFreq < gcd) {
-            return minFreq;
-        }
-        return gcd;
+        return Math.min(minFreq, gcd);
     }
 }
