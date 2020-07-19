@@ -4,6 +4,8 @@
         <!-- Status bar -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">false</item>
 
         <!-- Navigation bar -->
         <item name="android:windowTranslucentNavigation">false</item>
