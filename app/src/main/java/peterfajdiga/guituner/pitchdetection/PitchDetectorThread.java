@@ -1,7 +1,7 @@
 package peterfajdiga.guituner.pitchdetection;
 
-import peterfajdiga.guituner.recording.ShortBufferReceiver;
 import peterfajdiga.guituner.general.Stoppable;
+import peterfajdiga.guituner.recording.ShortBufferReceiver;
 
 public class PitchDetectorThread extends Thread implements ShortBufferReceiver, Stoppable {
     private final Receiver receiver;

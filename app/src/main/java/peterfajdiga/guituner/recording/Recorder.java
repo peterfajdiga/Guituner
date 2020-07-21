@@ -27,11 +27,11 @@ public class Recorder extends Thread implements Stoppable {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 
         final AudioRecord record = new AudioRecord(
-                MediaRecorder.AudioSource.DEFAULT,
-                sampleRate,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                bufferSize
+            MediaRecorder.AudioSource.DEFAULT,
+            sampleRate,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            bufferSize
         );
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
             throw new RuntimeException("Error initializing AudioRecord");
@@ -60,21 +60,21 @@ public class Recorder extends Thread implements Stoppable {
 
     private static boolean isSupportedSampleRate(final int sampleRate) {
         final int result = AudioRecord.getMinBufferSize(
-                sampleRate,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT
+            sampleRate,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT
         );
         return result != AudioRecord.ERROR_BAD_VALUE && result != AudioRecord.ERROR;
     }
 
     private static final int[] SAMPLE_RATES = {
-            4000,
-            8000,
-            11025,
-            16000,
-            22050,
-            44100,
-            48000
+        4000,
+        8000,
+        11025,
+        16000,
+        22050,
+        44100,
+        48000
     };
 
     private static int getBufferSizeForSampleRate(final int sampleRate) {

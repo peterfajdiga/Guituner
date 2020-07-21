@@ -27,9 +27,10 @@ public class ShortcutTonesPreferenceDialog {
     private Dialog dialog = null;
 
     public ShortcutTonesPreferenceDialog(
-            @NonNull final Context context,
-            @NonNull final Preferences preferences,
-            @NonNull final ToneShortcuts toneShortcuts) {
+        @NonNull final Context context,
+        @NonNull final Preferences preferences,
+        @NonNull final ToneShortcuts toneShortcuts
+    ) {
         this.context = context;
         this.preferences = preferences;
         this.toneShortcuts = toneShortcuts;
@@ -103,19 +104,19 @@ public class ShortcutTonesPreferenceDialog {
         final ItemedRadioGroup<Tuning> container = getRadioGroup();
         for (final Tuning tuning : Tuning.getBuiltInTunings(context.getResources(), radioButtonStyle)) {
             container.addItem(
-                    tuning,
-                    R.layout.radio_button_tuning,
-                    tuning.tonesString.equals(selectedTonesString),
-                    false
+                tuning,
+                R.layout.radio_button_tuning,
+                tuning.tonesString.equals(selectedTonesString),
+                false
             );
         }
 
         final String customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
         container.addItem(
-                new CustomTuning(customTuningLocalizedString, customTuningString, radioButtonStyle),
-                R.layout.radio_button_tuning,
-                customTuningString.equals(selectedTonesString),
-                true
+            new CustomTuning(customTuningLocalizedString, customTuningString, radioButtonStyle),
+            R.layout.radio_button_tuning,
+            customTuningString.equals(selectedTonesString),
+            true
         );
 
         container.setReceiver(radioGroupReceiver);
@@ -130,6 +131,6 @@ public class ShortcutTonesPreferenceDialog {
 
     private ItemedRadioGroup<Tuning> getRadioGroup() {
         final LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return (ItemedRadioGroup<Tuning>) layoutInflater.inflate(R.layout.radio_group_tuning, null, false);
+        return (ItemedRadioGroup<Tuning>)layoutInflater.inflate(R.layout.radio_group_tuning, null, false);
     }
 }

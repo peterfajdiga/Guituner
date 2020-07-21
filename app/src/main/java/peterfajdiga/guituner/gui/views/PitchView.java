@@ -107,10 +107,12 @@ public class PitchView extends ScrollView {
     }
 
     @Override
-    protected void onScrollChanged (final int l,
-                                    final int t,
-                                    final int oldl,
-                                    final int oldt) {
+    protected void onScrollChanged(
+        final int l,
+        final int t,
+        final int oldl,
+        final int oldt
+    ) {
         if (allowToneSelection) {
             focusOnCenter();
             lastDeltaY = Math.abs(t - oldt);

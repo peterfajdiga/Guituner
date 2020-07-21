@@ -1,7 +1,5 @@
 package peterfajdiga.guituner.app.tuning;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 public class CustomTuning extends Tuning {

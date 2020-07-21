@@ -21,23 +21,23 @@ public class PreferencesTest {
         Tone[] expected, actual;
 
         expected = new Tone[]{
-                Tone.E2,
-                Tone.A2,
-                Tone.D3,
-                Tone.G3,
-                Tone.B3,
-                Tone.E4,
+            Tone.E2,
+            Tone.A2,
+            Tone.D3,
+            Tone.G3,
+            Tone.B3,
+            Tone.E4,
         };
         actual = preferences.getShortcutTones();
         Assert.assertArrayEquals(expected, actual);
 
         sharedPreferencesMock.prefs.put("shortcutTones", "A1# E4 B0 G4 G4#");
         expected = new Tone[]{
-                Tone.A1s,
-                Tone.E4,
-                Tone.B0,
-                Tone.G4,
-                Tone.G4s,
+            Tone.A1s,
+            Tone.E4,
+            Tone.B0,
+            Tone.G4,
+            Tone.G4s,
         };
         actual = preferences.getShortcutTones();
         Assert.assertArrayEquals(expected, actual);

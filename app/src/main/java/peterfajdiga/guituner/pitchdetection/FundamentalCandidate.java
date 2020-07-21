@@ -22,6 +22,7 @@ class FundamentalCandidate {
 
     /**
      * if the given frequency is a harmonic, add it to this fundamental candidate
+     *
      * @param harmonic harmonic to add
      * @return true if harmonic was added
      */

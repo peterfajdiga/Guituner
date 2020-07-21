@@ -15,12 +15,14 @@ public class InputDialog {
     private InputDialog() {}  // make class static
 
     // TODO: build only once
-    public static void show(@NonNull final Context context,
-                     @NonNull final CharSequence title,
-                     @NonNull final CharSequence hint,
-                     @NonNull final CharSequence defaultValue,
-                     @NonNull final OnConfirmListener onConfirmListener,
-                     @Nullable final Validator validator) {
+    public static void show(
+        @NonNull final Context context,
+        @NonNull final CharSequence title,
+        @NonNull final CharSequence hint,
+        @NonNull final CharSequence defaultValue,
+        @NonNull final OnConfirmListener onConfirmListener,
+        @Nullable final Validator validator
+    ) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle(title);
 

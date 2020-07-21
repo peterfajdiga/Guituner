@@ -22,18 +22,14 @@ class CustomTuningDialog {
 
     void showCustomTuningDialog(@NonNull final String customTuning) {
         InputDialog.show(
-                context,
-                customTuningLocalizedString,
-                "G1 D2 A2 E3 B3 F4#",
-                customTuning,
-                new InputDialog.OnConfirmListener() {
-                    @Override
-                    public void onConfirm(final CharSequence input) {
-                        final String inputTuning = input.toString().toUpperCase();
-                        assert TonesString.validateTonesString(inputTuning);
-                        shortcutTonesPreferenceDialog.setCustomTuning(inputTuning);
-                    }
-                }, new TuningValidator()
+            context, customTuningLocalizedString, "G1 D2 A2 E3 B3 F4#", customTuning, new InputDialog.OnConfirmListener() {
+                @Override
+                public void onConfirm(final CharSequence input) {
+                    final String inputTuning = input.toString().toUpperCase();
+                    assert TonesString.validateTonesString(inputTuning);
+                    shortcutTonesPreferenceDialog.setCustomTuning(inputTuning);
+                }
+            }, new TuningValidator()
         );
     }
 }

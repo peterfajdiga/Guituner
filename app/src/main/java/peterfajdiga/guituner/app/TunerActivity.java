@@ -4,20 +4,20 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.parts.ShortcutTonesPreferenceDialog;
 import peterfajdiga.guituner.app.parts.ToneShortcuts;
 import peterfajdiga.guituner.gui.AlphaVisibility;
-import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.RippleVisibility;
+import peterfajdiga.guituner.gui.views.PitchView;
 import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
@@ -56,10 +56,10 @@ public class TunerActivity extends AppCompatActivity {
 
     private void initToneShortcuts() {
         final ToneShortcuts toneShortcuts = new ToneShortcuts(
-                preferences,
-                getLayoutInflater(),
-                (PitchView)findViewById(R.id.pitchview),
-                (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
+            preferences,
+            getLayoutInflater(),
+            (PitchView)findViewById(R.id.pitchview),
+            (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
         );
         toneShortcuts.initialize();
 
@@ -105,8 +105,12 @@ public class TunerActivity extends AppCompatActivity {
             if (permissions[i].equals(Manifest.permission.RECORD_AUDIO)) {
                 final int micGrantResult = grantResults[i];
                 switch (micGrantResult) {
-                    case PackageManager.PERMISSION_GRANTED: initialize(); break;
-                    case PackageManager.PERMISSION_DENIED: finishWithoutMicPermission(); break;
+                    case PackageManager.PERMISSION_GRANTED:
+                        initialize();
+                        break;
+                    case PackageManager.PERMISSION_DENIED:
+                        finishWithoutMicPermission();
+                        break;
                 }
                 return;
             }
@@ -193,9 +197,12 @@ public class TunerActivity extends AppCompatActivity {
 
     private boolean checkMicPermission() {
         switch (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
-            case PackageManager.PERMISSION_GRANTED: return true;
-            case PackageManager.PERMISSION_DENIED: return false;
-            default: throw new RuntimeException("Microphone permission check failed");
+            case PackageManager.PERMISSION_GRANTED:
+                return true;
+            case PackageManager.PERMISSION_DENIED:
+                return false;
+            default:
+                throw new RuntimeException("Microphone permission check failed");
         }
     }
 }

@@ -16,10 +16,11 @@ public class General {
 
     /**
      * find index of greatest element in given array between indices start and end
+     *
      * @param values array in which to search
      * @param start  start index (inclusive)
      * @param end    end index (exclusive)
-     * @return       index of max element
+     * @return index of max element
      */
     public static int max(final double[] values, final int start, final int end) {
         int maxIndex = -1;
@@ -36,6 +37,7 @@ public class General {
 
     /**
      * set values from start to end in given array to 0
+     *
      * @param values array to modify
      * @param start  start index (inclusive)
      * @param end    end index (exclusive
@@ -48,22 +50,23 @@ public class General {
 
     /**
      * set values around index in given array to 0
+     *
      * @param values array to modify
      * @param index  center index
      * @param radius distance from center index
      */
     public static void dropAround(final double[] values, final int index, final int radius) {
         drop(
-                values,
-                getStart(index, radius),
-                getEnd(index, radius, values.length)
+            values,
+            getStart(index, radius),
+            getEnd(index, radius, values.length)
         );
     }
 
     /**
      * @param index  center index
      * @param radius distance from center index
-     * @return       inclusive start index (>= 0)
+     * @return inclusive start index (>= 0)
      */
     public static int getStart(final int index, final int radius) {
         int start = index - radius;
@@ -77,7 +80,7 @@ public class General {
      * @param index  center index
      * @param radius distance from center index
      * @param length limit
-     * @return       exclusive end index (<= length)
+     * @return exclusive end index (<= length)
      */
     public static int getEnd(final int index, final int radius, final int length) {
         int end = index + radius + 1;

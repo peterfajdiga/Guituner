@@ -4,8 +4,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import androidx.annotation.NonNull;
-
 public class Beeper {
     private static final int SAMPLE_RATE = 44100;  // in Hz
     private static final double DURATION = 2.0;  // in seconds
@@ -16,12 +14,12 @@ public class Beeper {
 
     public Beeper() {
         audioTrack = new AudioTrack(
-                AudioManager.STREAM_MUSIC,
-                SAMPLE_RATE,
-                AudioFormat.CHANNEL_OUT_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                BUFFER_SIZE * 2,  // in bytes
-                AudioTrack.MODE_STATIC
+            AudioManager.STREAM_MUSIC,
+            SAMPLE_RATE,
+            AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            BUFFER_SIZE * 2,  // in bytes
+            AudioTrack.MODE_STATIC
         );
     }
 
@@ -49,7 +47,7 @@ public class Beeper {
         final double amplitude = Short.MAX_VALUE;
         final short[] buffer = new short[BUFFER_SIZE];
         for (int i = 0; i < BUFFER_SIZE; i++) {
-            final double sineSample = Math.sin(2.0*Math.PI * i * frequency / SAMPLE_RATE);
+            final double sineSample = Math.sin(2.0 * Math.PI * i * frequency / SAMPLE_RATE);
             double attenuation = 1.0 - (double)i / (double)BUFFER_SIZE;
             attenuation *= attenuation;
             buffer[i] = (short)(sineSample * attenuation * amplitude);

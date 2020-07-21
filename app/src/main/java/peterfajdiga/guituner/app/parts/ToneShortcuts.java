@@ -17,10 +17,10 @@ public class ToneShortcuts {
     private final ToneShortcutsBar toneShortcutsBar;
 
     public ToneShortcuts(
-            @NonNull final Preferences preferences,
-            @NonNull final LayoutInflater layoutInflater,
-            @NonNull final PitchView pitchView,
-            @NonNull final ToneShortcutsBar toneShortcutsBar
+        @NonNull final Preferences preferences,
+        @NonNull final LayoutInflater layoutInflater,
+        @NonNull final PitchView pitchView,
+        @NonNull final ToneShortcutsBar toneShortcutsBar
     ) {
         this.preferences = preferences;
         this.layoutInflater = layoutInflater;

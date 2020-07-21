@@ -72,7 +72,9 @@ class PitchViewDisplay extends View {
     public void setHighestFrequency(final double frequency) {
         int n_detectableTones = 0;
         for (Tone tone : fullToneList) {
-            if (tone.frequency > frequency) break;
+            if (tone.frequency > frequency) {
+                break;
+            }
             n_detectableTones++;
         }
         tones = Arrays.copyOf(fullToneList, n_detectableTones);
@@ -129,24 +131,24 @@ class PitchViewDisplay extends View {
             canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
 
             canvas.drawLine(
-                    0.0f, freqY,
-                    toneLineEndLeftX, freqY,
-                    paint_freq
+                0.0f, freqY,
+                toneLineEndLeftX, freqY,
+                paint_freq
             );
             canvas.drawLine(
-                    toneLineEndLeftX, freqY,
-                    toneLineEndRightX, freqY,
-                    paint_freq_light
+                toneLineEndLeftX, freqY,
+                toneLineEndRightX, freqY,
+                paint_freq_light
             );
             canvas.drawLine(
-                    toneLineEndRightX, freqY,
-                    getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
-                    paint_freq
+                toneLineEndRightX, freqY,
+                getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
+                paint_freq
             );
             canvas.drawLine(
-                    getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
-                    width, freqY,
-                    paint_freq
+                getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
+                width, freqY,
+                paint_freq
             );
 
             canvas.drawPath(getTriangle(toneLineEndLeftX , freqY, true ), paint_freq);
@@ -164,14 +166,14 @@ class PitchViewDisplay extends View {
             canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint);
 
             canvas.drawLine(
-                    toneLineStartLeftX - TONE_LINE_LENGTH, toneY,
-                    toneLineStartLeftX, toneY,
-                    paint
+                toneLineStartLeftX - TONE_LINE_LENGTH, toneY,
+                toneLineStartLeftX, toneY,
+                paint
             );
             canvas.drawLine(
-                    toneLineStartRightX, toneY,
-                    toneLineStartRightX + TONE_LINE_LENGTH, toneY,
-                    paint
+                toneLineStartRightX, toneY,
+                toneLineStartRightX + TONE_LINE_LENGTH, toneY,
+                paint
             );
         }
     }
@@ -202,9 +204,12 @@ class PitchViewDisplay extends View {
         final int textWidth = textBounds.right + textBounds.left;
         switch (paint.getTextAlign()) {
             default:
-            case LEFT: return textX;
-            case CENTER: return textX - textWidth / 2.0f;
-            case RIGHT: return textX - textWidth;
+            case LEFT:
+                return textX;
+            case CENTER:
+                return textX - textWidth / 2.0f;
+            case RIGHT:
+                return textX - textWidth;
         }
     }
 
@@ -212,10 +217,13 @@ class PitchViewDisplay extends View {
     private float getTextRight(final float textX, final Paint paint) {
         final int textWidth = textBounds.right + textBounds.left;
         switch (paint.getTextAlign()) {
-            case LEFT: return textX + textWidth;
-            case CENTER: return textX + textWidth / 2.0f;
+            case LEFT:
+                return textX + textWidth;
+            case CENTER:
+                return textX + textWidth / 2.0f;
             default:
-            case RIGHT: return textX;
+            case RIGHT:
+                return textX;
         }
     }
 
@@ -264,89 +272,89 @@ class PitchViewDisplay extends View {
     }
 
     static final Tone[] fullToneList = {
-            Tone.A0,
-            Tone.A0s,
-            Tone.B0,
-            Tone.C1,
-            Tone.C1s,
-            Tone.D1,
-            Tone.D1s,
-            Tone.E1,
-            Tone.F1,
-            Tone.F1s,
-            Tone.G1,
-            Tone.G1s,
-            Tone.A1,
-            Tone.A1s,
-            Tone.B1,
-            Tone.C2,
-            Tone.C2s,
-            Tone.D2,
-            Tone.D2s,
-            Tone.E2,
-            Tone.F2,
-            Tone.F2s,
-            Tone.G2,
-            Tone.G2s,
-            Tone.A2,
-            Tone.A2s,
-            Tone.B2,
-            Tone.C3,
-            Tone.C3s,
-            Tone.D3,
-            Tone.D3s,
-            Tone.E3,
-            Tone.F3,
-            Tone.F3s,
-            Tone.G3,
-            Tone.G3s,
-            Tone.A3,
-            Tone.A3s,
-            Tone.B3,
-            Tone.C4,
-            Tone.C4s,
-            Tone.D4,
-            Tone.D4s,
-            Tone.E4,
-            Tone.F4,
-            Tone.F4s,
-            Tone.G4,
-            Tone.G4s,
-            Tone.A4,
-            Tone.A4s,
-            Tone.B4,
-            Tone.C5,
-            Tone.C5s,
-            Tone.D5,
-            Tone.D5s,
-            Tone.E5,
-            Tone.F5,
-            Tone.F5s,
-            Tone.G5,
-            Tone.G5s,
-            Tone.A5,
-            Tone.A5s,
-            Tone.B5,
-            Tone.C6,
-            Tone.C6s,
-            Tone.D6,
-            Tone.D6s,
-            Tone.E6,
-            Tone.F6,
-            Tone.F6s,
-            Tone.G6,
-            Tone.G6s,
-            Tone.A6,
-            Tone.A6s,
-            Tone.B6,
-            Tone.C7,
-            Tone.C7s,
-            Tone.D7,
-            Tone.D7s,
-            Tone.E7,
-            Tone.F7,
-            Tone.F7s,
-            Tone.G7,
-            Tone.G7s
+        Tone.A0,
+        Tone.A0s,
+        Tone.B0,
+        Tone.C1,
+        Tone.C1s,
+        Tone.D1,
+        Tone.D1s,
+        Tone.E1,
+        Tone.F1,
+        Tone.F1s,
+        Tone.G1,
+        Tone.G1s,
+        Tone.A1,
+        Tone.A1s,
+        Tone.B1,
+        Tone.C2,
+        Tone.C2s,
+        Tone.D2,
+        Tone.D2s,
+        Tone.E2,
+        Tone.F2,
+        Tone.F2s,
+        Tone.G2,
+        Tone.G2s,
+        Tone.A2,
+        Tone.A2s,
+        Tone.B2,
+        Tone.C3,
+        Tone.C3s,
+        Tone.D3,
+        Tone.D3s,
+        Tone.E3,
+        Tone.F3,
+        Tone.F3s,
+        Tone.G3,
+        Tone.G3s,
+        Tone.A3,
+        Tone.A3s,
+        Tone.B3,
+        Tone.C4,
+        Tone.C4s,
+        Tone.D4,
+        Tone.D4s,
+        Tone.E4,
+        Tone.F4,
+        Tone.F4s,
+        Tone.G4,
+        Tone.G4s,
+        Tone.A4,
+        Tone.A4s,
+        Tone.B4,
+        Tone.C5,
+        Tone.C5s,
+        Tone.D5,
+        Tone.D5s,
+        Tone.E5,
+        Tone.F5,
+        Tone.F5s,
+        Tone.G5,
+        Tone.G5s,
+        Tone.A5,
+        Tone.A5s,
+        Tone.B5,
+        Tone.C6,
+        Tone.C6s,
+        Tone.D6,
+        Tone.D6s,
+        Tone.E6,
+        Tone.F6,
+        Tone.F6s,
+        Tone.G6,
+        Tone.G6s,
+        Tone.A6,
+        Tone.A6s,
+        Tone.B6,
+        Tone.C7,
+        Tone.C7s,
+        Tone.D7,
+        Tone.D7s,
+        Tone.E7,
+        Tone.F7,
+        Tone.F7s,
+        Tone.G7,
+        Tone.G7s
     };
 }

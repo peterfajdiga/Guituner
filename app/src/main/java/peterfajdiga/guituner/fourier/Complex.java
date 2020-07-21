@@ -18,6 +18,7 @@ public class Complex {
         final double imag = this.im + b.im;
         return new Complex(real, imag);
     }
+
     public void plusEquals(final Complex b) {
         re += b.re;
         im += b.im;
@@ -28,6 +29,7 @@ public class Complex {
         final double imag = this.im - b.im;
         return new Complex(real, imag);
     }
+
     public void minusEquals(final Complex b) {
         re -= b.re;
         im -= b.im;
@@ -38,6 +40,7 @@ public class Complex {
         final double imag = this.re * b.im + this.im * b.re;
         return new Complex(real, imag);
     }
+
     public void timesEquals(final Complex b) {
         final double real = this.re * b.re - this.im * b.im;
         final double imag = this.re * b.im + this.im * b.re;
@@ -47,15 +50,15 @@ public class Complex {
 
     public static Complex n_root(final int n) {
         return new Complex(
-                Math.cos(2 * Math.PI / n),
-                Math.sin(2 * Math.PI / n)
+            Math.cos(2 * Math.PI / n),
+            Math.sin(2 * Math.PI / n)
         );
     }
 
     public static Complex n_root_neg(final int n) {
         return new Complex(
-                Math.cos(-2 * Math.PI / n),
-                Math.sin(-2 * Math.PI / n)
+            Math.cos(-2 * Math.PI / n),
+            Math.sin(-2 * Math.PI / n)
         );
     }
 }
