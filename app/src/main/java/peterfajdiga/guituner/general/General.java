@@ -66,7 +66,7 @@ public class General {
     /**
      * @param index  center index
      * @param radius distance from center index
-     * @return inclusive start index (>= 0)
+     * @return inclusive start index
      */
     public static int getStart(final int index, final int radius) {
         int start = index - radius;
@@ -80,7 +80,7 @@ public class General {
      * @param index  center index
      * @param radius distance from center index
      * @param length limit
-     * @return exclusive end index (<= length)
+     * @return exclusive end index
      */
     public static int getEnd(final int index, final int radius, final int length) {
         int end = index + radius + 1;
