@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.Nullable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -11,8 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import peterfajdiga.guituner.general.Tone;
-
-import static org.junit.Assert.*;
 
 public class PreferencesTest {
     @Test
@@ -30,7 +29,7 @@ public class PreferencesTest {
                 Tone.E4,
         };
         actual = preferences.getShortcutTones();
-        assertArrayEquals(expected, actual);
+        Assert.assertArrayEquals(expected, actual);
 
         sharedPreferencesMock.prefs.put("shortcutTones", "A1# E4 B0 G4 G4#");
         expected = new Tone[]{
@@ -41,7 +40,7 @@ public class PreferencesTest {
                 Tone.G4s,
         };
         actual = preferences.getShortcutTones();
-        assertArrayEquals(expected, actual);
+        Assert.assertArrayEquals(expected, actual);
     }
 
     private static class SharedPreferencesMock implements SharedPreferences {
