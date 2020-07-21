@@ -9,22 +9,8 @@ public class Complex {
         im = imag;
     }
 
-    public Complex(final Complex original) {
-        this.re = original.re;
-        this.im = original.im;
-    }
-
     public double abs() {
         return Math.sqrt(re*re + im*im);
-    }
-
-    public String toString() {
-        final double tRe = Math.round(re * 100000) / 100000;
-        final double tIm = Math.round(im * 100000) / 100000;
-        if (tIm == 0) return tRe + "";
-        if (tRe == 0) return tIm + "i";
-        if (tIm <  0) return tRe + "-" + (-tIm) + "i";
-        return tRe + "+" + tIm + "i";
     }
 
     public Complex plus(final Complex b) {
