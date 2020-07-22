@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.parts.ShortcutTonesPreferenceDialog;
 import peterfajdiga.guituner.app.parts.ToneShortcuts;
+import peterfajdiga.guituner.general.Tone;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.RippleVisibility;
 import peterfajdiga.guituner.gui.views.PitchView;
@@ -46,7 +47,7 @@ public class TunerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tuner);
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setHighestFrequency(sampleRate / 2.0);
+        pitchView.setTones(Tone.getTonesBelowFrequency(sampleRate / 2.0));
 
         setupSelectionButtons();
         initToneShortcuts();

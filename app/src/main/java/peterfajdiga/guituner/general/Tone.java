@@ -2,6 +2,8 @@ package peterfajdiga.guituner.general;
 
 import androidx.annotation.NonNull;
 
+import java.util.Arrays;
+
 public class Tone {
     public final double frequency;
     public final String name;
@@ -238,4 +240,104 @@ public class Tone {
         }
         throw new NumberFormatException();
     }
+
+    @NonNull
+    public static Tone[] getTonesBelowFrequency(final double highestFrequency) {
+        // TODO: optimize
+        int detectableToneCount = 0;
+        for (Tone tone : fullToneList) {
+            if (tone.frequency > highestFrequency) {
+                break;
+            }
+            detectableToneCount++;
+        }
+        return Arrays.copyOf(fullToneList, detectableToneCount);
+    }
+
+    private static final Tone[] fullToneList = {
+        Tone.A0,
+        Tone.A0s,
+        Tone.B0,
+        Tone.C1,
+        Tone.C1s,
+        Tone.D1,
+        Tone.D1s,
+        Tone.E1,
+        Tone.F1,
+        Tone.F1s,
+        Tone.G1,
+        Tone.G1s,
+        Tone.A1,
+        Tone.A1s,
+        Tone.B1,
+        Tone.C2,
+        Tone.C2s,
+        Tone.D2,
+        Tone.D2s,
+        Tone.E2,
+        Tone.F2,
+        Tone.F2s,
+        Tone.G2,
+        Tone.G2s,
+        Tone.A2,
+        Tone.A2s,
+        Tone.B2,
+        Tone.C3,
+        Tone.C3s,
+        Tone.D3,
+        Tone.D3s,
+        Tone.E3,
+        Tone.F3,
+        Tone.F3s,
+        Tone.G3,
+        Tone.G3s,
+        Tone.A3,
+        Tone.A3s,
+        Tone.B3,
+        Tone.C4,
+        Tone.C4s,
+        Tone.D4,
+        Tone.D4s,
+        Tone.E4,
+        Tone.F4,
+        Tone.F4s,
+        Tone.G4,
+        Tone.G4s,
+        Tone.A4,
+        Tone.A4s,
+        Tone.B4,
+        Tone.C5,
+        Tone.C5s,
+        Tone.D5,
+        Tone.D5s,
+        Tone.E5,
+        Tone.F5,
+        Tone.F5s,
+        Tone.G5,
+        Tone.G5s,
+        Tone.A5,
+        Tone.A5s,
+        Tone.B5,
+        Tone.C6,
+        Tone.C6s,
+        Tone.D6,
+        Tone.D6s,
+        Tone.E6,
+        Tone.F6,
+        Tone.F6s,
+        Tone.G6,
+        Tone.G6s,
+        Tone.A6,
+        Tone.A6s,
+        Tone.B6,
+        Tone.C7,
+        Tone.C7s,
+        Tone.D7,
+        Tone.D7s,
+        Tone.E7,
+        Tone.F7,
+        Tone.F7s,
+        Tone.G7,
+        Tone.G7s,
+    };
 }

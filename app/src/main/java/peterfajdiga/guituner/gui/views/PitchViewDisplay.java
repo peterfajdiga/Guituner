@@ -70,21 +70,8 @@ class PitchViewDisplay extends View {
         invalidate();
     }
 
-    void setTones(@NonNull final Tone[] tones) throws HighlightedToneRemovedException {
+    void setTones(@NonNull final Tone[] tones) {
         this.tones = tones;
-
-        if (highlightedTone == null) {
-            return;
-        }
-
-        if (tones.length == 0) {
-            throw new HighlightedToneRemovedException();
-        }
-
-        final double highestFrequency = tones[tones.length - 1].frequency;
-        if (highlightedTone.frequency > highestFrequency) {
-            throw new HighlightedToneRemovedException();
-        }
     }
 
     public Tone getToneFromY(final float y) {
@@ -274,6 +261,4 @@ class PitchViewDisplay extends View {
         }
         return nearestTone;
     }
-
-    static class HighlightedToneRemovedException extends Exception {}
 }
