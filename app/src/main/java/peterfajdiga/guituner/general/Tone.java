@@ -122,12 +122,6 @@ public enum Tone {
         this.name = name;
     }
 
-    @Override
-    @NonNull
-    public String toString() {
-        return this.name;
-    }
-
     public static Tone fromString(@NonNull final String toneString) throws NumberFormatException {
         for (final Tone tone : Tone.values()) {
             if (tone.name.equals(toneString)) {
