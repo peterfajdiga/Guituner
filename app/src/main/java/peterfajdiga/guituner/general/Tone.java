@@ -122,13 +122,14 @@ public enum Tone {
         this.name = name;
     }
 
-    public static Tone fromString(@NonNull final String toneString) throws NumberFormatException {
+    @NonNull
+    public static Tone fromString(@NonNull final String toneString) throws ToneFormatException {
         for (final Tone tone : Tone.values()) {
             if (tone.name.equals(toneString)) {
                 return tone;
             }
         }
-        throw new NumberFormatException();
+        throw new ToneFormatException();
     }
 
     @NonNull
@@ -142,4 +143,6 @@ public enum Tone {
         }
         return Arrays.copyOf(Tone.values(), detectableToneCount);
     }
+
+    public static class ToneFormatException extends IllegalArgumentException {}
 }

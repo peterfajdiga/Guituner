@@ -30,7 +30,7 @@ public class Preferences {
         return TonesString.parseTonesString(getShortcutTonesString());
     }
 
-    public void saveShortcutTones(@NonNull final String shortcutTonesString) throws NumberFormatException {
+    public void saveShortcutTones(@NonNull final String shortcutTonesString) throws Tone.ToneFormatException {
         saveTonesString(shortcutTonesKey, shortcutTonesString);
     }
 
@@ -44,7 +44,7 @@ public class Preferences {
         return TonesString.parseTonesString(getShortcutTonesCustomString());
     }
 
-    public void saveShortcutTonesCustom(@NonNull final String shortcutTonesCustomString) throws NumberFormatException {
+    public void saveShortcutTonesCustom(@NonNull final String shortcutTonesCustomString) throws Tone.ToneFormatException {
         saveTonesString(shortcutTonesCustomKey, shortcutTonesCustomString);
     }
 
@@ -55,9 +55,9 @@ public class Preferences {
         return value;
     }
 
-    private void saveTonesString(@NonNull final String key, @NonNull final String tonesString) throws NumberFormatException {
+    private void saveTonesString(@NonNull final String key, @NonNull final String tonesString) throws Tone.ToneFormatException {
         if (!TonesString.validateTonesString(tonesString)) {
-            throw new NumberFormatException();
+            throw new Tone.ToneFormatException();
         }
         final SharedPreferences.Editor prefsEditor = prefs.edit();
         prefsEditor.putString(key, tonesString);

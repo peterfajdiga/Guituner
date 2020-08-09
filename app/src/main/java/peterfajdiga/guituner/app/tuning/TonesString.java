@@ -8,7 +8,7 @@ public class TonesString {
     private TonesString() {}  // make class static
 
     @NonNull
-    public static Tone[] parseTonesString(@NonNull final String tonesString) throws NumberFormatException {
+    public static Tone[] parseTonesString(@NonNull final String tonesString) throws Tone.ToneFormatException {
         final String[] toneStrings = tonesString.split(" ");
         final int n = toneStrings.length;
         final Tone[] tones = new Tone[n];
@@ -22,7 +22,7 @@ public class TonesString {
         try {
             final Tone[] tones = parseTonesString(tonesString);
             return tones.length > 0;
-        } catch (final NumberFormatException e) {
+        } catch (final Tone.ToneFormatException e) {
             return false;
         }
     }
