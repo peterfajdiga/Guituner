@@ -133,7 +133,7 @@ public enum Tone {
     }
 
     @NonNull
-    public static Tone[] getTonesBelowFrequency(final double highestFrequency) {
+    public static Tone[] getTonesUpTo(final double highestFrequency) {
         int detectableToneCount = 0;
         for (final Tone tone : Tone.values()) {
             if (tone.frequency > highestFrequency) {

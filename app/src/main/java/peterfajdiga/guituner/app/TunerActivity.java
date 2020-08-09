@@ -47,7 +47,7 @@ public class TunerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tuner);
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setTones(Tone.getTonesBelowFrequency(sampleRate / 2.0));
+        pitchView.setTones(Tone.getTonesUpTo(sampleRate / 2.0));
 
         setupSelectionButtons();
         initToneShortcuts();
