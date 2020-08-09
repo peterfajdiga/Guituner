@@ -124,12 +124,12 @@ public enum Tone {
 
     @NonNull
     public static Tone fromString(@NonNull final String toneString) throws ToneFormatException {
-        for (final Tone tone : Tone.values()) {
-            if (tone.name.equals(toneString)) {
-                return tone;
-            }
+        final String enumName = toneString.replace('#', 's');
+        try {
+            return Tone.valueOf(enumName);
+        } catch (final IllegalArgumentException e) {
+            throw new ToneFormatException();
         }
-        throw new ToneFormatException();
     }
 
     @NonNull
