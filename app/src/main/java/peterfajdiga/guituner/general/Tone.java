@@ -128,7 +128,7 @@ public enum Tone {
         try {
             return Tone.valueOf(enumName);
         } catch (final IllegalArgumentException e) {
-            throw new ToneFormatException();
+            throw new ToneFormatException(toneString);
         }
     }
 
@@ -144,5 +144,9 @@ public enum Tone {
         return Arrays.copyOf(Tone.values(), detectableToneCount);
     }
 
-    public static class ToneFormatException extends IllegalArgumentException {}
+    public static class ToneFormatException extends IllegalArgumentException {
+        public ToneFormatException(@NonNull final String inputToneString) {
+            super(inputToneString);
+        }
+    }
 }

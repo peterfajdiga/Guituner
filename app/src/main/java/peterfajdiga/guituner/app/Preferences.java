@@ -57,7 +57,7 @@ public class Preferences {
 
     private void saveTonesString(@NonNull final String key, @NonNull final String tonesString) throws Tone.ToneFormatException {
         if (!TonesString.validateTonesString(tonesString)) {
-            throw new Tone.ToneFormatException();
+            throw new Tone.ToneFormatException(tonesString);
         }
         final SharedPreferences.Editor prefsEditor = prefs.edit();
         prefsEditor.putString(key, tonesString);
