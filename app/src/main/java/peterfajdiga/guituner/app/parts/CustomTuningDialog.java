@@ -5,18 +5,18 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.tuning.TonesString;
+import peterfajdiga.guituner.app.tuning.PitchesString;
 import peterfajdiga.guituner.app.tuning.TuningValidator;
 import peterfajdiga.guituner.gui.InputDialog;
 
 class CustomTuningDialog {
     private final Context context;
-    private final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog;
+    private final ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog;
     private final String customTuningLocalizedString;
 
-    CustomTuningDialog(@NonNull final Context context, @NonNull ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog) {
+    CustomTuningDialog(@NonNull final Context context, @NonNull ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog) {
         this.context = context;
-        this.shortcutTonesPreferenceDialog = shortcutTonesPreferenceDialog;
+        this.shortcutPitchesPreferenceDialog = shortcutPitchesPreferenceDialog;
         customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
     }
 
@@ -26,8 +26,8 @@ class CustomTuningDialog {
                 @Override
                 public void onConfirm(final CharSequence input) {
                     final String inputTuning = input.toString().toUpperCase();
-                    assert TonesString.validateTonesString(inputTuning);
-                    shortcutTonesPreferenceDialog.setCustomTuning(inputTuning);
+                    assert PitchesString.validatePitchesString(inputTuning);
+                    shortcutPitchesPreferenceDialog.setCustomTuning(inputTuning);
                 }
             }, new TuningValidator()
         );

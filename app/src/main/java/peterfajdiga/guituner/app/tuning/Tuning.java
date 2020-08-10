@@ -13,19 +13,19 @@ import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
 public class Tuning implements ItemedRadioGroup.Item {
     public final String name;
-    public final String tonesString;
+    public final String pitchesString;
 
     private final Style style;
 
-    public Tuning(@NonNull final String name, @NonNull final String tonesString, @NonNull final Style style) {
+    public Tuning(@NonNull final String name, @NonNull final String pitchesString, @NonNull final Style style) {
         this.name = name;
-        this.tonesString = tonesString;
+        this.pitchesString = pitchesString;
         this.style = style;
     }
 
     @Override
     public CharSequence getButtonText() {
-        final SpannableString str = new SpannableString(name + "\n" + tonesString);
+        final SpannableString str = new SpannableString(name + "\n" + pitchesString);
         str.setSpan(
             new ForegroundColorSpan(style.secondaryColor),
             name.length() + 1,

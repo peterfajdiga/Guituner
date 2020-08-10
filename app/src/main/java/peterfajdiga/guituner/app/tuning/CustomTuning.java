@@ -7,7 +7,7 @@ public class CustomTuning extends Tuning {
         this(name, "", style);
     }
 
-    public CustomTuning(@NonNull final String name, @NonNull final String tonesString, @NonNull final Style style) {
-        super(name, tonesString, style);
+    public CustomTuning(@NonNull final String name, @NonNull final String pitchesString, @NonNull final Style style) {
+        super(name, pitchesString, style);
     }
 }

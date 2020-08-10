@@ -10,25 +10,25 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.general.Pitch;
 
 // TODO: consider using ListView or RecyclerView instead
-public class ToneShortcutsBar extends LinearLayout {
+public class PitchShortcutsBar extends LinearLayout {
     private Receiver receiver;
 
-    public ToneShortcutsBar(final Context context) {
+    public PitchShortcutsBar(final Context context) {
         super(context);
     }
 
-    public ToneShortcutsBar(final Context context, final @Nullable AttributeSet attrs) {
+    public PitchShortcutsBar(final Context context, final @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ToneShortcutsBar(final Context context, final @Nullable AttributeSet attrs, final int defStyleAttr) {
+    public PitchShortcutsBar(final Context context, final @Nullable AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public ToneShortcutsBar(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
+    public PitchShortcutsBar(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -36,12 +36,12 @@ public class ToneShortcutsBar extends LinearLayout {
         this.receiver = receiver;
     }
 
-    public void setupTones(@NonNull final Tone[] tones, @NonNull final LayoutInflater layoutInflater, final int layoutResourceId) {
-        final int n = tones.length;
+    public void setupPitches(@NonNull final Pitch[] pitches, @NonNull final LayoutInflater layoutInflater, final int layoutResourceId) {
+        final int n = pitches.length;
         ensureCorrectChildCount(layoutInflater, layoutResourceId, n);
         for (int i = 0; i < n; i++) {
             final Button button = (Button)getChildAt(i);
-            setupToneShortcutButton(button, tones[i]);
+            setupPitchShortcutButton(button, pitches[i]);
         }
     }
 
@@ -56,13 +56,13 @@ public class ToneShortcutsBar extends LinearLayout {
         }
     }
 
-    private void setupToneShortcutButton(@NonNull final Button button, @NonNull final Tone tone) {
-        button.setText(tone.toString());
+    private void setupPitchShortcutButton(@NonNull final Button button, @NonNull final Pitch pitch) {
+        button.setText(pitch.toString());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 if (receiver != null) {
-                    receiver.OnToneClick(tone);
+                    receiver.OnPitchClick(pitch);
                 }
             }
         });
@@ -72,7 +72,7 @@ public class ToneShortcutsBar extends LinearLayout {
                 if (receiver == null) {
                     return false;
                 }
-                return receiver.OnToneLongClick(tone);
+                return receiver.OnPitchLongClick(pitch);
             }
         });
     }
@@ -86,7 +86,7 @@ public class ToneShortcutsBar extends LinearLayout {
     }
 
     public interface Receiver {
-        void OnToneClick(Tone tone);
-        boolean OnToneLongClick(Tone tone);
+        void OnPitchClick(Pitch pitch);
+        boolean OnPitchLongClick(Pitch pitch);
     }
 }

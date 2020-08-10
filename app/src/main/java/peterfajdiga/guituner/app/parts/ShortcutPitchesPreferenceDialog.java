@@ -14,26 +14,26 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.Preferences;
 import peterfajdiga.guituner.app.tuning.CustomTuning;
-import peterfajdiga.guituner.app.tuning.TonesString;
+import peterfajdiga.guituner.app.tuning.PitchesString;
 import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
-public class ShortcutTonesPreferenceDialog {
+public class ShortcutPitchesPreferenceDialog {
     private final Context context;
     private final Preferences preferences;
-    private final ToneShortcuts toneShortcuts;
+    private final PitchShortcuts pitchShortcuts;
     private final CustomTuningDialog customTuningDialog;
 
     private Dialog dialog = null;
 
-    public ShortcutTonesPreferenceDialog(
+    public ShortcutPitchesPreferenceDialog(
         @NonNull final Context context,
         @NonNull final Preferences preferences,
-        @NonNull final ToneShortcuts toneShortcuts
+        @NonNull final PitchShortcuts pitchShortcuts
     ) {
         this.context = context;
         this.preferences = preferences;
-        this.toneShortcuts = toneShortcuts;
+        this.pitchShortcuts = pitchShortcuts;
         this.customTuningDialog = new CustomTuningDialog(context, this);
     }
 
@@ -44,26 +44,26 @@ public class ShortcutTonesPreferenceDialog {
         dialog.show();
     }
 
-    void setShortcutTones(@NonNull final String shortcutTonesString) {
-        preferences.saveShortcutTones(shortcutTonesString);
-        toneShortcuts.updateToneShortcuts();
+    void setShortcutPitches(@NonNull final String shortcutPitchesString) {
+        preferences.saveShortcutPitches(shortcutPitchesString);
+        pitchShortcuts.updatePitchShortcuts();
     }
 
     void setCustomTuning(@NonNull final String customTuning) {
-        if (!TonesString.validateTonesString(customTuning)) {
+        if (!PitchesString.validatePitchesString(customTuning)) {
             return;
         }
         if (isCustomTuningSelected()) {
-            setShortcutTones(customTuning);
+            setShortcutPitches(customTuning);
         }
-        preferences.saveShortcutTonesCustom(customTuning);
+        preferences.saveShortcutPitchesCustom(customTuning);
         updateDialog();
     }
 
     private boolean isCustomTuningSelected() {
-        final String selectedTonesString = preferences.getShortcutTonesString();
-        final String customTuningString = preferences.getShortcutTonesCustomString();
-        return selectedTonesString.equals(customTuningString);
+        final String selectedPitchesString = preferences.getShortcutPitchesString();
+        final String customTuningString = preferences.getShortcutPitchesCustomString();
+        return selectedPitchesString.equals(customTuningString);
     }
 
     private void updateDialog() {
@@ -80,13 +80,13 @@ public class ShortcutTonesPreferenceDialog {
     }
 
     private View createRadioGroup() {
-        final String selectedTonesString = preferences.getShortcutTonesString();
-        final String customTuningString = preferences.getShortcutTonesCustomString();
+        final String selectedPitchesString = preferences.getShortcutPitchesString();
+        final String customTuningString = preferences.getShortcutPitchesCustomString();
 
         final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver = new ItemedRadioGroup.Receiver<Tuning>() {
             @Override
             public void onCheckedChanged(final Tuning item) {
-                setShortcutTones(item.tonesString);
+                setShortcutPitches(item.pitchesString);
             }
 
             @Override
@@ -106,7 +106,7 @@ public class ShortcutTonesPreferenceDialog {
             container.addItem(
                 tuning,
                 R.layout.radio_button_tuning,
-                tuning.tonesString.equals(selectedTonesString),
+                tuning.pitchesString.equals(selectedPitchesString),
                 false
             );
         }
@@ -115,7 +115,7 @@ public class ShortcutTonesPreferenceDialog {
         container.addItem(
             new CustomTuning(customTuningLocalizedString, customTuningString, radioButtonStyle),
             R.layout.radio_button_tuning,
-            customTuningString.equals(selectedTonesString),
+            customTuningString.equals(selectedPitchesString),
             true
         );
 

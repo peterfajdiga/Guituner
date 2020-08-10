@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <peterfajdiga.guituner.gui.views.ToneShortcutsBar
+        <peterfajdiga.guituner.gui.views.PitchShortcutsBar
             android:id="@+id/shortcutcontainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -4,15 +4,15 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import peterfajdiga.guituner.app.tuning.TonesString;
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.app.tuning.PitchesString;
+import peterfajdiga.guituner.general.Pitch;
 
 public class Preferences {
-    private static final String shortcutTonesKey = "shortcutTones";
-    private static final String shortcutTonesDefault = "E2 A2 D3 G3 B3 E4";
+    private static final String shortcutPitchesKey = "shortcutPitches";
+    private static final String shortcutPitchesDefault = "E2 A2 D3 G3 B3 E4";
 
-    private static final String shortcutTonesCustomKey = "shortcutTonesCustom";
-    private static final String shortcutTonesCustomDefault = "G1 D2 A2 E3 B3 F4#";
+    private static final String shortcutPitchesCustomKey = "shortcutPitchesCustom";
+    private static final String shortcutPitchesCustomDefault = "G1 D2 A2 E3 B3 F4#";
 
     private final SharedPreferences prefs;
 
@@ -21,31 +21,31 @@ public class Preferences {
     }
 
     @NonNull
-    public String getShortcutTonesString() {
-        return getStringNonNull(shortcutTonesKey, shortcutTonesDefault);
+    public String getShortcutPitchesString() {
+        return getStringNonNull(shortcutPitchesKey, shortcutPitchesDefault);
     }
 
     @NonNull
-    public Tone[] getShortcutTones() {
-        return TonesString.parseTonesString(getShortcutTonesString());
+    public Pitch[] getShortcutPitches() {
+        return PitchesString.parsePitchesString(getShortcutPitchesString());
     }
 
-    public void saveShortcutTones(@NonNull final String shortcutTonesString) throws Tone.ToneFormatException {
-        saveTonesString(shortcutTonesKey, shortcutTonesString);
-    }
-
-    @NonNull
-    public String getShortcutTonesCustomString() {
-        return getStringNonNull(shortcutTonesCustomKey, shortcutTonesCustomDefault);
+    public void saveShortcutPitches(@NonNull final String shortcutPitchesString) throws Pitch.PitchFormatException {
+        savePitchesString(shortcutPitchesKey, shortcutPitchesString);
     }
 
     @NonNull
-    public Tone[] getShortcutTonesCustom() {
-        return TonesString.parseTonesString(getShortcutTonesCustomString());
+    public String getShortcutPitchesCustomString() {
+        return getStringNonNull(shortcutPitchesCustomKey, shortcutPitchesCustomDefault);
     }
 
-    public void saveShortcutTonesCustom(@NonNull final String shortcutTonesCustomString) throws Tone.ToneFormatException {
-        saveTonesString(shortcutTonesCustomKey, shortcutTonesCustomString);
+    @NonNull
+    public Pitch[] getShortcutPitchesCustom() {
+        return PitchesString.parsePitchesString(getShortcutPitchesCustomString());
+    }
+
+    public void saveShortcutPitchesCustom(@NonNull final String shortcutPitchesCustomString) throws Pitch.PitchFormatException {
+        savePitchesString(shortcutPitchesCustomKey, shortcutPitchesCustomString);
     }
 
     @NonNull
@@ -55,12 +55,12 @@ public class Preferences {
         return value;
     }
 
-    private void saveTonesString(@NonNull final String key, @NonNull final String tonesString) throws Tone.ToneFormatException {
-        if (!TonesString.validateTonesString(tonesString)) {
-            throw new Tone.ToneFormatException(tonesString);
+    private void savePitchesString(@NonNull final String key, @NonNull final String pitchesString) throws Pitch.PitchFormatException {
+        if (!PitchesString.validatePitchesString(pitchesString)) {
+            throw new Pitch.PitchFormatException(pitchesString);
         }
         final SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString(key, tonesString);
+        prefsEditor.putString(key, pitchesString);
         prefsEditor.apply();
     }
 }

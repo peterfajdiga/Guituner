@@ -8,17 +8,15 @@ import android.widget.ScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Arrays;
-
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.general.Pitch;
 
 public class PitchView extends ScrollView {
     private static final int SNAP_DELTA_Y = 10;
-    private static final float TONE_PRESS_MOVE_TOLERANCE = 10;
+    private static final float PITCH_PRESS_MOVE_TOLERANCE = 10;
 
     private PitchView.OnFocusChangedListener onFocusChangedListener;
     private PitchViewDisplay display;
-    private boolean allowToneSelection = true;
+    private boolean allowPitchSelection = true;
     private boolean fingerOnScreen = false;
     private int lastDeltaY;
     private float lastTouchX, lastTouchY;
@@ -58,24 +56,24 @@ public class PitchView extends ScrollView {
         }
     }
 
-    public void setTones(@NonNull final Tone[] tones) {
-        display.setTones(tones);
+    public void setPitches(@NonNull final Pitch[] pitches) {
+        display.setPitches(pitches);
     }
 
-    public void focusOn(final Tone tone) {
-        setFocus(tone);
+    public void focusOn(final Pitch pitch) {
+        setFocus(pitch);
         centerOnFocus();
     }
 
     private void centerOnFrequency(final double frequency) {
         final int screenHeightHalf = getHeight() / 2;
         final int y = Math.round(display.getFrequencyY(frequency) - screenHeightHalf);
-        allowToneSelection = false;
+        allowPitchSelection = false;
         smoothScrollTo(0, y);
     }
 
     private void centerOnFocus() {
-        centerOnFrequency(getFocusedTone().frequency);
+        centerOnFrequency(getFocusedPitch().frequency);
     }
 
     @Override
@@ -84,7 +82,7 @@ public class PitchView extends ScrollView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 fingerOnScreen = true;
-                allowToneSelection = true;
+                allowPitchSelection = true;
                 lastDeltaY = 0;
                 lastTouchX = event.getX();
                 lastTouchY = event.getY();
@@ -92,9 +90,9 @@ public class PitchView extends ScrollView {
             }
             case MotionEvent.ACTION_UP: {
                 fingerOnScreen = false;
-                if (Math.abs(event.getX() - lastTouchX) + Math.abs(event.getY() - lastTouchY) < TONE_PRESS_MOVE_TOLERANCE) {
+                if (Math.abs(event.getX() - lastTouchX) + Math.abs(event.getY() - lastTouchY) < PITCH_PRESS_MOVE_TOLERANCE) {
                     final float y = event.getY() + getScrollY();
-                    setFocusedToneFromClick(display.getToneFromY(y), event.getX(), event.getY());
+                    setFocusedPitchFromClick(display.getPitchFromY(y), event.getX(), event.getY());
                     centerOnFocus();
                 } else if (isInFocusedMode() && lastDeltaY < SNAP_DELTA_Y) {
                     centerOnFocus();
@@ -112,7 +110,7 @@ public class PitchView extends ScrollView {
         final int oldl,
         final int oldt
     ) {
-        if (allowToneSelection) {
+        if (allowPitchSelection) {
             focusOnCenter();
             lastDeltaY = Math.abs(t - oldt);
             if (lastDeltaY < SNAP_DELTA_Y && !fingerOnScreen) {
@@ -121,39 +119,39 @@ public class PitchView extends ScrollView {
         }
     }
 
-    private void setFocus(final Tone tone) {
-        display.selectTone(tone);
+    private void setFocus(final Pitch pitch) {
+        display.selectPitch(pitch);
         if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(tone.frequency);
+            onFocusChangedListener.onFocusChanged(pitch.frequency);
         }
     }
 
-    private void setFocusedToneFromClick(@NonNull final Tone tone, final float clickX, final float clickY) {
-        display.selectTone(tone);
+    private void setFocusedPitchFromClick(@NonNull final Pitch pitch, final float clickX, final float clickY) {
+        display.selectPitch(pitch);
         if (onFocusChangedListener != null) {
-            onFocusChangedListener.onFocusChanged(tone.frequency, clickX, clickY);
+            onFocusChangedListener.onFocusChanged(pitch.frequency, clickX, clickY);
         }
     }
 
     private void focusOnCenter() {
         final int y = getScrollY() + getHeight() / 2;
-        setFocus(display.getToneFromY(y));
+        setFocus(display.getPitchFromY(y));
     }
 
     public void removeFocus() {
-        display.unselectTone();
+        display.unselectPitch();
         if (onFocusChangedListener != null) {
             onFocusChangedListener.onFocusRemoved();
         }
     }
 
     private boolean isInFocusedMode() {
-        return getFocusedTone() != null;
+        return getFocusedPitch() != null;
     }
 
     @Nullable
-    private Tone getFocusedTone() {
-        return display.getHighlightedTone();
+    private Pitch getFocusedPitch() {
+        return display.getHighlightedPitch();
     }
 
     public void setOnFocusChangedListener(final OnFocusChangedListener listener) {

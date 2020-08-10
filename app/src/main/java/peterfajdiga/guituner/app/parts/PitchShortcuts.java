@@ -6,44 +6,44 @@ import androidx.annotation.NonNull;
 
 import peterfajdiga.guituner.R;
 import peterfajdiga.guituner.app.Preferences;
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.general.Pitch;
 import peterfajdiga.guituner.gui.views.PitchView;
-import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
+import peterfajdiga.guituner.gui.views.PitchShortcutsBar;
 
-public class ToneShortcuts {
+public class PitchShortcuts {
     private final Preferences preferences;
     private final LayoutInflater layoutInflater;
     private final PitchView pitchView;
-    private final ToneShortcutsBar toneShortcutsBar;
+    private final PitchShortcutsBar pitchShortcutsBar;
 
-    public ToneShortcuts(
+    public PitchShortcuts(
         @NonNull final Preferences preferences,
         @NonNull final LayoutInflater layoutInflater,
         @NonNull final PitchView pitchView,
-        @NonNull final ToneShortcutsBar toneShortcutsBar
+        @NonNull final PitchShortcutsBar pitchShortcutsBar
     ) {
         this.preferences = preferences;
         this.layoutInflater = layoutInflater;
         this.pitchView = pitchView;
-        this.toneShortcutsBar = toneShortcutsBar;
+        this.pitchShortcutsBar = pitchShortcutsBar;
     }
 
     public void initialize() {
-        updateToneShortcuts();
-        toneShortcutsBar.setReceiver(new ToneShortcutsBar.Receiver() {
+        updatePitchShortcuts();
+        pitchShortcutsBar.setReceiver(new PitchShortcutsBar.Receiver() {
             @Override
-            public void OnToneClick(final Tone tone) {
-                pitchView.focusOn(tone);
+            public void OnPitchClick(final Pitch pitch) {
+                pitchView.focusOn(pitch);
             }
 
             @Override
-            public boolean OnToneLongClick(final Tone tone) {
+            public boolean OnPitchLongClick(final Pitch pitch) {
                 return false;
             }
         });
     }
 
-    void updateToneShortcuts() {
-        toneShortcutsBar.setupTones(preferences.getShortcutTones(), layoutInflater, R.layout.button_tone_shortcut);
+    void updatePitchShortcuts() {
+        pitchShortcutsBar.setupPitches(preferences.getShortcutPitches(), layoutInflater, R.layout.button_pitch_shortcut);
     }
 }

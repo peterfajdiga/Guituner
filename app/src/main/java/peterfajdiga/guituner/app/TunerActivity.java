@@ -13,13 +13,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.parts.ShortcutTonesPreferenceDialog;
-import peterfajdiga.guituner.app.parts.ToneShortcuts;
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.app.parts.ShortcutPitchesPreferenceDialog;
+import peterfajdiga.guituner.app.parts.PitchShortcuts;
+import peterfajdiga.guituner.general.Pitch;
 import peterfajdiga.guituner.gui.AlphaVisibility;
 import peterfajdiga.guituner.gui.RippleVisibility;
 import peterfajdiga.guituner.gui.views.PitchView;
-import peterfajdiga.guituner.gui.views.ToneShortcutsBar;
+import peterfajdiga.guituner.gui.views.PitchShortcutsBar;
 import peterfajdiga.guituner.pitchdetection.PitchDetector;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorHarmony;
 import peterfajdiga.guituner.pitchdetection.PitchDetectorThread;
@@ -47,29 +47,31 @@ public class TunerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tuner);
 
         final PitchView pitchView = findViewById(R.id.pitchview);
-        pitchView.setTones(Tone.getTonesUpTo(sampleRate / 2.0));
+        pitchView.setPitches(Pitch.getPitchesUpTo(sampleRate / 2.0));
 
         setupSelectionButtons();
-        initToneShortcuts();
+        initPitchShortcuts();
 
         initialized = true;
     }
 
-    private void initToneShortcuts() {
-        final ToneShortcuts toneShortcuts = new ToneShortcuts(
+    private void initPitchShortcuts() {
+        final PitchShortcuts pitchShortcuts = new PitchShortcuts(
             preferences,
             getLayoutInflater(),
             (PitchView)findViewById(R.id.pitchview),
-            (ToneShortcutsBar)findViewById(R.id.shortcutcontainer)
+            (PitchShortcutsBar)findViewById(R.id.shortcutcontainer)
         );
-        toneShortcuts.initialize();
+        pitchShortcuts.initialize();
 
-        final ShortcutTonesPreferenceDialog shortcutTonesPreferenceDialog = new ShortcutTonesPreferenceDialog(this, preferences, toneShortcuts);
+        final ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog = new ShortcutPitchesPreferenceDialog(this, preferences,
+            pitchShortcuts
+        );
         final View tuningSetupButton = findViewById(R.id.tuning_setup_button);
         tuningSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                shortcutTonesPreferenceDialog.show();
+                shortcutPitchesPreferenceDialog.show();
             }
         });
     }
@@ -190,8 +192,8 @@ public class TunerActivity extends AppCompatActivity {
                 AlphaVisibility.hideView(findViewById(R.id.selectionbg));
                 pitchDetector.removeFocusedFrequency();
 
-                final ToneShortcutsBar toneShortcutsBar = findViewById(R.id.shortcutcontainer);
-                toneShortcutsBar.removeHighlight();
+                final PitchShortcutsBar pitchShortcutsBar = findViewById(R.id.shortcutcontainer);
+                pitchShortcutsBar.removeHighlight();
             }
         });
     }

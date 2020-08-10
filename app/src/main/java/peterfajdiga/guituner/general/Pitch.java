@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 
-public enum Tone {
+public enum Pitch {
     // C0 (16.35),
     // C0s(17.32),
     // D0 (18.35),
@@ -116,7 +116,7 @@ public enum Tone {
 
     public final double frequency;
 
-    Tone(final double frequency) {
+    Pitch(final double frequency) {
         this.frequency = frequency;
     }
 
@@ -127,30 +127,30 @@ public enum Tone {
     }
 
     @NonNull
-    public static Tone fromString(@NonNull final String toneString) throws ToneFormatException {
-        final String enumName = toneString.replace('#', 's');
+    public static Pitch fromString(@NonNull final String pitchString) throws PitchFormatException {
+        final String enumName = pitchString.replace('#', 's');
         try {
-            return Tone.valueOf(enumName);
+            return Pitch.valueOf(enumName);
         } catch (final IllegalArgumentException e) {
-            throw new ToneFormatException(toneString);
+            throw new PitchFormatException(pitchString);
         }
     }
 
     @NonNull
-    public static Tone[] getTonesUpTo(final double highestFrequency) {
-        int detectableToneCount = 0;
-        for (final Tone tone : Tone.values()) {
-            if (tone.frequency > highestFrequency) {
+    public static Pitch[] getPitchesUpTo(final double highestFrequency) {
+        int detectablePitchCount = 0;
+        for (final Pitch pitch : Pitch.values()) {
+            if (pitch.frequency > highestFrequency) {
                 break;
             }
-            detectableToneCount++;
+            detectablePitchCount++;
         }
-        return Arrays.copyOf(Tone.values(), detectableToneCount);
+        return Arrays.copyOf(Pitch.values(), detectablePitchCount);
     }
 
-    public static class ToneFormatException extends IllegalArgumentException {
-        public ToneFormatException(@NonNull final String inputToneString) {
-            super(inputToneString);
+    public static class PitchFormatException extends IllegalArgumentException {
+        public PitchFormatException(@NonNull final String inputPitchString) {
+            super(inputPitchString);
         }
     }
 }

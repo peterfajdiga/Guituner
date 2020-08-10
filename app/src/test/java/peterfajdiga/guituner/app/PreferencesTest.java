@@ -11,35 +11,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.general.Pitch;
 
 public class PreferencesTest {
     @Test
-    public void getShortcutTones() {
+    public void getShortcutPitches() {
         final SharedPreferencesMock sharedPreferencesMock = new SharedPreferencesMock();
         final Preferences preferences = new Preferences(sharedPreferencesMock);
-        Tone[] expected, actual;
+        Pitch[] expected, actual;
 
-        expected = new Tone[]{
-            Tone.E2,
-            Tone.A2,
-            Tone.D3,
-            Tone.G3,
-            Tone.B3,
-            Tone.E4,
+        expected = new Pitch[]{
+            Pitch.E2,
+            Pitch.A2,
+            Pitch.D3,
+            Pitch.G3,
+            Pitch.B3,
+            Pitch.E4,
         };
-        actual = preferences.getShortcutTones();
+        actual = preferences.getShortcutPitches();
         Assert.assertArrayEquals(expected, actual);
 
-        sharedPreferencesMock.prefs.put("shortcutTones", "A1# E4 B0 G4 G4#");
-        expected = new Tone[]{
-            Tone.A1s,
-            Tone.E4,
-            Tone.B0,
-            Tone.G4,
-            Tone.G4s,
+        sharedPreferencesMock.prefs.put("shortcutPitches", "A1# E4 B0 G4 G4#");
+        expected = new Pitch[]{
+            Pitch.A1s,
+            Pitch.E4,
+            Pitch.B0,
+            Pitch.G4,
+            Pitch.G4s,
         };
-        actual = preferences.getShortcutTones();
+        actual = preferences.getShortcutPitches();
         Assert.assertArrayEquals(expected, actual);
     }
 

@@ -13,31 +13,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.general.Tone;
+import peterfajdiga.guituner.general.Pitch;
 
 class PitchViewDisplay extends View {
     private static final boolean HIGH_F_ON_TOP = true;
-    private static final float TONE_OFFSET_X_RATIO = 0.5f;
+    private static final float PITCH_OFFSET_X_RATIO = 0.5f;
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;
 
     // these need to be multiplied by dp
-    private static final float TONE_FULL_WIDTH = 144.0f;
+    private static final float PITCH_FULL_WIDTH = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
-    private static final float TONE_LINE_LENGTH = 96.0f;
+    private static final float PITCH_LINE_LENGTH = 96.0f;
 
-    private static final Paint paint_tone = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private static final Paint paint_tone_inactive = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final Paint paint_pitch = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final Paint paint_pitch_inactive = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq_light = new Paint();
 
     private final float dp;
     private int width, height;
-    private float edgeToneOffsetY, toneLineStartLeftX, toneLineStartRightX, toneLineEndLeftX, toneLineEndRightX;
+    private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
 
     private final android.graphics.Rect textBounds = new Rect();
 
-    private Tone[] tones;
-    private Tone highlightedTone = null;
+    private Pitch[] pitches;
+    private Pitch highlightedPitch = null;
     private double detectedFrequency = 0.0;
 
     public PitchViewDisplay(final Context context) {
@@ -46,15 +46,15 @@ class PitchViewDisplay extends View {
         final Resources r = context.getResources();
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
 
-        paint_tone.setTextSize(24 * dp);
-        paint_tone.setTextAlign(Paint.Align.CENTER);
-        paint_tone.setColor(r.getColor(R.color.primary_text));
-        paint_tone.setStrokeWidth(dp);
+        paint_pitch.setTextSize(24 * dp);
+        paint_pitch.setTextAlign(Paint.Align.CENTER);
+        paint_pitch.setColor(r.getColor(R.color.primary_text));
+        paint_pitch.setStrokeWidth(dp);
 
-        paint_tone_inactive.setTextSize(24 * dp);
-        paint_tone_inactive.setTextAlign(Paint.Align.CENTER);
-        paint_tone_inactive.setColor(r.getColor(R.color.secondary_text));
-        paint_tone_inactive.setStrokeWidth(dp);
+        paint_pitch_inactive.setTextSize(24 * dp);
+        paint_pitch_inactive.setTextAlign(Paint.Align.CENTER);
+        paint_pitch_inactive.setColor(r.getColor(R.color.secondary_text));
+        paint_pitch_inactive.setStrokeWidth(dp);
 
         paint_freq.setTextSize(12 * dp);
         paint_freq.setTextAlign(Paint.Align.RIGHT);
@@ -70,42 +70,42 @@ class PitchViewDisplay extends View {
         invalidate();
     }
 
-    void setTones(@NonNull final Tone[] tones) {
-        this.tones = tones;
+    void setPitches(@NonNull final Pitch[] pitches) {
+        this.pitches = pitches;
     }
 
-    public Tone getToneFromY(final float y) {
-        return getNearestTone(getFrequencyFromY(y));
+    public Pitch getPitchFromY(final float y) {
+        return getNearestPitch(getFrequencyFromY(y));
     }
 
-    public void selectTone(final Tone tone) {
-        highlightedTone = tone;
+    public void selectPitch(final Pitch pitch) {
+        highlightedPitch = pitch;
         invalidate();
     }
 
-    public void unselectTone() {
-        highlightedTone = null;
+    public void unselectPitch() {
+        highlightedPitch = null;
         invalidate();
     }
 
     @Nullable
-    public Tone getHighlightedTone() {
-        return highlightedTone;
+    public Pitch getHighlightedPitch() {
+        return highlightedPitch;
     }
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         width = View.MeasureSpec.getSize(widthMeasureSpec);
-        height = (int)(TONE_FULL_WIDTH * dp * tones.length) + heightMeasureSpec;
-        edgeToneOffsetY = (float)heightMeasureSpec / 2;
+        height = (int)(PITCH_FULL_WIDTH* dp * pitches.length) + heightMeasureSpec;
+        edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
-        paint_tone.getTextBounds(Tone.A4s.toString(), 0, Tone.A4s.toString().length(), textBounds);
-        final float x = width * TONE_OFFSET_X_RATIO;
-        toneLineStartLeftX = getTextLeft(x, paint_tone) - LINE_TEXT_SPACING * dp;
-        toneLineStartRightX = getTextRight(x, paint_tone) + LINE_TEXT_SPACING * dp;
-        toneLineEndLeftX = toneLineStartLeftX - TONE_LINE_LENGTH;
-        toneLineEndRightX = toneLineStartRightX + TONE_LINE_LENGTH;
+        paint_pitch.getTextBounds(Pitch.A4s.toString(), 0, Pitch.A4s.toString().length(), textBounds);
+        final float x = width *PITCH_OFFSET_X_RATIO;
+        pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
+        pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
+        pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH;
+        pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH;
     }
 
     @Override
@@ -123,16 +123,16 @@ class PitchViewDisplay extends View {
 
             canvas.drawLine(
                 0.0f, freqY,
-                toneLineEndLeftX, freqY,
+                pitchLineEndLeftX, freqY,
                 paint_freq
             );
             canvas.drawLine(
-                toneLineEndLeftX, freqY,
-                toneLineEndRightX, freqY,
+                pitchLineEndLeftX, freqY,
+                pitchLineEndRightX, freqY,
                 paint_freq_light
             );
             canvas.drawLine(
-                toneLineEndRightX, freqY,
+                pitchLineEndRightX, freqY,
                 getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
                 paint_freq
             );
@@ -142,28 +142,28 @@ class PitchViewDisplay extends View {
                 paint_freq
             );
 
-            canvas.drawPath(getTriangle(toneLineEndLeftX , freqY, true ), paint_freq);
-            canvas.drawPath(getTriangle(toneLineEndRightX, freqY, false), paint_freq);
+            canvas.drawPath(getTriangle(pitchLineEndLeftX, freqY, true ), paint_freq);
+            canvas.drawPath(getTriangle(pitchLineEndRightX, freqY, false), paint_freq);
         }
 
-        // draw tones
-        final float toneX = width * TONE_OFFSET_X_RATIO;
-        for (Tone tone : tones) {
-            final float toneY = getFrequencyY(tone.frequency);
+        // draw pitches
+        final float pitchX = width *PITCH_OFFSET_X_RATIO;
+        for (Pitch pitch : pitches) {
+            final float pitchY = getFrequencyY(pitch.frequency);
 
-            final Paint paint = highlightedTone == null || highlightedTone == tone ? paint_tone : paint_tone_inactive;
-            paint.getTextBounds(tone.toString(), 0, tone.toString().length(), textBounds);
+            final Paint paint = highlightedPitch == null || highlightedPitch == pitch ? paint_pitch : paint_pitch_inactive;
+            paint.getTextBounds(pitch.toString(), 0, pitch.toString().length(), textBounds);
 
-            canvas.drawText(tone.toString(), toneX, getCenteredY(toneY), paint);
+            canvas.drawText(pitch.toString(), pitchX, getCenteredY(pitchY), paint);
 
             canvas.drawLine(
-                toneLineStartLeftX - TONE_LINE_LENGTH, toneY,
-                toneLineStartLeftX, toneY,
+                pitchLineStartLeftX - PITCH_LINE_LENGTH, pitchY,
+                pitchLineStartLeftX, pitchY,
                 paint
             );
             canvas.drawLine(
-                toneLineStartRightX, toneY,
-                toneLineStartRightX + TONE_LINE_LENGTH, toneY,
+                pitchLineStartRightX, pitchY,
+                pitchLineStartRightX + PITCH_LINE_LENGTH, pitchY,
                 paint
             );
         }
@@ -219,11 +219,11 @@ class PitchViewDisplay extends View {
     }
 
     float getFrequencyY(final double frequency) {
-        final float minY = edgeToneOffsetY;
-        final float maxY = height - edgeToneOffsetY;
+        final float minY = edgePitchOffsetY;
+        final float maxY = height - edgePitchOffsetY;
 
-        final double minLogFreq = Math.log(tones[0].frequency);
-        final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
+        final double minLogFreq = Math.log(pitches[0].frequency);
+        final double maxLogFreq = Math.log(pitches[pitches.length-1].frequency);
         final double logFreq = Math.log(frequency);
 
         double freq01 = (logFreq - minLogFreq) / (maxLogFreq - minLogFreq);
@@ -234,11 +234,11 @@ class PitchViewDisplay extends View {
     }
 
     private double getFrequencyFromY(final float y) {
-        final float minY = edgeToneOffsetY;
-        final float maxY = height - edgeToneOffsetY;
+        final float minY = edgePitchOffsetY;
+        final float maxY = height - edgePitchOffsetY;
 
-        final double minLogFreq = Math.log(tones[0].frequency);
-        final double maxLogFreq = Math.log(tones[tones.length-1].frequency);
+        final double minLogFreq = Math.log(pitches[0].frequency);
+        final double maxLogFreq = Math.log(pitches[pitches.length-1].frequency);
 
         double freq01 = (y - minY) / (maxY - minY);
         if (HIGH_F_ON_TOP) {
@@ -248,17 +248,17 @@ class PitchViewDisplay extends View {
         return Math.exp(logFreq);
     }
 
-    private Tone getNearestTone(final double frequency) {
+    private Pitch getNearestPitch(final double frequency) {
         // TODO: optimise
         double minDiff = Double.POSITIVE_INFINITY;
-        Tone nearestTone = null;
-        for (Tone tone : tones) {
-            final double diff = Math.abs(tone.frequency - frequency);
+        Pitch nearestPitch = null;
+        for (Pitch pitch : pitches) {
+            final double diff = Math.abs(pitch.frequency - frequency);
             if (diff < minDiff) {
                 minDiff = diff;
-                nearestTone = tone;
+                nearestPitch = pitch;
             }
         }
-        return nearestTone;
+        return nearestPitch;
     }
 }
