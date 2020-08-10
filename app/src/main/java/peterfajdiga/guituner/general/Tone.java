@@ -123,6 +123,12 @@ public enum Tone {
     }
 
     @NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @NonNull
     public static Tone fromString(@NonNull final String toneString) throws ToneFormatException {
         final String enumName = toneString.replace('#', 's');
         try {
