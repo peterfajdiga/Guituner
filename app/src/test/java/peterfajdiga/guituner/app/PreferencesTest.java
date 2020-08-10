@@ -31,13 +31,13 @@ public class PreferencesTest {
         actual = preferences.getTuningPitches();
         Assert.assertArrayEquals(expected, actual);
 
-        sharedPreferencesMock.prefs.put("tuning", "A1# E4 B0 G4 G4#");
+        sharedPreferencesMock.prefs.put("tuning", "A#1 E4 B0 G4 G#4");
         expected = new Pitch[]{
-            Pitch.A1s,
+            Pitch.As1,
             Pitch.E4,
             Pitch.B0,
             Pitch.G4,
-            Pitch.G4s,
+            Pitch.Gs4,
         };
         actual = preferences.getTuningPitches();
         Assert.assertArrayEquals(expected, actual);

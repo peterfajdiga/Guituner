@@ -100,7 +100,7 @@ class PitchViewDisplay extends View {
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
-        paint_pitch.getTextBounds(Pitch.A4s.toString(), 0, Pitch.A4s.toString().length(), textBounds);
+        paint_pitch.getTextBounds(Pitch.As4.toString(), 0, Pitch.As4.toString().length(), textBounds);
         final float x = width *PITCH_OFFSET_X_RATIO;
         pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
