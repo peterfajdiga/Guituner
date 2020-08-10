@@ -11,12 +11,12 @@ import peterfajdiga.guituner.gui.InputDialog;
 
 class CustomTuningDialog {
     private final Context context;
-    private final ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog;
+    private final TuningPreferenceDialog tuningPreferenceDialog;
     private final String customTuningLocalizedString;
 
-    CustomTuningDialog(@NonNull final Context context, @NonNull ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog) {
+    CustomTuningDialog(@NonNull final Context context, @NonNull TuningPreferenceDialog tuningPreferenceDialog) {
         this.context = context;
-        this.shortcutPitchesPreferenceDialog = shortcutPitchesPreferenceDialog;
+        this.tuningPreferenceDialog = tuningPreferenceDialog;
         customTuningLocalizedString = context.getResources().getString(R.string.tuning_custom);
     }
 
@@ -27,7 +27,7 @@ class CustomTuningDialog {
                 public void onConfirm(final CharSequence input) {
                     final String inputTuning = input.toString().toUpperCase();
                     assert PitchesString.validatePitchesString(inputTuning);
-                    shortcutPitchesPreferenceDialog.setCustomTuning(inputTuning);
+                    tuningPreferenceDialog.setCustomTuning(inputTuning);
                 }
             }, new TuningValidator()
         );

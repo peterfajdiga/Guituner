@@ -8,11 +8,11 @@ import peterfajdiga.guituner.app.tuning.PitchesString;
 import peterfajdiga.guituner.general.Pitch;
 
 public class Preferences {
-    private static final String shortcutPitchesKey = "shortcutPitches";
-    private static final String shortcutPitchesDefault = "E2 A2 D3 G3 B3 E4";
+    private static final String tuningKey = "tuning";
+    private static final String tuningDefault = "E2 A2 D3 G3 B3 E4";
 
-    private static final String shortcutPitchesCustomKey = "shortcutPitchesCustom";
-    private static final String shortcutPitchesCustomDefault = "G1 D2 A2 E3 B3 F4#";
+    private static final String customTuningKey = "customTuning";
+    private static final String customTuningDefault = "G1 D2 A2 E3 B3 F4#";
 
     private final SharedPreferences prefs;
 
@@ -21,31 +21,31 @@ public class Preferences {
     }
 
     @NonNull
-    public String getShortcutPitchesString() {
-        return getStringNonNull(shortcutPitchesKey, shortcutPitchesDefault);
+    public String getTuningString() {
+        return getStringNonNull(tuningKey, tuningDefault);
     }
 
     @NonNull
-    public Pitch[] getShortcutPitches() {
-        return PitchesString.parsePitchesString(getShortcutPitchesString());
+    public Pitch[] getTuningPitches() {
+        return PitchesString.parsePitchesString(getTuningString());
     }
 
-    public void saveShortcutPitches(@NonNull final String shortcutPitchesString) throws Pitch.PitchFormatException {
-        savePitchesString(shortcutPitchesKey, shortcutPitchesString);
-    }
-
-    @NonNull
-    public String getShortcutPitchesCustomString() {
-        return getStringNonNull(shortcutPitchesCustomKey, shortcutPitchesCustomDefault);
+    public void saveTuning(@NonNull final String tuningString) throws Pitch.PitchFormatException {
+        savePitchesString(tuningKey, tuningString);
     }
 
     @NonNull
-    public Pitch[] getShortcutPitchesCustom() {
-        return PitchesString.parsePitchesString(getShortcutPitchesCustomString());
+    public String getCustomTuningString() {
+        return getStringNonNull(customTuningKey, customTuningDefault);
     }
 
-    public void saveShortcutPitchesCustom(@NonNull final String shortcutPitchesCustomString) throws Pitch.PitchFormatException {
-        savePitchesString(shortcutPitchesCustomKey, shortcutPitchesCustomString);
+    @NonNull
+    public Pitch[] getCustomTuningPitches() {
+        return PitchesString.parsePitchesString(getCustomTuningString());
+    }
+
+    public void saveCustomTuning(@NonNull final String customTuningString) throws Pitch.PitchFormatException {
+        savePitchesString(customTuningKey, customTuningString);
     }
 
     @NonNull

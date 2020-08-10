@@ -18,7 +18,7 @@ import peterfajdiga.guituner.app.tuning.PitchesString;
 import peterfajdiga.guituner.app.tuning.Tuning;
 import peterfajdiga.guituner.gui.views.ItemedRadioGroup;
 
-public class ShortcutPitchesPreferenceDialog {
+public class TuningPreferenceDialog {
     private final Context context;
     private final Preferences preferences;
     private final PitchShortcuts pitchShortcuts;
@@ -26,7 +26,7 @@ public class ShortcutPitchesPreferenceDialog {
 
     private Dialog dialog = null;
 
-    public ShortcutPitchesPreferenceDialog(
+    public TuningPreferenceDialog(
         @NonNull final Context context,
         @NonNull final Preferences preferences,
         @NonNull final PitchShortcuts pitchShortcuts
@@ -44,8 +44,8 @@ public class ShortcutPitchesPreferenceDialog {
         dialog.show();
     }
 
-    void setShortcutPitches(@NonNull final String shortcutPitchesString) {
-        preferences.saveShortcutPitches(shortcutPitchesString);
+    void setTuning(@NonNull final String tuningString) {
+        preferences.saveTuning(tuningString);
         pitchShortcuts.updatePitchShortcuts();
     }
 
@@ -54,15 +54,15 @@ public class ShortcutPitchesPreferenceDialog {
             return;
         }
         if (isCustomTuningSelected()) {
-            setShortcutPitches(customTuning);
+            setTuning(customTuning);
         }
-        preferences.saveShortcutPitchesCustom(customTuning);
+        preferences.saveCustomTuning(customTuning);
         updateDialog();
     }
 
     private boolean isCustomTuningSelected() {
-        final String selectedPitchesString = preferences.getShortcutPitchesString();
-        final String customTuningString = preferences.getShortcutPitchesCustomString();
+        final String selectedPitchesString = preferences.getTuningString();
+        final String customTuningString = preferences.getCustomTuningString();
         return selectedPitchesString.equals(customTuningString);
     }
 
@@ -80,13 +80,13 @@ public class ShortcutPitchesPreferenceDialog {
     }
 
     private View createRadioGroup() {
-        final String selectedPitchesString = preferences.getShortcutPitchesString();
-        final String customTuningString = preferences.getShortcutPitchesCustomString();
+        final String selectedPitchesString = preferences.getTuningString();
+        final String customTuningString = preferences.getCustomTuningString();
 
         final ItemedRadioGroup.Receiver<Tuning> radioGroupReceiver = new ItemedRadioGroup.Receiver<Tuning>() {
             @Override
             public void onCheckedChanged(final Tuning item) {
-                setShortcutPitches(item.pitchesString);
+                setTuning(item.pitchesString);
             }
 
             @Override

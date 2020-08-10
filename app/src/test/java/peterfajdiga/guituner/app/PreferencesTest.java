@@ -15,7 +15,7 @@ import peterfajdiga.guituner.general.Pitch;
 
 public class PreferencesTest {
     @Test
-    public void getShortcutPitches() {
+    public void getTuningPitches() {
         final SharedPreferencesMock sharedPreferencesMock = new SharedPreferencesMock();
         final Preferences preferences = new Preferences(sharedPreferencesMock);
         Pitch[] expected, actual;
@@ -28,10 +28,10 @@ public class PreferencesTest {
             Pitch.B3,
             Pitch.E4,
         };
-        actual = preferences.getShortcutPitches();
+        actual = preferences.getTuningPitches();
         Assert.assertArrayEquals(expected, actual);
 
-        sharedPreferencesMock.prefs.put("shortcutPitches", "A1# E4 B0 G4 G4#");
+        sharedPreferencesMock.prefs.put("tuning", "A1# E4 B0 G4 G4#");
         expected = new Pitch[]{
             Pitch.A1s,
             Pitch.E4,
@@ -39,7 +39,7 @@ public class PreferencesTest {
             Pitch.G4,
             Pitch.G4s,
         };
-        actual = preferences.getShortcutPitches();
+        actual = preferences.getTuningPitches();
         Assert.assertArrayEquals(expected, actual);
     }
 

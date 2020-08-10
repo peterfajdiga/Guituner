@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import peterfajdiga.guituner.R;
-import peterfajdiga.guituner.app.parts.ShortcutPitchesPreferenceDialog;
+import peterfajdiga.guituner.app.parts.TuningPreferenceDialog;
 import peterfajdiga.guituner.app.parts.PitchShortcuts;
 import peterfajdiga.guituner.general.Pitch;
 import peterfajdiga.guituner.gui.AlphaVisibility;
@@ -64,14 +64,14 @@ public class TunerActivity extends AppCompatActivity {
         );
         pitchShortcuts.initialize();
 
-        final ShortcutPitchesPreferenceDialog shortcutPitchesPreferenceDialog = new ShortcutPitchesPreferenceDialog(this, preferences,
+        final TuningPreferenceDialog tuningPreferenceDialog = new TuningPreferenceDialog(this, preferences,
             pitchShortcuts
         );
         final View tuningSetupButton = findViewById(R.id.tuning_setup_button);
         tuningSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                shortcutPitchesPreferenceDialog.show();
+                tuningPreferenceDialog.show();
             }
         });
     }

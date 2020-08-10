@@ -44,6 +44,6 @@ public class PitchShortcuts {
     }
 
     void updatePitchShortcuts() {
-        pitchShortcutsBar.setupPitches(preferences.getShortcutPitches(), layoutInflater, R.layout.button_pitch_shortcut);
+        pitchShortcutsBar.setupPitches(preferences.getTuningPitches(), layoutInflater, R.layout.button_pitch_shortcut);
     }
 }
