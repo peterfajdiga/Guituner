@@ -100,7 +100,7 @@ class PitchViewDisplay extends View {
         edgeToneOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
-        paint_tone.getTextBounds(Tone.A4s.name, 0, Tone.A4s.name.length(), textBounds);
+        paint_tone.getTextBounds(Tone.A4s.toString(), 0, Tone.A4s.toString().length(), textBounds);
         final float x = width * TONE_OFFSET_X_RATIO;
         toneLineStartLeftX = getTextLeft(x, paint_tone) - LINE_TEXT_SPACING * dp;
         toneLineStartRightX = getTextRight(x, paint_tone) + LINE_TEXT_SPACING * dp;
@@ -152,9 +152,9 @@ class PitchViewDisplay extends View {
             final float toneY = getFrequencyY(tone.frequency);
 
             final Paint paint = highlightedTone == null || highlightedTone == tone ? paint_tone : paint_tone_inactive;
-            paint.getTextBounds(tone.name, 0, tone.name.length(), textBounds);
+            paint.getTextBounds(tone.toString(), 0, tone.toString().length(), textBounds);
 
-            canvas.drawText(tone.name, toneX, getCenteredY(toneY), paint);
+            canvas.drawText(tone.toString(), toneX, getCenteredY(toneY), paint);
 
             canvas.drawLine(
                 toneLineStartLeftX - TONE_LINE_LENGTH, toneY,

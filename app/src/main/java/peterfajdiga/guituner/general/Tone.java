@@ -115,7 +115,7 @@ public enum Tone {
     B8 (ToneFrequencies.B8 , "B8");
 
     public final double frequency;
-    public final String name;
+    private final String name;
 
     Tone(final double frequency, final String name) {
         this.frequency = frequency;

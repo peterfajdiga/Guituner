@@ -57,7 +57,7 @@ public class ToneShortcutsBar extends LinearLayout {
     }
 
     private void setupToneShortcutButton(@NonNull final Button button, @NonNull final Tone tone) {
-        button.setText(tone.name);
+        button.setText(tone.toString());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
