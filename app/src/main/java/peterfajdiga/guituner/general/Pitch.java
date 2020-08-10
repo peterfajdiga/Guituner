@@ -127,6 +127,11 @@ public enum Pitch {
     }
 
     @NonNull
+    public CharSequence toCharSequence() {
+        return toString();
+    }
+
+    @NonNull
     public static Pitch fromString(@NonNull final String pitchString) throws PitchFormatException {
         final String enumName = pitchString.replace('#', 's');
         try {

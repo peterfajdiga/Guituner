@@ -57,7 +57,7 @@ public class PitchShortcutsBar extends LinearLayout {
     }
 
     private void setupPitchShortcutButton(@NonNull final Button button, @NonNull final Pitch pitch) {
-        button.setText(pitch.toString());
+        button.setText(pitch.toCharSequence());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {

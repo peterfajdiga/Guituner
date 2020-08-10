@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -95,12 +96,12 @@ class PitchViewDisplay extends View {
 
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
-        width = View.MeasureSpec.getSize(widthMeasureSpec);
+        width = MeasureSpec.getSize(widthMeasureSpec);
         height = (int)(PITCH_FULL_WIDTH* dp * pitches.length) + heightMeasureSpec;
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
-        paint_pitch.getTextBounds(Pitch.As4.toString(), 0, Pitch.As4.toString().length(), textBounds);
+        getPitchTextBounds(Pitch.As4, paint_pitch, textBounds);
         final float x = width *PITCH_OFFSET_X_RATIO;
         pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
@@ -152,9 +153,9 @@ class PitchViewDisplay extends View {
             final float pitchY = getFrequencyY(pitch.frequency);
 
             final Paint paint = highlightedPitch == null || highlightedPitch == pitch ? paint_pitch : paint_pitch_inactive;
-            paint.getTextBounds(pitch.toString(), 0, pitch.toString().length(), textBounds);
+            getPitchTextBounds(pitch, paint, textBounds);
 
-            canvas.drawText(pitch.toString(), pitchX, getCenteredY(pitchY), paint);
+            canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
 
             canvas.drawLine(
                 pitchLineStartLeftX - PITCH_LINE_LENGTH, pitchY,
@@ -260,5 +261,15 @@ class PitchViewDisplay extends View {
             }
         }
         return nearestPitch;
+    }
+
+    private static void getPitchTextBounds(@NonNull final Pitch pitch, @NonNull final Paint paint, @NonNull final android.graphics.Rect bounds) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            final CharSequence pitchString = pitch.toCharSequence();
+            paint.getTextBounds(pitchString, 0, pitchString.length(), bounds);
+        } else {
+            final String pitchString = pitch.toString();
+            paint.getTextBounds(pitchString, 0, pitchString.length(), bounds);
+        }
     }
 }
