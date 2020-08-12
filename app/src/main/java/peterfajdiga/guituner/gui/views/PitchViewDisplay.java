@@ -91,9 +91,7 @@ class PitchViewDisplay extends View {
     }
 
     public void unselectPitch() {
-        highlightedPitch = null;
-        pitchLabelsCache = null;
-        invalidate();
+        selectPitch(null);
     }
 
     @Nullable
