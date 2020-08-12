@@ -80,6 +80,9 @@ class PitchViewDisplay extends View {
     }
 
     public void selectPitch(final Pitch pitch) {
+        if (pitch == highlightedPitch) {
+            return;
+        }
         highlightedPitch = pitch;
         invalidate();
     }
