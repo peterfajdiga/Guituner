@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Picture;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.TypedValue;
@@ -36,6 +37,7 @@ class PitchViewDisplay extends View {
     private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
 
     private final android.graphics.Rect textBounds = new Rect();
+    private Picture pitchLabelsCache;
 
     private Pitch[] pitches;
     private Pitch highlightedPitch = null;
@@ -84,11 +86,13 @@ class PitchViewDisplay extends View {
             return;
         }
         highlightedPitch = pitch;
+        pitchLabelsCache = null;
         invalidate();
     }
 
     public void unselectPitch() {
         highlightedPitch = null;
+        pitchLabelsCache = null;
         invalidate();
     }
 
@@ -117,7 +121,14 @@ class PitchViewDisplay extends View {
         if (detectedFrequency > 0.0) {
             drawDetectedFrequency(canvas);
         }
-        drawPitchLabels(canvas);
+
+        if (pitchLabelsCache == null) {
+            pitchLabelsCache = new Picture();
+            final Canvas cacheCanvas = pitchLabelsCache.beginRecording(width, height);
+            drawPitchLabels(cacheCanvas);
+            pitchLabelsCache.endRecording();
+        }
+        pitchLabelsCache.draw(canvas);
     }
 
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
