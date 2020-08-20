@@ -37,7 +37,7 @@ class PitchViewDisplay extends View {
     private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
 
     private final android.graphics.Rect textBounds = new Rect();
-    private Picture pitchLabelsCache;
+    private Picture pitchLabelsCache, pitchLabelsCacheInactive;
 
     private Pitch[] pitches;
     private Pitch highlightedPitch = null;
@@ -86,7 +86,6 @@ class PitchViewDisplay extends View {
             return;
         }
         highlightedPitch = pitch;
-        pitchLabelsCache = null;
         invalidate();
     }
 
@@ -120,13 +119,24 @@ class PitchViewDisplay extends View {
             drawDetectedFrequency(canvas);
         }
 
-        if (pitchLabelsCache == null) {
-            pitchLabelsCache = new Picture();
-            final Canvas cacheCanvas = pitchLabelsCache.beginRecording(width, height);
-            drawPitchLabels(cacheCanvas);
-            pitchLabelsCache.endRecording();
+        if (highlightedPitch == null) {
+            if (pitchLabelsCache == null) {
+                pitchLabelsCache = new Picture();
+                final Canvas cacheCanvas = pitchLabelsCache.beginRecording(width, height);
+                drawPitchLabels(cacheCanvas, paint_pitch);
+                pitchLabelsCache.endRecording();
+            }
+            pitchLabelsCache.draw(canvas);
+        } else {
+            if (pitchLabelsCacheInactive == null) {
+                pitchLabelsCacheInactive = new Picture();
+                final Canvas cacheCanvas = pitchLabelsCacheInactive.beginRecording(width, height);
+                drawPitchLabels(cacheCanvas, paint_pitch_inactive);
+                pitchLabelsCacheInactive.endRecording();
+            }
+            pitchLabelsCacheInactive.draw(canvas);
+            drawPitchLabel(canvas, highlightedPitch, paint_pitch);
         }
-        pitchLabelsCache.draw(canvas);
     }
 
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
@@ -163,27 +173,29 @@ class PitchViewDisplay extends View {
         canvas.drawPath(getTriangle(pitchLineEndRightX, freqY, false), paint_freq);
     }
 
-    private void drawPitchLabels(@NonNull final Canvas canvas) {
-        final float pitchX = width *PITCH_OFFSET_X_RATIO;
+    private void drawPitchLabels(@NonNull final Canvas canvas, final @NonNull Paint paint) {
         for (Pitch pitch : pitches) {
-            final float pitchY = getFrequencyY(pitch.frequency);
-
-            final Paint paint = highlightedPitch == null || highlightedPitch == pitch ? paint_pitch : paint_pitch_inactive;
-            getPitchTextBounds(pitch, paint, textBounds);
-
-            canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
-
-            canvas.drawLine(
-                pitchLineStartLeftX - PITCH_LINE_LENGTH, pitchY,
-                pitchLineStartLeftX, pitchY,
-                paint
-            );
-            canvas.drawLine(
-                pitchLineStartRightX, pitchY,
-                pitchLineStartRightX + PITCH_LINE_LENGTH, pitchY,
-                paint
-            );
+            drawPitchLabel(canvas, pitch, paint);
         }
+    }
+
+    private void drawPitchLabel(@NonNull final Canvas canvas, @NonNull final Pitch pitch, @NonNull final Paint paint) {
+        final float pitchX = width * PITCH_OFFSET_X_RATIO;
+        final float pitchY = getFrequencyY(pitch.frequency);
+
+        getPitchTextBounds(pitch, paint, textBounds);
+        canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
+
+        canvas.drawLine(
+            pitchLineStartLeftX - PITCH_LINE_LENGTH, pitchY,
+            pitchLineStartLeftX, pitchY,
+            paint
+        );
+        canvas.drawLine(
+            pitchLineStartRightX, pitchY,
+            pitchLineStartRightX + PITCH_LINE_LENGTH, pitchY,
+            paint
+        );
     }
 
     private Path getTriangle(float x, final float y, final boolean pointRight) {
