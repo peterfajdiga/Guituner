@@ -116,6 +116,9 @@ class PitchViewDisplay extends View {
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
         pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH;
         pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH;
+
+        pitchLabelsCache = null;
+        pitchLabelsCacheInactive = null;
     }
 
     @Override
