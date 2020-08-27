@@ -26,6 +26,7 @@ class PitchViewDisplay extends View {
     private static final float PITCH_FULL_WIDTH = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
     private static final float PITCH_LINE_LENGTH = 96.0f;
+    private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
 
     private static final Paint paint_pitch = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_pitch_inactive = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -150,7 +151,7 @@ class PitchViewDisplay extends View {
 
         canvas.drawLine(
             0.0f, freqY,
-            pitchLineEndLeftX, freqY,
+            pitchLineEndLeftX - FREQ_ARROW_TRIANGLE_SIZE * dp, freqY,
             paint_freq
         );
         canvas.drawLine(
@@ -159,7 +160,7 @@ class PitchViewDisplay extends View {
             paint_freq_light
         );
         canvas.drawLine(
-            pitchLineEndRightX, freqY,
+            pitchLineEndRightX + FREQ_ARROW_TRIANGLE_SIZE * dp, freqY,
             getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
             paint_freq
         );
@@ -199,7 +200,7 @@ class PitchViewDisplay extends View {
     }
 
     private Path getTriangle(float x, final float y, final boolean pointRight) {
-        final float size = 4.0f * dp;  // TODO: define constant
+        final float size = FREQ_ARROW_TRIANGLE_SIZE * dp;
         final Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
         path.moveTo(x, y);
