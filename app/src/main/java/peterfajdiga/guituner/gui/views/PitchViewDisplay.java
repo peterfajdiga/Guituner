@@ -27,11 +27,13 @@ class PitchViewDisplay extends View {
     private static final float LINE_TEXT_SPACING = 6.0f;
     private static final float PITCH_LINE_LENGTH = 96.0f;
     private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
+    private static final float HIGHLIGHT_BG_HEIGHT = 48.0f;  // TODO: get from resources instead
 
     private static final Paint paint_pitch = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_pitch_inactive = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final Paint paint_freq_light = new Paint();
+    private static final Paint paint_highlight_bg = new Paint();
 
     private final float dp;
     private int width, height;
@@ -49,6 +51,8 @@ class PitchViewDisplay extends View {
 
         final Resources r = context.getResources();
         dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
+
+        paint_highlight_bg.setColor(r.getColor(R.color.background));
 
         paint_pitch.setTextSize(24 * dp);
         paint_pitch.setTextAlign(Paint.Align.CENTER);
@@ -102,7 +106,7 @@ class PitchViewDisplay extends View {
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         width = MeasureSpec.getSize(widthMeasureSpec);
-        height = (int)(PITCH_FULL_WIDTH* dp * pitches.length) + heightMeasureSpec;
+        height = (int)(PITCH_FULL_WIDTH * dp * pitches.length) + heightMeasureSpec;
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
@@ -116,10 +120,6 @@ class PitchViewDisplay extends View {
 
     @Override
     protected void onDraw(final Canvas canvas) {
-        if (detectedFrequency > 0.0) {
-            drawDetectedFrequency(canvas);
-        }
-
         if (highlightedPitch == null) {
             if (pitchLabelsCache == null) {
                 pitchLabelsCache = new Picture();
@@ -128,6 +128,7 @@ class PitchViewDisplay extends View {
                 pitchLabelsCache.endRecording();
             }
             pitchLabelsCache.draw(canvas);
+
         } else {
             if (pitchLabelsCacheInactive == null) {
                 pitchLabelsCacheInactive = new Picture();
@@ -136,7 +137,13 @@ class PitchViewDisplay extends View {
                 pitchLabelsCacheInactive.endRecording();
             }
             pitchLabelsCacheInactive.draw(canvas);
+
+            drawHighlightBackground(canvas, highlightedPitch, paint_highlight_bg);
             drawPitchLabel(canvas, highlightedPitch, paint_pitch);
+        }
+
+        if (detectedFrequency > 0.0) {
+            drawDetectedFrequency(canvas);
         }
     }
 
@@ -197,6 +204,12 @@ class PitchViewDisplay extends View {
             pitchLineStartRightX + PITCH_LINE_LENGTH, pitchY,
             paint
         );
+    }
+
+    private void drawHighlightBackground(@NonNull final Canvas canvas, @NonNull final Pitch pitch, @NonNull final Paint paintClear) {
+        final float pitchY = getFrequencyY(pitch.frequency);
+        final float dy = HIGHLIGHT_BG_HEIGHT * dp / 2.0f;
+        canvas.drawRect(0.0f, pitchY-dy, width, pitchY+dy, paintClear);
     }
 
     private Path getTriangle(float x, final float y, final boolean pointRight) {
