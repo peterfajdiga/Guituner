@@ -3,5 +3,6 @@
     <color name="background">#FAFAFA</color>
     <color name="primary_text">#DE000000</color>
     <color name="secondary_text">#99000000</color>
+    <color name="dimmed_text">#60000000</color>
     <color name="selection_background">#1E000000</color>
 </resources>

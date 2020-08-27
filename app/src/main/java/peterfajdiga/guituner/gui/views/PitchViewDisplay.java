@@ -61,7 +61,7 @@ class PitchViewDisplay extends View {
 
         paint_pitch_inactive.setTextSize(24 * dp);
         paint_pitch_inactive.setTextAlign(Paint.Align.CENTER);
-        paint_pitch_inactive.setColor(r.getColor(R.color.secondary_text));
+        paint_pitch_inactive.setColor(r.getColor(R.color.dimmed_text));
         paint_pitch_inactive.setStrokeWidth(dp);
 
         paint_freq.setTextSize(12 * dp);
