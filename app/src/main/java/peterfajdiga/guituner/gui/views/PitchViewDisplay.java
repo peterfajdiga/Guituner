@@ -209,10 +209,10 @@ class PitchViewDisplay extends View {
         );
     }
 
-    private void drawHighlightBackground(@NonNull final Canvas canvas, @NonNull final Pitch pitch, @NonNull final Paint paintClear) {
+    private void drawHighlightBackground(@NonNull final Canvas canvas, @NonNull final Pitch pitch, @NonNull final Paint paint) {
         final float pitchY = getFrequencyY(pitch.frequency);
         final float dy = HIGHLIGHT_BG_HEIGHT * dp / 2.0f;
-        canvas.drawRect(0.0f, pitchY-dy, width, pitchY+dy, paintClear);
+        canvas.drawRect(0.0f, pitchY-dy, width, pitchY+dy, paint);
     }
 
     private Path getTriangle(float x, final float y, final boolean pointRight) {
