@@ -65,7 +65,7 @@ class PitchViewDisplay extends View {
         paint_pitch_inactive.setStrokeWidth(dp);
 
         paint_freq.setTextSize(12 * dp);
-        paint_freq.setTextAlign(Paint.Align.RIGHT);
+        paint_freq.setTextAlign(Paint.Align.CENTER);
         paint_freq.setColor(r.getColor(R.color.secondary_text));
         paint_freq.setStrokeWidth(dp);
 
@@ -152,36 +152,43 @@ class PitchViewDisplay extends View {
 
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
         final String freqText = String.format("%.1f Hz", detectedFrequency);
-        final float freqX = width * FREQ_OFFSET_X_RATIO;
+        final float triangleWidth = FREQ_ARROW_TRIANGLE_SIZE * dp;
+        final float freqLineEndLeftX = 0.0f;
+        final float freqLineStartLeftX = pitchLineEndLeftX - triangleWidth;
+        final float freqLineStartRightX = pitchLineEndRightX + triangleWidth;
+        final float freqLineEndRightX = width;
+        final float freqX = (freqLineStartRightX + freqLineEndRightX) / 2.0f;
         final float freqY = getFrequencyY(detectedFrequency);
 
         paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
 
-        canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
-
+        // ->-<
         canvas.drawLine(
-            0.0f, freqY,
-            pitchLineEndLeftX - FREQ_ARROW_TRIANGLE_SIZE * dp, freqY,
+            freqLineEndLeftX, freqY,
+            freqLineStartLeftX, freqY,
             paint_freq
         );
+        canvas.drawPath(getTriangle(pitchLineEndLeftX, freqY, true), paint_freq);
         canvas.drawLine(
             pitchLineEndLeftX, freqY,
             pitchLineEndRightX, freqY,
             paint_freq_light
         );
+        canvas.drawPath(getTriangle(pitchLineEndRightX, freqY, false), paint_freq);
+
+        // -Hz-
         canvas.drawLine(
-            pitchLineEndRightX + FREQ_ARROW_TRIANGLE_SIZE * dp, freqY,
+            freqLineStartRightX, freqY,
             getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
             paint_freq
         );
+        canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
         canvas.drawLine(
             getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
-            width, freqY,
+            freqLineEndRightX, freqY,
             paint_freq
         );
 
-        canvas.drawPath(getTriangle(pitchLineEndLeftX, freqY, true ), paint_freq);
-        canvas.drawPath(getTriangle(pitchLineEndRightX, freqY, false), paint_freq);
     }
 
     private void drawPitchLabels(@NonNull final Canvas canvas, final @NonNull Paint paint) {
