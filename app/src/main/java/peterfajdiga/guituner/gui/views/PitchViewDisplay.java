@@ -23,7 +23,7 @@ class PitchViewDisplay extends View {
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;
 
     // these need to be multiplied by dp
-    private static final float PITCH_FULL_WIDTH = 144.0f;
+    private static final float PITCH_FULL_RANGE_Y = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
     private static final float PITCH_LINE_LENGTH = 32.0f;
     private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
@@ -106,7 +106,7 @@ class PitchViewDisplay extends View {
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         width = MeasureSpec.getSize(widthMeasureSpec);
-        height = (int)(PITCH_FULL_WIDTH * dp * pitches.length) + heightMeasureSpec;
+        height = (int)(PITCH_FULL_RANGE_Y* dp * pitches.length) + heightMeasureSpec;
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
