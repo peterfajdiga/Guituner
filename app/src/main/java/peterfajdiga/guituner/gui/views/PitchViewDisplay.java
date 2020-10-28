@@ -25,7 +25,7 @@ class PitchViewDisplay extends View {
     // these need to be multiplied by dp
     private static final float PITCH_FULL_WIDTH = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
-    private static final float PITCH_LINE_LENGTH = 96.0f;
+    private static final float PITCH_LINE_LENGTH = 32.0f;
     private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
     private static final float HIGHLIGHT_BG_HEIGHT = 48.0f;  // TODO: get from resources instead
 
@@ -114,8 +114,8 @@ class PitchViewDisplay extends View {
         final float x = width *PITCH_OFFSET_X_RATIO;
         pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
-        pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH;
-        pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH;
+        pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH * dp;
+        pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH * dp;
 
         pitchLabelsCache = null;
         pitchLabelsCacheInactive = null;
@@ -198,13 +198,13 @@ class PitchViewDisplay extends View {
         canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
 
         canvas.drawLine(
-            pitchLineStartLeftX - PITCH_LINE_LENGTH, pitchY,
+            pitchLineStartLeftX - PITCH_LINE_LENGTH * dp, pitchY,
             pitchLineStartLeftX, pitchY,
             paint
         );
         canvas.drawLine(
             pitchLineStartRightX, pitchY,
-            pitchLineStartRightX + PITCH_LINE_LENGTH, pitchY,
+            pitchLineStartRightX + PITCH_LINE_LENGTH * dp, pitchY,
             paint
         );
     }
