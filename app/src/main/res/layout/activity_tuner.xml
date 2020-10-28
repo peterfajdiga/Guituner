@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="peterfajdiga.guituner.app.TunerActivity"
     android:layout_width="match_parent"
@@ -50,7 +51,6 @@
                 android:contentDescription="@string/tooltip_sound" />
 
         </LinearLayout>
-
     </FrameLayout>
 
     <HorizontalScrollView
@@ -64,27 +64,25 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <peterfajdiga.guituner.gui.views.PitchShortcutsBar
-            android:id="@+id/shortcutcontainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            style="?android:attr/buttonBarStyle" />
+            <peterfajdiga.guituner.gui.views.PitchShortcutsBar
+                android:id="@+id/shortcutcontainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                style="?android:attr/buttonBarStyle" />
 
-        <Button android:id="@+id/tuning_setup_button"
-            android:layout_width="@dimen/button_pitchview_width"
-            android:layout_height="@dimen/selection_bar_height"
-            android:padding="12dp"
-            style="?android:attr/buttonBarButtonStyle"
-            android:background="?attr/selectableItemBackground"
-            android:drawableEnd="@drawable/ic_edit_24dp"
-            android:tooltipText="@string/tooltip_tuning_setup"
-            android:contentDescription="@string/tooltip_tuning_setup" />
+            <Button android:id="@+id/tuning_setup_button"
+                android:layout_width="@dimen/button_pitchview_width"
+                android:layout_height="@dimen/selection_bar_height"
+                android:padding="12dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:background="?attr/selectableItemBackground"
+                android:drawableEnd="@drawable/ic_edit_24dp"
+                android:tooltipText="@string/tooltip_tuning_setup"
+                android:contentDescription="@string/tooltip_tuning_setup" />
 
         </LinearLayout>
-
     </HorizontalScrollView>
-
 </LinearLayout>
