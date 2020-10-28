@@ -38,7 +38,7 @@ class PitchViewDisplay extends View {
     private final float dp;
     private int width, height;
     private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
-    private float freqLineEndLeftX, freqLineStartLeftX, freqLineStartRightX, freqLineEndRightX;
+    private float freqLineEndLeftX, freqLineStartLeftX, freqLineStartRightX, freqLineEndRightX, freqTextX;
 
     private final Rect textBounds = new Rect();
     private Picture pitchLabelsCache, pitchLabelsCacheInactive;
@@ -107,14 +107,14 @@ class PitchViewDisplay extends View {
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         width = MeasureSpec.getSize(widthMeasureSpec);
-        height = (int)(PITCH_FULL_RANGE_Y* dp * pitches.length) + heightMeasureSpec;
+        height = (int)(PITCH_FULL_RANGE_Y * dp * pitches.length) + heightMeasureSpec;
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
-        final float pitchLineLength = PITCH_LINE_LENGTH * dp;
-
         getPitchTextBounds(Pitch.As4, paint_pitch, textBounds);
         final float x = width * PITCH_OFFSET_X_RATIO;
+        final float pitchLineLength = Math.min(PITCH_LINE_LENGTH * dp, getAvailableSpaceRightSide(dp, x, width, textBounds) / 2.0f);
+
         pitchLineStartLeftX = getTextLeft(x, paint_pitch, textBounds) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch, textBounds) + LINE_TEXT_SPACING * dp;
         pitchLineEndLeftX = pitchLineStartLeftX - pitchLineLength;
@@ -125,6 +125,7 @@ class PitchViewDisplay extends View {
         freqLineStartLeftX = pitchLineEndLeftX - triangleWidth;
         freqLineStartRightX = pitchLineEndRightX + triangleWidth;
         freqLineEndRightX = width;
+        freqTextX = freqLineStartRightX + pitchLineLength + LINE_TEXT_SPACING * dp;
 
         pitchLabelsCache = null;
         pitchLabelsCacheInactive = null;
@@ -162,7 +163,6 @@ class PitchViewDisplay extends View {
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
         final String freqText = String.format("%.1f Hz", detectedFrequency);
         final float lineTextSpacing = LINE_TEXT_SPACING * dp;
-        final float freqX = freqLineStartRightX + PITCH_LINE_LENGTH * dp + lineTextSpacing;
         final float freqY = getFrequencyY(detectedFrequency);
 
         paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
@@ -184,12 +184,12 @@ class PitchViewDisplay extends View {
         // -Hz-
         canvas.drawLine(
             freqLineStartRightX, freqY,
-            getTextLeft(freqX, paint_freq, textBounds) - lineTextSpacing, freqY,
+            getTextLeft(freqTextX, paint_freq, textBounds) - lineTextSpacing, freqY,
             paint_freq
         );
-        canvas.drawText(freqText, freqX, getCenteredY(freqY, textBounds), paint_freq);
+        canvas.drawText(freqText, freqTextX, getCenteredY(freqY, textBounds), paint_freq);
         canvas.drawLine(
-            getTextRight(freqX, paint_freq, textBounds) + lineTextSpacing, freqY,
+            getTextRight(freqTextX, paint_freq, textBounds) + lineTextSpacing, freqY,
             freqLineEndRightX, freqY,
             paint_freq
         );
@@ -274,6 +274,18 @@ class PitchViewDisplay extends View {
             case RIGHT:
                 return textX;
         }
+    }
+
+    private static float getAvailableSpaceRightSide(final float dp, final float pitchX, final float width, final Rect pitchTextBounds) {
+        final float lineTextSpacing = LINE_TEXT_SPACING * dp;
+        final float rightSideWidth = width - getTextRight(pitchX, paint_pitch, pitchTextBounds) - lineTextSpacing;
+
+        final String longestFreqString = "8888.8 Hz";
+        final Rect freqTextBounds = new Rect();
+        paint_freq.getTextBounds(longestFreqString, 0, longestFreqString.length(), freqTextBounds);
+        final float freqWidth = freqTextBounds.width() + lineTextSpacing * 2.0f;
+
+        return rightSideWidth - freqWidth;
     }
 
     float getFrequencyY(final double frequency) {
