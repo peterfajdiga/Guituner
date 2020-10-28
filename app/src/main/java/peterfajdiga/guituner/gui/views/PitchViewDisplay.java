@@ -38,6 +38,7 @@ class PitchViewDisplay extends View {
     private final float dp;
     private int width, height;
     private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
+    private float freqLineEndLeftX, freqLineStartLeftX, freqLineStartRightX, freqLineEndRightX;
 
     private final android.graphics.Rect textBounds = new Rect();
     private Picture pitchLabelsCache, pitchLabelsCacheInactive;
@@ -117,6 +118,12 @@ class PitchViewDisplay extends View {
         pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH * dp;
         pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH * dp;
 
+        final float triangleWidth = FREQ_ARROW_TRIANGLE_SIZE * dp;
+        freqLineEndLeftX = 0.0f;
+        freqLineStartLeftX = pitchLineEndLeftX - triangleWidth;
+        freqLineStartRightX = pitchLineEndRightX + triangleWidth;
+        freqLineEndRightX = width;
+
         pitchLabelsCache = null;
         pitchLabelsCacheInactive = null;
     }
@@ -152,12 +159,7 @@ class PitchViewDisplay extends View {
 
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
         final String freqText = String.format("%.1f Hz", detectedFrequency);
-        final float triangleWidth = FREQ_ARROW_TRIANGLE_SIZE * dp;
         final float lineTextSpacing = LINE_TEXT_SPACING * dp;
-        final float freqLineEndLeftX = 0.0f;
-        final float freqLineStartLeftX = pitchLineEndLeftX - triangleWidth;
-        final float freqLineStartRightX = pitchLineEndRightX + triangleWidth;
-        final float freqLineEndRightX = width;
         final float freqX = freqLineStartRightX + PITCH_LINE_LENGTH * dp + lineTextSpacing;
         final float freqY = getFrequencyY(detectedFrequency);
 
