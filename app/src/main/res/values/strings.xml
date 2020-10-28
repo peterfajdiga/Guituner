@@ -2,6 +2,10 @@
     <string name="app_name">Guituner</string>
     <string name="no_mic_permission">Guituner needs the microphone permission to work</string>
 
+    <string name="tooltip_tuning_setup">Select a different tuning</string>
+    <string name="tooltip_unpin">Deselect pitch</string>
+    <string name="tooltip_sound">Play selected pitch</string>
+
     <string name="tuning_standard">Standard</string>
     <string name="tuning_drop_d">Drop D</string>
     <string name="tuning_open_d">Open D</string>

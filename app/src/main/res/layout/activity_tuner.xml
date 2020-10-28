@@ -16,7 +16,7 @@
         <peterfajdiga.guituner.gui.views.PitchView
             android:id="@+id/pitchview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/selectionbg"
@@ -35,7 +35,9 @@
                 android:padding="12dp"
                 style="?android:attr/buttonBarButtonStyle"
                 android:background="?attr/selectableItemBackground"
-                android:drawableLeft="@drawable/ic_unlock_24dp" />
+                android:drawableLeft="@drawable/ic_unlock_24dp"
+                android:tooltipText="@string/tooltip_unpin"
+                android:contentDescription="@string/tooltip_unpin" />
 
             <Button android:id="@+id/soundbtn"
                 android:layout_width="@dimen/button_pitchview_width"
@@ -43,7 +45,9 @@
                 android:padding="12dp"
                 style="?android:attr/buttonBarButtonStyle"
                 android:background="?attr/selectableItemBackground"
-                android:drawableLeft="@drawable/ic_music_note_24dp" />
+                android:drawableLeft="@drawable/ic_music_note_24dp"
+                android:tooltipText="@string/tooltip_sound"
+                android:contentDescription="@string/tooltip_sound" />
 
         </LinearLayout>
 
@@ -67,7 +71,7 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
-            style="?android:attr/buttonBarStyle"/>
+            style="?android:attr/buttonBarStyle" />
 
         <Button android:id="@+id/tuning_setup_button"
             android:layout_width="@dimen/button_pitchview_width"
@@ -75,7 +79,9 @@
             android:padding="12dp"
             style="?android:attr/buttonBarButtonStyle"
             android:background="?attr/selectableItemBackground"
-            android:drawableEnd="@drawable/ic_edit_24dp" />
+            android:drawableEnd="@drawable/ic_edit_24dp"
+            android:tooltipText="@string/tooltip_tuning_setup"
+            android:contentDescription="@string/tooltip_tuning_setup" />
 
         </LinearLayout>
 
