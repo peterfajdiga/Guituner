@@ -40,7 +40,7 @@ class PitchViewDisplay extends View {
     private float edgePitchOffsetY, pitchLineStartLeftX, pitchLineStartRightX, pitchLineEndLeftX, pitchLineEndRightX;
     private float freqLineEndLeftX, freqLineStartLeftX, freqLineStartRightX, freqLineEndRightX;
 
-    private final android.graphics.Rect textBounds = new Rect();
+    private final Rect textBounds = new Rect();
     private Picture pitchLabelsCache, pitchLabelsCacheInactive;
 
     private Pitch[] pitches;
@@ -115,8 +115,8 @@ class PitchViewDisplay extends View {
 
         getPitchTextBounds(Pitch.As4, paint_pitch, textBounds);
         final float x = width * PITCH_OFFSET_X_RATIO;
-        pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
-        pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
+        pitchLineStartLeftX = getTextLeft(x, paint_pitch, textBounds) - LINE_TEXT_SPACING * dp;
+        pitchLineStartRightX = getTextRight(x, paint_pitch, textBounds) + LINE_TEXT_SPACING * dp;
         pitchLineEndLeftX = pitchLineStartLeftX - pitchLineLength;
         pitchLineEndRightX = pitchLineStartRightX + pitchLineLength;
 
@@ -184,12 +184,12 @@ class PitchViewDisplay extends View {
         // -Hz-
         canvas.drawLine(
             freqLineStartRightX, freqY,
-            getTextLeft(freqX, paint_freq) - lineTextSpacing, freqY,
+            getTextLeft(freqX, paint_freq, textBounds) - lineTextSpacing, freqY,
             paint_freq
         );
-        canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
+        canvas.drawText(freqText, freqX, getCenteredY(freqY, textBounds), paint_freq);
         canvas.drawLine(
-            getTextRight(freqX, paint_freq) + lineTextSpacing, freqY,
+            getTextRight(freqX, paint_freq, textBounds) + lineTextSpacing, freqY,
             freqLineEndRightX, freqY,
             paint_freq
         );
@@ -207,7 +207,7 @@ class PitchViewDisplay extends View {
         final float pitchY = getFrequencyY(pitch.frequency);
 
         getPitchTextBounds(pitch, paint, textBounds);
-        canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
+        canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY, textBounds), paint);
 
         canvas.drawLine(
             pitchLineEndLeftX, pitchY,
@@ -244,12 +244,12 @@ class PitchViewDisplay extends View {
     }
 
     // getTextBounds must be called before this
-    private float getCenteredY(final float y) {
+    private static float getCenteredY(final float y, final Rect textBounds) {
         return y - (textBounds.bottom + textBounds.top) / 2.0f;
     }
 
     // getTextBounds must be called before this
-    private float getTextLeft(final float textX, final Paint paint) {
+    private static float getTextLeft(final float textX, final Paint paint, final Rect textBounds) {
         final int textWidth = textBounds.right + textBounds.left;
         switch (paint.getTextAlign()) {
             default:
@@ -263,7 +263,7 @@ class PitchViewDisplay extends View {
     }
 
     // getTextBounds must be called before this
-    private float getTextRight(final float textX, final Paint paint) {
+    private static float getTextRight(final float textX, final Paint paint, final Rect textBounds) {
         final int textWidth = textBounds.right + textBounds.left;
         switch (paint.getTextAlign()) {
             case LEFT:
@@ -320,7 +320,7 @@ class PitchViewDisplay extends View {
         return nearestPitch;
     }
 
-    private static void getPitchTextBounds(@NonNull final Pitch pitch, @NonNull final Paint paint, @NonNull final android.graphics.Rect bounds) {
+    private static void getPitchTextBounds(@NonNull final Pitch pitch, @NonNull final Paint paint, @NonNull final Rect bounds) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             final CharSequence pitchString = pitch.toCharSequence();
             paint.getTextBounds(pitchString, 0, pitchString.length(), bounds);
