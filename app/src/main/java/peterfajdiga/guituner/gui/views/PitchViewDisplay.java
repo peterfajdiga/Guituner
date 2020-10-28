@@ -21,11 +21,11 @@ class PitchViewDisplay extends View {
     private static final boolean HIGH_F_ON_TOP = true;
     private static final float PITCH_OFFSET_X_RATIO = 0.5f;
     private static final float FREQ_OFFSET_X_RATIO = 0.94f;
+    private static final float PITCH_LINE_LENGTH_X_RATIO = 0.133f;
 
     // these need to be multiplied by dp
     private static final float PITCH_FULL_RANGE_Y = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
-    private static final float PITCH_LINE_LENGTH = 32.0f;
     private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
     private static final float HIGHLIGHT_BG_HEIGHT = 48.0f;  // TODO: get from resources instead
 
@@ -111,11 +111,11 @@ class PitchViewDisplay extends View {
         setMeasuredDimension(width, height);
 
         getPitchTextBounds(Pitch.As4, paint_pitch, textBounds);
-        final float x = width *PITCH_OFFSET_X_RATIO;
+        final float x = width * PITCH_OFFSET_X_RATIO;
         pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
-        pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH * dp;
-        pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH * dp;
+        pitchLineEndLeftX = pitchLineStartLeftX - width * PITCH_LINE_LENGTH_X_RATIO;
+        pitchLineEndRightX = pitchLineStartRightX + width * PITCH_LINE_LENGTH_X_RATIO;
 
         pitchLabelsCache = null;
         pitchLabelsCacheInactive = null;
@@ -198,13 +198,13 @@ class PitchViewDisplay extends View {
         canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
 
         canvas.drawLine(
-            pitchLineStartLeftX - PITCH_LINE_LENGTH * dp, pitchY,
+            pitchLineStartLeftX - width * PITCH_LINE_LENGTH_X_RATIO, pitchY,
             pitchLineStartLeftX, pitchY,
             paint
         );
         canvas.drawLine(
             pitchLineStartRightX, pitchY,
-            pitchLineStartRightX + PITCH_LINE_LENGTH * dp, pitchY,
+            pitchLineStartRightX + width * PITCH_LINE_LENGTH_X_RATIO, pitchY,
             paint
         );
     }
