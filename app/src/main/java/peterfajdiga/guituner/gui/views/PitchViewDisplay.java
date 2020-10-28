@@ -111,12 +111,14 @@ class PitchViewDisplay extends View {
         edgePitchOffsetY = (float)heightMeasureSpec / 2;
         setMeasuredDimension(width, height);
 
+        final float pitchLineLength = PITCH_LINE_LENGTH * dp;
+
         getPitchTextBounds(Pitch.As4, paint_pitch, textBounds);
         final float x = width * PITCH_OFFSET_X_RATIO;
         pitchLineStartLeftX = getTextLeft(x, paint_pitch) - LINE_TEXT_SPACING * dp;
         pitchLineStartRightX = getTextRight(x, paint_pitch) + LINE_TEXT_SPACING * dp;
-        pitchLineEndLeftX = pitchLineStartLeftX - PITCH_LINE_LENGTH * dp;
-        pitchLineEndRightX = pitchLineStartRightX + PITCH_LINE_LENGTH * dp;
+        pitchLineEndLeftX = pitchLineStartLeftX - pitchLineLength;
+        pitchLineEndRightX = pitchLineStartRightX + pitchLineLength;
 
         final float triangleWidth = FREQ_ARROW_TRIANGLE_SIZE * dp;
         freqLineEndLeftX = 0.0f;
@@ -208,13 +210,13 @@ class PitchViewDisplay extends View {
         canvas.drawText(pitch.toCharSequence(), 0, pitch.toCharSequence().length(), pitchX, getCenteredY(pitchY), paint);
 
         canvas.drawLine(
-            pitchLineStartLeftX - PITCH_LINE_LENGTH * dp, pitchY,
+            pitchLineEndLeftX, pitchY,
             pitchLineStartLeftX, pitchY,
             paint
         );
         canvas.drawLine(
             pitchLineStartRightX, pitchY,
-            pitchLineStartRightX + PITCH_LINE_LENGTH * dp, pitchY,
+            pitchLineEndRightX, pitchY,
             paint
         );
     }
