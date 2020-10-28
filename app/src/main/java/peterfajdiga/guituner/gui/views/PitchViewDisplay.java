@@ -25,7 +25,7 @@ class PitchViewDisplay extends View {
     // these need to be multiplied by dp
     private static final float PITCH_FULL_RANGE_Y = 144.0f;
     private static final float LINE_TEXT_SPACING = 6.0f;
-    private static final float PITCH_LINE_LENGTH = 32.0f;
+    private static final float PITCH_LINE_LENGTH = 48.0f;
     private static final float FREQ_ARROW_TRIANGLE_SIZE = 4.0f;
     private static final float HIGHLIGHT_BG_HEIGHT = 48.0f;  // TODO: get from resources instead
 
@@ -65,7 +65,7 @@ class PitchViewDisplay extends View {
         paint_pitch_inactive.setStrokeWidth(dp);
 
         paint_freq.setTextSize(12 * dp);
-        paint_freq.setTextAlign(Paint.Align.CENTER);
+        paint_freq.setTextAlign(Paint.Align.LEFT);
         paint_freq.setColor(r.getColor(R.color.secondary_text));
         paint_freq.setStrokeWidth(dp);
 
@@ -153,11 +153,12 @@ class PitchViewDisplay extends View {
     private void drawDetectedFrequency(@NonNull final Canvas canvas) {
         final String freqText = String.format("%.1f Hz", detectedFrequency);
         final float triangleWidth = FREQ_ARROW_TRIANGLE_SIZE * dp;
+        final float lineTextSpacing = LINE_TEXT_SPACING * dp;
         final float freqLineEndLeftX = 0.0f;
         final float freqLineStartLeftX = pitchLineEndLeftX - triangleWidth;
         final float freqLineStartRightX = pitchLineEndRightX + triangleWidth;
         final float freqLineEndRightX = width;
-        final float freqX = (freqLineStartRightX + freqLineEndRightX) / 2.0f;
+        final float freqX = freqLineStartRightX + PITCH_LINE_LENGTH * dp + lineTextSpacing;
         final float freqY = getFrequencyY(detectedFrequency);
 
         paint_freq.getTextBounds(freqText, 0, freqText.length(), textBounds);
@@ -179,12 +180,12 @@ class PitchViewDisplay extends View {
         // -Hz-
         canvas.drawLine(
             freqLineStartRightX, freqY,
-            getTextLeft(freqX, paint_freq) - LINE_TEXT_SPACING * dp, freqY,
+            getTextLeft(freqX, paint_freq) - lineTextSpacing, freqY,
             paint_freq
         );
         canvas.drawText(freqText, freqX, getCenteredY(freqY), paint_freq);
         canvas.drawLine(
-            getTextRight(freqX, paint_freq) + LINE_TEXT_SPACING * dp, freqY,
+            getTextRight(freqX, paint_freq) + lineTextSpacing, freqY,
             freqLineEndRightX, freqY,
             paint_freq
         );
