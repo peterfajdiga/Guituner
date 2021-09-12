@@ -34,14 +34,14 @@ public class Recorder extends Thread implements Stoppable {
             bufferSize
         );
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
-            throw new RuntimeException("Error initializing AudioRecord");
+            throw new RuntimeException("Invalid AudioRecord state: " + record.getState());
         }
 
         record.startRecording();
         while (threadEnabled) {
             final int sampleCount = record.read(buffer, 0, buffer.length);
             if (sampleCount > buffer.length) {
-                throw new RuntimeException("Read more samples than buffer.length");
+                throw new RuntimeException("Read more samples than buffer.length: " + sampleCount);
             }
             receiver.putBuffer(Arrays.copyOfRange(buffer, 0, sampleCount));
         }
